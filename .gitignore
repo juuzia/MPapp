@@ -1,4 +1,4 @@
-MPapp/results/
-MPapp/__pycache__
+MPapp/MPapp/results/
+MPapp/MPapp/__pycache__
 .vscode/
 *.rdb
