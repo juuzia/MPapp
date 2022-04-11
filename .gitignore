@@ -1,4 +1,5 @@
-MPapp/results/
+MPapp/results/*
+!MPapp/.gitkeep
 MPapp/__pycache__
 .vscode/
 *.rdb
