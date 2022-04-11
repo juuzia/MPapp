@@ -1,5 +1,5 @@
-MPapp/MPapp/results/
-MPapp/MPapp/__pycache__
+MPapp/results/
+MPapp/__pycache__
 .vscode/
 *.rdb
 *.txt
@@ -7,3 +7,6 @@ MPapp/MPapp/__pycache__
 *.vcf.gz*
 *.list
 *.bin
+*.bam
+MPapp.egg-info/
+MPapp.egg-info/*.txt
