@@ -9,8 +9,7 @@ def create_app(test_config=None):
         SECRET_KEY='dev',
         UPLOAD_FOLDER="/tmp",
         APP_ROOT=os.path.dirname(os.path.abspath(__file__)),
-        RESULTS_DIR=os.path.dirname(os.path.abspath(__file__))+"/results",
-        ALLOWED_FILE_EXTENSIONS=["FASTQ", "FQ", "FASTQ.GZ", "FQ.GZ", "BAM", "CRAM"]
+        RESULTS_DIR=os.path.dirname(os.path.abspath(__file__))+"/results"
     )
 
     if test_config is None:

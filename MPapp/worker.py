@@ -1,5 +1,6 @@
 import os
 from celery import Celery
+from celery.result import AsyncResult
 
 from flask import Flask, current_app, url_for
 import subprocess as sp #TODO check multiprocessing
@@ -31,6 +32,9 @@ flask_app.config.update(
     CELERY_RESULT_BACKEND='redis://localhost:6379',
 )
 celery = make_celery(flask_app)
+
+def get_status(run_id):
+    return AsyncResult(run_id).state
 
 @celery.task
 def run_mp_fastq(fq1, fq2, run_id, results_dir):
