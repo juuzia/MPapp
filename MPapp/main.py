@@ -1,12 +1,13 @@
 import os
 import uuid
+import re
 
 from flask import (
     Blueprint, flash, request, redirect, render_template, url_for, current_app, send_file)
 from flask import current_app as app
 
 from werkzeug.utils import secure_filename # to secure file
-from .worker import run_mp_fastq, run_mp_bam
+from .worker import run_mp_fastq, run_mp_bam, get_status
 
 bp = Blueprint('main', __name__)
 
@@ -28,8 +29,8 @@ def analysis():
 
                 if (fq1.filename == "") & (fq2.filename == ""):
                     error="No files selected. Please specify FASTQ or BAM/CRAM files"
-                #if not(allowed_file(fq1.filename) & allowed_file(fq2.filename)):
-                #    error="This file extension is not allowed."
+                if not(check_file_extension(fq1.filename) & check_file_extension(fq2.filename)):
+                   error="This file extension is not allowed."
 
                 if error:
                     flash(error, "danger") #TODO does not display it as redirect happens to quickly
@@ -44,7 +45,7 @@ def analysis():
                 
                 if bam.filename == "":
                     error="No filename"
-                if not(allowed_file(bam.filename)):
+                if not(check_file_extension(bam.filename, bam=True)):
                     error="This file extension is not allowed."
                 
                 if error:
@@ -58,17 +59,15 @@ def analysis():
 
     return render_template("pages/analysis.html")
 
-def allowed_file(filename):
-    #TODO distinguish BAM, CRAM, FQ
-    # We only want files with a . in the filename
-    if not "." in filename:
-        return False
+def check_file_extension(filename, bam=False):
+    pattern = "\.fastq?.[A-Za-z]*$|\.fq?.[A-Za-z]*$"
+    if bam:
+        pattern = "\.bam$"
+   
+    ext = filename.strip().lower()
 
-    # Split the extension from the filename
-    ext = filename.rsplit(".", 1)[1] #TODO need to include GZ
-
-    # Check if the extension is in ALLOWED_FILE_EXTENSIONS
-    if ext.upper() in app.config["ALLOWED_FILE_EXTENSIONS"]:
+    # Check pattern
+    if re.search(pattern, ext):
         return True
     else:
         return False
@@ -148,8 +147,3 @@ def run_bam_pipeline(bam, run_id):
         O.write("F1: %s\n" % fpath)
     x = run_mp_bam.delay(fpath, run_id, app.config["RESULTS_DIR"])
     return x
-
-
-@bp.route('/contact')
-def contact():
-    return render_template("pages/contact.html")
