@@ -5,15 +5,15 @@
 <div id="first" class="row justify-content-center">
   <div class="col-md-7">    
     <div id="first" class="row justify-content-center">
-      <h1 class="display-4">malaria-profiler</h1>
+      <h1 class="display-4">Malaria-Profiler</h1>
     </div>
     <div id="first" class="row justify-content-center">
       <p class="lead">
-        Welcome to the webserver of <b> Malaria-Profiler </b> - a pipeline which allows users to analyse <i>Plasmodium</i> malaria whole genome sequencing data to predict
+        Welcome to the webserver of <b>Malaria-Profiler</b> - a pipeline which allows users to analyse <i>Plasmodium</i> malaria whole genome sequencing data to predict
         species and potential drug resistance. Follow the instructions below to upload a new sample or view analysed runs.
         If you want to check example analysis click here.
       </p>
-        
+      <a class="btn btn-outline-secondary btn-lg" href="{{ url_for('main.result_id', run_id='42f66540-d33a-481c-8b1f-4b3625952537') }}" role="button">Example analysis</a>     
     </div>
  
     <div id="first" class="row justify-content-center">
@@ -90,13 +90,13 @@
 <h5 class="card-header expandable">
   <a data-toggle="collapse" href="#collapse-example-2" aria-expanded="false" aria-controls="collapse-example-2" id="heading-example-2" class="d-block">
       <i class="rotate fa fa-chevron-down "></i>
-      Can I run Malaria-Profiler on my own computer?
+      Can I run <b>Malaria-Profiler</b> on my own computer?
   </a>
 </h5>
 <div id="collapse-example-2" class="collapse" aria-labelledby="heading-example-2">
   <div class="card-body">
     <p class="lead">
-      If you have access to a linux or osX operating system then you can download the commandline version of Malaria-Profiler. For more information on this please
+      If you have access to a linux or osX operating system then you can download the commandline version of <b>Malaria-Profiler</b>. For more information on this please
       visit the github repository. 
   If you would like to create your own instance of this webserver, the code is fully open-source and available at this github repository
     </p>
@@ -112,7 +112,7 @@
 <div id="collapse-example-3" class="collapse" aria-labelledby="heading-example-3">
   <div class="card-body">
     <p class="lead">
-      We are always looking to improve Malaria-Profiler. If you see some results that don't look right or would like to see some additional
+      We are always looking to improve <b>Malaria-Profiler</b>. If you see some results that don't look right or would like to see some additional
       functionality in the future, don't hesitate to get in touch via the section on our github page.
     </p>
   </div>
@@ -133,9 +133,10 @@
 
 <div class="row justify-content-center">
   <p class="lead">
-    <a class="btn btn-dark btn-lg" href="#" role="button" title="GitHub"><i class="fa-brands fa-github"></i></a>
-    <a class="btn btn-info btn-lg" href="#" role="button" title="Twitter"><i class="fa-brands fa-twitter"></i></a>
-    <a class="btn btn-primary btn-lg" href="https://pathogenseq.lshtm.ac.uk" role="button", title="PathogenSeq webpage"><i class="fa-solid fa-school"></i></a>
+    <a class="btn btn-outline-success btn-lg" href="#" role="button" title="E-mail us!"><i class="fa-solid fa-envelope"></i></a>
+    <a class="btn btn-outline-dark btn-lg" href="#" role="button" title="GitHub"><i class="fa-brands fa-github"></i></a>
+    <a class="btn btn-outline-info btn-lg" href="#" role="button" title="Twitter"><i class="fa-brands fa-twitter"></i></a>
+    <a class="btn btn-outline-primary btn-lg" href="https://pathogenseq.lshtm.ac.uk" role="button", title="PathogenSeq webpage"><i class="fa-solid fa-school"></i></a>
   </p>
 </div>             
 <hr>
