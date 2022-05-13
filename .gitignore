@@ -13,4 +13,4 @@ MPapp/__pycache__
 *.bam
 MPapp.egg-info/
 MPapp.egg-info/*.txt
-
+build
