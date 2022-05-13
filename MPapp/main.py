@@ -31,15 +31,12 @@ def analysis():
                     error="No files selected. Please specify FASTQ or BAM/CRAM files"
                 if not(check_file_extension(fq1.filename) & check_file_extension(fq2.filename)):
                    error="This file extension is not allowed."
-
+                   
                 if error:
-                    flash(error, "danger") #TODO does not display it as redirect happens to quickly
+                    flash(error, "danger")
                 else:
                     process = run_fastq_pipeline(fq1, fq2, run_id)
-                    while process.status != 'SUCCESS': # process.ready = True/False
-                        return redirect(url_for('main.pending', run_id=run_id))
-                    else:
-                        return redirect(url_for('main.result_id', run_id=run_id))
+                    return redirect(url_for('main.result_id', run_id=run_id))
             if "bam_submit" in request.form:
                 bam = request.files["bam"]
                 
@@ -49,13 +46,10 @@ def analysis():
                     error="This file extension is not allowed."
                 
                 if error:
-                    flash(error, "error") #TODO does not display it as redirect happens to quickly
+                    flash(error, "danger")
                 else:
-                    process = run_bam_pipeline(bam, run_id)
-                    while process.status != 'SUCCESS':
-                        return redirect(url_for('main.pending', run_id=run_id))
-                    else:
-                        return redirect(url_for('main.result_id', run_id=run_id))
+                    process = run_bam_pipeline(bam, run_id)                    
+                    return redirect(url_for('main.result_id', run_id=run_id))
 
     return render_template("pages/analysis.html")
 
@@ -89,53 +83,6 @@ def run_fastq_pipeline(fq1, fq2, run_id):
     x = run_mp_fastq.delay(fpath1, fpath2, run_id, app.config["RESULTS_DIR"])
     return x
 
-@bp.route('/result/<uuid:run_id>/pending')
-def pending(run_id):
-    log_file = "%s/%s.log" % (app.config["RESULTS_DIR"], run_id)
-    if not os.path.isfile(log_file):
-        flash("Error! Result with ID:%s doesn't exist" % run_id, "danger")
-        return render_template('pages/result.html')
-    else:
-        flash("Files uploaded", "success")
-        flash("Analysis in progress. Check in later", "info")
-        return render_template('pages/pending.html', run_id=run_id)
-
-@bp.route('/result/<uuid:run_id>')
-def result_id(run_id):
-    log_file = "%s/%s.log" % (app.config["RESULTS_DIR"], run_id)
-    if not os.path.isfile(log_file):
-        flash("Error! Result with ID:%s doesn't exist" % run_id, "danger")
-        return render_template('pages/result.html')
-    result_file = "%s/%s.results.txt" % (app.config["RESULTS_DIR"], run_id)
-    if not os.path.isfile(result_file):
-        return render_template('pages/pending', run_id=run_id)
-    else:
-        results = open(result_file).read()
-        return render_template('pages/result_id.html', run_id=run_id, results = results)
-
-@bp.route('/result/<uuid:run_id>/download', methods=['GET', 'POST'])
-def download(run_id):
-        result_file = "%s/%s.results.txt" % (app.config["RESULTS_DIR"], run_id)
-        return send_file(result_file, as_attachment=True)
-
-@bp.route('/result', methods=['POST', 'GET'])
-def result():
-    if request.method == "POST":
-        if "result_submit" in request.form:
-            #TODO # trim it  
-            run_id = request.form["result_id"].strip()
-            log_file = "%s/%s.log" % (app.config["RESULTS_DIR"], run_id)
-            if not os.path.isfile(log_file):
-                flash("Error! Result with ID:%s doesn't exist" % run_id, "danger")
-                return render_template('pages/result.html')
-            result_file = "%s/%s.results.txt" % (app.config["RESULTS_DIR"], run_id)
-            if not os.path.isfile(result_file):
-                return redirect(url_for('main.pending', run_id=run_id))
-            else:
-                results = open(result_file).read()
-                return redirect(url_for('main.result_id', run_id=run_id))
-    return render_template("pages/result.html")
-
 def run_bam_pipeline(bam, run_id):
     bam_path = secure_filename(bam.filename)
 
@@ -147,3 +94,49 @@ def run_bam_pipeline(bam, run_id):
         O.write("F1: %s\n" % fpath)
     x = run_mp_bam.delay(fpath, run_id, app.config["RESULTS_DIR"])
     return x
+
+@bp.route('/result/<uuid:run_id>')
+def result_id(run_id):
+    log_file = "%s/%s.log" % (app.config["RESULTS_DIR"], run_id)
+    if not os.path.isfile(log_file):
+        flash("Error! Result with ID:%s doesn't exist" % run_id, "danger")
+        return render_template('pages/result.html')
+    result_file = "%s/%s.results.txt" % (app.config["RESULTS_DIR"], run_id)
+    if not os.path.isfile(result_file):
+        status = "Processing"
+        results = None
+        flash("Analysis in progress...", "info")
+        flash("Wait or copy Result ID and check later.", "info")
+        return render_template('pages/result_id.html', run_id=run_id, results = results, status=status)
+    else:
+        status = "OK"
+        results = open(result_file).read()
+        return render_template('pages/result_id.html', run_id=run_id, results = results, status=status)
+
+@bp.route('/result/<uuid:run_id>/download', methods=['GET', 'POST'])
+def download(run_id):
+        result_file = "%s/%s.results.txt" % (app.config["RESULTS_DIR"], run_id)
+        return send_file(result_file, as_attachment=True)
+
+@bp.route('/result', methods=['POST', 'GET'])
+def result():
+    if request.method == "POST":
+        if "result_submit" in request.form:
+            run_id = request.form["result_id"].strip()
+            log_file = "%s/%s.log" % (app.config["RESULTS_DIR"], run_id)
+            if not os.path.isfile(log_file):
+                flash("Error! Result with ID:%s doesn't exist" % run_id, "danger")
+                return render_template('pages/result.html')
+            result_file = "%s/%s.results.txt" % (app.config["RESULTS_DIR"], run_id)
+            if not os.path.isfile(result_file):
+                status = "Processing"
+                results = None
+                flash("Analysis in progress...", "info")
+                flash("Wait or copy Result ID and check later.", "info")
+                return render_template('pages/result_id.html', run_id=run_id, results = results, status=status)
+            else:
+                status = "OK"
+                results = open(result_file).read()
+                return render_template('pages/result_id.html', run_id=run_id, results = results, status=status)
+    return render_template("pages/result.html")
+

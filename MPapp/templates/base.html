@@ -30,17 +30,14 @@
   </head>
   <body>
         <nav class="navbar navbar-expand-lg sticky-top navbar-dark bg-dark font-weight-bold ">
-            <a class="navbar-brand" href="{{ url_for('main.index') }}"><i class="fa-solid fa-mosquito"></i> Malaria-profiler </a>
+            <a class="navbar-brand" href="{{ url_for('main.index') }}"><i class="fa-solid fa-mosquito"></i> Malaria-Profiler </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
-                    <ul class="navbar-nav">
-                        <li class="nav-item active">
-                            <a class="nav-link text-white" href="{{ url_for('main.index') }}">Home <span class="sr-only">(current)</span></a>
-                        </li>
+                    <ul class="navbar-nav">                     
                         <li class="nav-item">
                             <a class="nav-link text-white" href="{{ url_for('main.analysis') }}">Analysis</a>
                         </li>
@@ -51,8 +48,10 @@
                 </ul>
             </div>
             <div class="collapse navbar-collapse justify-content-end" id="navbarCollapse">
-                <a class="nav-link text-white" href="#"><i class="fa-brands fa-github"></i></a>
-                <a class="nav-link text-white" href="#"><i class="fa-brands fa-twitter"></i></a>
+                <a class="nav-link text-white" href="#", title="E-mail us!"><i class="fa-solid fa-envelope"></i></a>
+                <a class="nav-link text-white" href="#", title="GitHub"><i class="fa-brands fa-github"></i></a>
+                <a class="nav-link text-white" href="#" title="Twitter"><i class="fa-brands fa-twitter"></i></a>
+                <a class="nav-link text-white" href="https://pathogenseq.lshtm.ac.uk" title="PathogenSeq webpage"><i class="fa-solid fa-school"></i></a>
             </div>
         </nav>
 
@@ -67,9 +66,6 @@
             {% endfor %}
             {% block content %}
             {% endblock %}
-        </div>
-        <hr>
-        <!-- Optional JavaScript -->
-        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        </div>        
     </body>
 </html>
