@@ -38,8 +38,8 @@ def get_status(run_id):
 
 @celery.task
 def run_mp_fastq(fq1, fq2, run_id, results_dir):
-    sp.call("malaria-profiler --dir %s profile -1 %s -2 %s -p %s -t 2 --txt" % (results_dir, fq1, fq2, run_id), shell=True)
+    sp.call("malaria-profiler profile --dir %s -1 %s -2 %s -p %s -t 2 --txt" % (results_dir, fq1, fq2, run_id), shell=True)
 
 @celery.task
 def run_mp_bam(bam, run_id, results_dir):
-    sp.call("malaria-profiler --dir %s profile -a %s -p %s -t 2 --txt" % (results_dir, bam, run_id), shell=True)
+    sp.call("malaria-profiler profile --dir %s -a %s -p %s -t 2 --txt" % (results_dir, bam, run_id), shell=True)
