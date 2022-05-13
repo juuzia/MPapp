@@ -1,9 +1,11 @@
 MPapp/results/*
 !MPapp/.gitkeep
+!MPapp/results/42f66540-d33a-481c-8b1f-4b3625952537.results.txt
+!MPapp/results/42f66540-d33a-481c-8b1f-4b3625952537.log
 MPapp/__pycache__
 .vscode/
 *.rdb
-*.txt
+*errlog.txt
 *.kmc*
 *.vcf.gz*
 *.list
@@ -11,3 +13,4 @@ MPapp/__pycache__
 *.bam
 MPapp.egg-info/
 MPapp.egg-info/*.txt
+
