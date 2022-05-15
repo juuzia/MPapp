@@ -51,6 +51,44 @@
 
 {%- endmacro %}
 
+{% macro file_dropper(random_id) -%}
+
+    <div class="card border-dark">
+        <div class="card-header bg-dark text-white text-center">
+            BAM input
+        </div>
+        <div class="card-body">
+            <p class="card-text">
+                Please drop your files in here and click submit when done.
+            </p>
+            <form method="POST" action='{{ url_for("main.file_upload",upload_id=random_id) }}' class="dropzone dz-clickable" 
+                id="dropper" enctype="multipart/form-data">
+            </form>
+            <div class="pt-2">
+                <form method="post" enctype=multipart/form-data>
+                    <button type="submit" class="btn btn-success" name="submit_button" value="{{random_id}}" id="bam_submit">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.js"></script>
+
+    <script type="application/javascript">
+        Dropzone.options.dropper = {
+            paramName: 'file',
+            chunking: true,
+            forceChunking: true,
+            url: '{{ url_for("main.file_upload", upload_id=random_id) }}',
+            maxFilesize: 1025, // megabytes
+            chunkSize: 100000000, // bytes
+            timeout: 0
+        }	
+    </script>
+
+{%- endmacro %}
+
+
 {% macro result_retriever() -%}
 
     <div class="card border-dark">

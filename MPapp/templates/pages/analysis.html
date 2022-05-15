@@ -1,6 +1,8 @@
 {% import 'macros.html' as macros %}
 {% extends "base.html" %}
 {% block header %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.css">
+
 {% endblock %}
 {% block content %}
 <div id="wraper", class="container">
@@ -12,11 +14,8 @@
 </div>
 <div id="wraper", class="container">
   <div id="first" class="row justify-content-center">
-    <div class="col-md-4">      
-      {{macros.fastq_uploader()}}
-    </div>
-    <div class="col-md-4">
-      {{macros.bam_uploader()}}
+    <div class="col-md-6">      
+      {{macros.file_dropper(random_id)}}
     </div>
   </div>
 </div>
