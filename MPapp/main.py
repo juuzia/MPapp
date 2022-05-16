@@ -86,6 +86,7 @@ def get_files_in_dir(upload_dir):
             else:
                 potential_pair = r.group(1)+"_R2"+r.group(3)
 
+            print(f"Looking for {potential_pair} in {str(fastqs)}: {potential_pair in fastqs}")
             if potential_pair in fastqs:
                 pair = fastqs.pop(fastqs.index(potential_pair))
                 files.append(File((f,pair),"fastq"))
