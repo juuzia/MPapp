@@ -77,8 +77,9 @@ def get_files_in_dir(upload_dir):
 
     pattern = "(.*)(_R?[12])(\.fastq.[A-Za-z]*$)|(.*)(_R?[12])(\.fq.[A-Za-z]*$)"
     
+    fastqs = sorted(fastqs)
     while len(fastqs)>0:
-        f = fastqs.pop()
+        f = fastqs.pop(0)
         r = re.search(pattern,f)
         if r:
             if r.group(2)=="_1":
