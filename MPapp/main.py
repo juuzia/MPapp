@@ -27,6 +27,10 @@ def analysis():
         runs = []
         upload_id = request.form['submit_button']
         upload_dir = get_upload_dir(upload_id)
+        if not os.path.isdir(upload_dir):
+            flash("No new files uploaded","info")
+            return render_template("pages/analysis.html",random_id=random_id)
+
         new_upload_id = str(uuid4())
         new_upload_dir = get_upload_dir(new_upload_id)
         os.rename(upload_dir,new_upload_dir)
