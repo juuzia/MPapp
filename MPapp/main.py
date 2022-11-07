@@ -24,22 +24,26 @@ def index():
 def analysis():
     random_id = str(uuid4())
     if request.method == "POST":
+        #if  == "illumina":
+        platform = request.form["radio_platform"]
+
         runs = []
         upload_id = request.form['submit_button']
         upload_dir = get_upload_dir(upload_id)
         if not os.path.isdir(upload_dir):
             flash("No new files uploaded","info")
-            return render_template("pages/analysis.html",random_id=random_id)
+            return render_template("pages/analysis.html", random_id=random_id)
 
         new_upload_id = str(uuid4())
         new_upload_dir = get_upload_dir(new_upload_id)
         os.rename(upload_dir,new_upload_dir)
+
         for f in get_files_in_dir(new_upload_dir):
             run_id = str(uuid4())
             with open("%s/%s.log" % (app.config["RESULTS_DIR"], run_id), "w") as O:
                 O.write("Starting job: %s\n" % run_id)
-            run_mp.delay(f.type, f.files, run_id, app.config["RESULTS_DIR"])
-            runs.append({"id":run_id,"files":f.files})
+            run_mp.delay(f.type, f.files, run_id, app.config["RESULTS_DIR"], platform)
+            runs.append({"id":run_id, "files":f.files})
         with io.StringIO() as O:
             writer = csv.DictWriter(O,list(runs[0]))
             writer.writeheader()
@@ -47,7 +51,7 @@ def analysis():
             csv_text = O.getvalue()
         return Response(csv_text,mimetype="text/csv",headers={"Content-disposition": "attachment; filename=run-ids.csv"})
         
-    return render_template("pages/analysis.html",random_id=random_id)
+    return render_template("pages/analysis.html", random_id=random_id)
 
 file_patterns = {
     "fasta": "\.fasta$|\.fa$",

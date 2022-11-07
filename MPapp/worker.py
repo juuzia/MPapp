@@ -37,7 +37,7 @@ def get_status(run_id):
     return AsyncResult(run_id).state
 
 @celery.task
-def run_mp(ftype, files, run_id, results_dir):
+def run_mp(ftype, files, run_id, results_dir, platform):
     print(files)
     if ftype=="fastq":
         if len(files)==2:
@@ -49,5 +49,5 @@ def run_mp(ftype, files, run_id, results_dir):
     elif ftype in ["bam","cram"]:
         tmp = f"-a {files[0]}"
 
-    sp.call("malaria-profiler profile --dir %s %s -p %s -t 1 --txt" % (results_dir, tmp, run_id), shell=True)
+    sp.call("malaria-profiler profile --dir %s %s --prefix %s --platform %s -t 1 --txt" % (results_dir, tmp, run_id, platform), shell=True)
 
