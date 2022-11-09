@@ -1,7 +1,8 @@
 MPapp/results/*
 !MPapp/.gitkeep
-!MPapp/results/7039884b-0ec9-4ec1-a05c-79d6257ef35b.results.txt
-!MPapp/results/7039884b-0ec9-4ec1-a05c-79d6257ef35b.log
+!MPapp/results/d61749da-9e7b-40a2-bc98-6b8b3798dbae.results.txt
+!MPapp/results/d61749da-9e7b-40a2-bc98-6b8b3798dbae.results.json
+!MPapp/results/d61749da-9e7b-40a2-bc98-6b8b3798dbae.log
 MPapp/__pycache__
 .vscode/
 *.rdb
