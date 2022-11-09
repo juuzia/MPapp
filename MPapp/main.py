@@ -2,6 +2,7 @@ from collections import defaultdict, namedtuple
 import os
 from uuid import uuid4
 import re
+import time
 
 from flask import (
     Blueprint, flash, request, redirect, render_template, url_for, current_app, send_file, make_response, Response)
@@ -10,7 +11,10 @@ from glob import glob
 from werkzeug.utils import secure_filename # to secure file
 from .worker import run_mp, get_status
 import io
+import json
 import csv
+import pathogenprofiler as pp
+
 bp = Blueprint('main', __name__)
 
 def get_upload_dir(upload_id):
@@ -108,6 +112,105 @@ def is_legal_filetype(filename):
     else:
         return False
 
+def get_conf(results):
+    species_prediction = results['species']
+    if len(species_prediction['prediction'])>1:
+            pp.infolog(f"Multiple species found.\n")
+            return None
+    if len(species_prediction['prediction'])==0:
+        pp.infolog(f"Species classification failed.\n")
+        return None
+    if len(species_prediction['prediction'])==1:
+        pp.infolog("No resistance database was specified. Attempting to use database based on species prediction...\n")
+        db_name = species_prediction['prediction'][0]["species"].replace(" ","_")
+        conf = pp.get_db('malaria_profiler',db_name)
+        if not conf:
+            pp.infolog(f"No resistance db found for {db_name}.\n")
+        return conf
+
+def parse_result_summary(json_file):
+    geoclass, drugs, var_drug, variants, gene_coverage, missing = None, None, None, None, None, None
+
+    with open(json_file) as json_file:
+        json_results = json.load(json_file, parse_float=lambda x: round(float(x), 2))
+
+    conf = get_conf(json_results)    
+    
+    info = ([{"id" : json_results['id'], "date": time.ctime()}],
+            {"id": "Identifier",
+             "date": "Date"})
+
+    species = (json_results['species']['prediction'],
+              {"species": "Species",
+               "mean": "Mean kmer coverage",
+               "std": "Standard dev"})
+
+    analysis = (json_results['pipeline_software'],
+                {'Analysis': 'Analysis',
+                 'Program': 'Program'})
+
+    if conf:
+        if "drugs" in conf:
+            json_results = pp.get_summary(json_results, conf, columns = None, drug_order = None, reporting_af=0.0)
+
+        if "geoclassification" in json_results:
+            converted = [{"region": l.replace("_", " ")} for l in json_results['geoclassification']]
+            geoclass = (converted,
+                        {"region": "Region"})
+
+        if "drugs" in conf:            
+            json_results['drug_table'] = [[y for y in json_results['drug_table'] if y["Drug"].upper()==d.upper()][0] for d in conf['drugs']]
+            drugs = (json_results['drug_table'],
+                    {"Drug": "Drug",
+                     "Genotypic Resistance": "Genotypic Resistance",
+                     "Mutations": "Mutations"})
+
+        if "dr_variants" in json_results: #TODO is this condition okay 
+            for var in json_results['dr_variants']:
+                var['drug'] = ", ".join([d["drug"] for d in var['drugs']])
+            var_drug = (json_results['dr_variants'],
+                        {"chrom": "Chromosome",
+                        "genome_pos": "Genome Position",
+                        "locus_tag": "Locus Tag",
+                        "freq": "Estimated fraction",
+                        "drugs.drug": "Drug"})
+
+        if "other_variants" in json_results:
+            variants = (json_results['other_variants'],
+                        {"chrom": "Chromosome:",
+                        "genome_pos": "Genome Position",
+                        "locus_tag": "Locus Tag",
+                        "freq": "Estimated fraction"})
+        
+        if "gene_coverage" in json_results['qc']:
+            gene_coverage = (json_results['qc']['gene_coverage'],
+                            {"gene": "Gene",
+                             "locus_tag": "Locus tag",
+                             "cutoff": "Cutoff",
+                             "fraction": "Fraction"})
+
+        if "missing_positions" in json_results['qc']:
+            missing = (json_results['qc']['missing_positions'],
+                      {"gene": "Gene",
+                       "locus_tag": "Locus tag",
+                       "position": "Position",
+                       "variants": "Variants",
+                       "drugs": "Drugs"})          
+
+    tables = {
+        "General information" : info,
+        "Species" : species,
+        "Analysis" : analysis,
+        "Geoclassification": geoclass,
+        "Resistance report": drugs,
+        "Resistance variants report": var_drug,
+        "Other variants": variants,
+        "Coverage report": gene_coverage,
+        "Missing positions report": missing
+        }
+
+    return tables
+
 @bp.route('/result/<uuid:run_id>')
 def result_id(run_id):
     log_file = "%s/%s.log" % (app.config["RESULTS_DIR"], run_id)
@@ -115,16 +218,20 @@ def result_id(run_id):
         flash("Error! Result with ID:%s doesn't exist" % run_id, "danger")
         return render_template('pages/result.html')
     result_file = "%s/%s.results.txt" % (app.config["RESULTS_DIR"], run_id)
+    json_file = "%s/%s.results.json" % (app.config["RESULTS_DIR"], run_id)
+
     if not os.path.isfile(result_file):
         status = "Processing"
         results = None
+        tables = None
         flash("Analysis in progress...", "info")
         flash("Wait or copy Result ID and check later.", "info")
-        return render_template('pages/result_id.html', run_id=run_id, results = results, status=status)
+        return render_template('pages/result_id.html', run_id=run_id, results = results, status=status, tables=tables)
     else:
         status = "OK"
         results = open(result_file).read()
-        return render_template('pages/result_id.html', run_id=run_id, results = results, status=status)
+        tables = parse_result_summary(json_file)
+        return render_template('pages/result_id.html', run_id=run_id, results = results, status=status, tables=tables)
 
 @bp.route('/result/<uuid:run_id>/download', methods=['GET', 'POST'])
 def download(run_id):
