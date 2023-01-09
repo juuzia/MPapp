@@ -203,9 +203,6 @@ dependencies:
     - escape==1.1
     - flask==2.1.1
     - itsdangerous==2.1.2
-    - malaria-profiler==0.0.1
-    - mpapp==0.0.0
-    - pathogen-profiler==2.0.3
     - redis==4.2.2
     - werkzeug==2.1.1
     - wrapt==1.14.0

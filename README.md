@@ -6,6 +6,10 @@ conda env create -f MPapp_env.yml
 ```
 
 ## Install malaria-profiler
+```
+pip install git+https://github.com/jodyphelan/malaria-profiler.git
+pip install git+https://github.com/jodyphelan/pathogen-profiler.git
+```
 
 ## Run app
 ```
