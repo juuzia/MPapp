@@ -54,7 +54,7 @@
             </div>
         </nav>
 
-        <div class="container-fluid pt-2">
+        <div class="p">
             {% for category, message in get_flashed_messages(with_categories=true) %}
                 <div class="alert alert-{{category}} alert-dismissible fade show" role="alert">
                     <span>{{ message }}</span>

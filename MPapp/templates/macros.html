@@ -1,3 +1,14 @@
+<head>
+    <style>
+        .fa-solid{
+            color: lightseagreen;
+            background-color: lightcoral;
+        }
+    </style>
+</head>
+
+
+
 {% macro fastq_uploader() -%}
 
     <div class="card border-dark">
@@ -180,4 +191,79 @@
     </div>
 </div>
 
+{%- endmacro %}
+
+{% macro get_results(rows, columns, name) -%}
+<div class="container">
+    <div class="card-header text-center bg-dark text-white">
+        {{name}}
+    </div>
+    {% for row in rows %}
+    
+    {% for key in columns %}
+    
+    {% if row[key] == 'falciparum' %}
+    <i class="fa-solid fa-p fa-6x"></i>
+    <i class="fa-solid fa-f fa-3x"></i>
+    {% elif row[key] == 'ovale' %}
+    <i class="fa-solid fa-p fa-6x"></i>
+    <i class="fa-solid fa-o fa-3x"></i>
+    {% elif row[key] == 'vivax' %}
+    <i class="fa-solid fa-p fa-6x"></i>
+    <i class="fa-solid fa-v fa-3x"></i>
+    {% elif row[key] == 'knowlesi' %}
+    <i class="fa-solid fa-p fa-6x"></i>
+    <i class="fa-solid fa-k fa-3x"></i>
+    {% else %}
+    
+    
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+
+    <table class="table table-hover" id="table-{{rand_id}}">
+        <thead>
+            <tr>
+                {% for key in columns %}
+                {% if columns[key] != "Species" %}
+                    <th scope="col" style="width: 10%">{{ columns[key] }}</th>
+                    {% endif %}
+                    {% endfor %}
+            </tr>
+        </thead>
+        <tbody id="resultsTable">
+            {% for row in rows %}
+                <tr>
+                {% for key in columns %}
+                {% if row[key] != 'falciparum' %}
+                    <td>
+                        {{ row[key]|safe }}
+                    </td>
+                    {% endif %}
+                {% endfor %}
+                </tr>
+            {% endfor %}                
+        </tbody>
+    </table>
+                  
+
+</div>
+{%- endmacro %}
+
+
+{% macro get_results2(rows, columns, name) -%}
+<div class="contaasiner">
+ {% for row in rows %}
+  {% for key in columns %}
+      {% if not '-' in row[key] %}
+      <p style="float: right; font-size: 20px;">{{ row[key] }}</p>
+         
+     {% else %} 
+    
+    {% endif %}      
+    {% endfor %}
+
+{% endfor %}                
+
+</div>
 {%- endmacro %}
