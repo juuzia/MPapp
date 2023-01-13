@@ -21,14 +21,16 @@
 function setup() {
     var canvasDiv = document.getElementById('canvasForHTML');
     var width = canvasDiv.offsetWidth;
-    var sketchCanvas = createCanvas(width/1.5,height);
+    var sketchCanvas = createCanvas(width,height);
     
     sketchCanvas.parent("canvasForHTML");
 } 
 function draw() {
+  noStroke();
+let c = color(0, 104, 107);
+fill(c)
+  rect(0, 10, width/1.5,height/2, 25);
  
-  rect(100, 10, width/1.5,height/2, 25);
-  
 }
 
 
@@ -143,18 +145,30 @@ pointSeries.bullets.push(function () {
 });
 
 var regions = [
-  {
-    title: "West Africa",
-    latitude: 9,
-    longitude: 4
-  },
+  
   
 ];
 
-for (var i = 0; i < regions.length; i++) {
-  var region = regions[i];
-  addregion(region.longitude, region.latitude, region.title);
+$(document).ready(function(){
+  var region = $('#region').data();
+var regionalValues = Object.values(region);
+
+firstValue = regionalValues[0]
+var splitValues = firstValue.split(":")
+beforeTrim = splitValues[1];
+finalRegion = beforeTrim.replace(/[^\w\s!?]/g,'');
+
+if(finalRegion = "Western Africa"){
+ regions.push({
+    title: "West Africa",
+    latitude: 9,
+    longitude: 4
+  },)
+  addregion(regions[0].longitude, regions[0].latitude, regions[0].title);
+  
 }
+})
+
 
 function addregion(longitude, latitude, title) {
   pointSeries.data.push({
@@ -195,6 +209,7 @@ div#draw-shapes {
    
 
 }
+
 .container-fluid > div{
   box-shadow: 2px 2px 5px #333;
   padding: 20px;
@@ -233,16 +248,71 @@ div#draw-shapes {
 .container-fluid > div:nth-child(7){
   height: 210px;
   grid-column: span 4;
+  position: relative;
 }
 .container-fluid .fa-solid{
-            color: lightseagreen;
+            color: #add8e6;
             margin-top: 5px;
         }
-        
+
+.container2 {
+  height: inherit;
+  width: 33%;
+  display: grid;
+   
+  margin-top: -10px;
+  grid-template-columns: repeat(1, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+}
+        .container2 > div:nth-child(1){
+  width:80%;
+  height: 70%;
+  grid-column-start: 1;
+  grid-row-start: 1;
+  
+  position: relative;
+}
+.container2 > div:nth-child(2){
+  width:80%;
+  height: 70%;
+  grid-column-start: 1;
+  grid-row-start: 2;
+  
+  position: relative;
+}
+.container2 > div:nth-child(3){
+  width:80%;
+  height: 70%;
+  grid-column-start: 1;
+  grid-row-start: 3;
+  position: relative;
+  
+}
+.container3{
+  clear: both;
+  position: absolute;
+  top:33%;
+  right: -30%;
+  width:100%
+}
+
+.btn-outline-success{
+  background-color: #add8e6;
+  color: #333;
+  border-color: #add8e6 !important; 
+}
+.btn-outline-success:hover{
+background-color: #35add4;
+color: #eee !important;
+  border-color: #35add4 !important; 
+}
+.btn:active {
+  background-color: #35add4 !important;
+}
   </style>
   <script type="text/javascript">
 $(document).ready(function(){
-  var djangoData = $('#my-data').data();
+  var djangoData = $('#rvr-data').data();
 
 console.log(djangoData)
 
@@ -250,6 +320,10 @@ $('#7').on('click', function(e) {
     
 });
 });
+
+
+
+
   </script>
 </head>
 <div class="container-fluid">
@@ -281,7 +355,7 @@ $('#7').on('click', function(e) {
   </div>
   <div class="3">
     <div class="row justify-content-center text-center">
-      <div class="col-md-6">    
+      <div class="">    
         <div class="tab-content" id="tabcontent">  
           
           {% for key in tables %}     
@@ -305,6 +379,14 @@ $('#7').on('click', function(e) {
     <div class="card-header text-center bg-dark text-white">
       <h5>Region of Origin</h5>
   </div>
+  {% for key in tables %}
+    
+    {% for row in tables[key][0] %}
+    {% if key == 'Geoclassification' %}
+    <meta id="region" data-name="{{row}}" >
+    {% endif %}
+    {% endfor %}
+    {% endfor %}
     <div id="chartdiv" style="width: 100%; height: 75%;"></div></div>
   <div class="5">
     {% for key in tables %}
@@ -320,16 +402,35 @@ $('#7').on('click', function(e) {
     
     {% endif %}
     {% endfor %} </div>
-  <div  class="7" id="7">
-    {% for key in tables %}
+  <div  class="7" id="7"> {% set values = [] %}
+    <div class="container2">
+      <div class="Resistance">
+        <a class="btn btn-outline-success btn-lg" onclick="changeChromosome()">Resistance variants</a>
+        {% for key in tables %}
     
     {% for row in tables[key][0] %}
-    
-    <meta id="my-data" data-name="{{row}}" >
-    
+    {% if key == 'Resistance variants report' %}
+    {{ values.append(row) }}
+   {% endif %}
     {% endfor %}
-    {% endfor %}
-    <div  id="canvasForHTML" style="margin-top: 70px;"></div>
+        
+{% endfor %}
+<meta id="rvr-data" data-name="{{values}}" >
+{{values}}
+      </div>
+      <div class="otherVariants">
+        <a class="btn btn-outline-success btn-lg" onclick="changeChromosome()" >Other Variants</a>
+      </div>
+      <div class="Missing">
+        <a class="btn btn-outline-success btn-lg" onclick="changeChromosome()">Missing Positions</a>
+      </div>
+    </div>
+      <div class="container3">
+        <div  id="canvasForHTML"></div>  
+      </div>
+      
+    
+    
 </div>
 
   
