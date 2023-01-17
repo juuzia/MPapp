@@ -191,9 +191,7 @@ def parse_result_summary(json_file):
                             {"gene": "Gene",
                              "locus_tag": "Locus tag",
                              "cutoff": "Cutoff",
-                             "fraction": "Fraction"},
-                             "Gene coverage"
-                             )
+                             "fraction": "Fraction"})
 
         if "missing_positions" in json_results['qc']:
             missing = (json_results['qc']['missing_positions'],
