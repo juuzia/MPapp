@@ -252,11 +252,11 @@
 
 
 {% macro get_results2(rows, columns, name) -%}
-<div class="contaasiner">
+<div class="contasiner">
  {% for row in rows %}
   {% for key in columns %}
       {% if not '-' in row[key] %}
-      <p style="float: right; font-size: 20px;">{{ row[key] }}</p>
+      <p style="float: right; font-size: 20px; font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">{{ row[key] }}</p>
          
      {% else %} 
     
