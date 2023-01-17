@@ -172,6 +172,8 @@ def parse_result_summary(json_file):
                         {"chrom": "Chromosome",
                         "genome_pos": "Genome Position",
                         "locus_tag": "Locus Tag",
+                        "gene": "Gene Name",
+                        "change": "Change",
                         "freq": "Estimated fraction",
                         "drugs.drug": "Drug"})
 
@@ -180,6 +182,8 @@ def parse_result_summary(json_file):
                         {"chrom": "Chromosome:",
                         "genome_pos": "Genome Position",
                         "locus_tag": "Locus Tag",
+                        "gene": "Gene Name",
+                        "change": "Change",
                         "freq": "Estimated fraction"})
         
         if "gene_coverage" in json_results['qc']:
@@ -187,7 +191,9 @@ def parse_result_summary(json_file):
                             {"gene": "Gene",
                              "locus_tag": "Locus tag",
                              "cutoff": "Cutoff",
-                             "fraction": "Fraction"})
+                             "fraction": "Fraction"},
+                             "Gene coverage"
+                             )
 
         if "missing_positions" in json_results['qc']:
             missing = (json_results['qc']['missing_positions'],
