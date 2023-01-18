@@ -4,8 +4,24 @@
             color: lightseagreen;
             background-color: lightcoral;
         }
+        .owl-stage, .owl-carousel, .owl-stage-outer {
+            width: 1px !important;
+        }
+       .item{
+        background-color: #4DC7A0;
+  color: white;
+  font-size: 30px;
+
+  padding: 10px;
+       }
     </style>
+    
+
 </head>
+<scripts>
+ 
+
+</scripts>
 
 
 
@@ -264,30 +280,70 @@
 </div>
 {%- endmacro %}
 
-{% macro get_results3(rows, columns, name) -%}
-<div class="container">
-   <div>
-        {% for key in columns %}
-                {% if columns[key] != "Species" %}
-                    <p scope="col" style="width: 10%">{{ columns[key] }}</p>
-                    {% endif %}
-                    {% endfor %}
+{% macro get_analysis(rows, columns, name) -%}
+
+<div class="owl-carousel">{% set values = [] %}
+    {% for row in rows %}
+    {% for key in columns %}
+    {{ loop.index }}
+    {{values.append(row[key]) or ""}}
+    
+        <div class="item">
             
-        
-       
-            {% for row in rows %}
-       
-                {% for key in columns %}
-                
-       
-                        {{ row[key]|safe }}
-       
+            <table class="" id="table-{{rand_id}}">
+                <thead>
+                    <tr>
+                        
+                        <th scope="col" style="width: 10%;">Gene</th>   
+                        <th scope="col" style="width: 10%;">Locus Tag</th>   
+                        <th scope="col" style="width: 10%;">Cutoff</th>   
+                        <th scope="col" style="width: 10%;">Fraction</th>   
+                    </tr>
+                </thead>
+                <tbody id="resultsTable">
                     
-                {% endfor %}
-       
-            {% endfor %}                
+                  
+                    <tr>
+                        
+                    <td>
+                            {{ values[0]}}
+                    </td>
+                    <td>
+                        {{ values[1]}}
+                </td>
+                <td>
+                    {{ values[2]}}
+            </td>
+            <td>
+                {{ values[3]}}
+            </td>
+                    </tr>
+                      
+                    
+                </tbody>
+            </table>
+            
+        </div>
+        
+        {% endfor %}    
+            {% endfor %}
+            
+      </div>
+        
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <script>
+       $(document).ready(function() {
+        $(".owl-carousel").owlCarousel({
+            loop:true,
+            margin:10,
+            nav:false,
+            items: 1,
+            singleItem:true,
+                   });
+                });
 
-    </div>
-
-</div>
+    </script>
 {%- endmacro %}
+
+</div>   
+    
