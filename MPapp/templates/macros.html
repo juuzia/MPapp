@@ -164,9 +164,7 @@
 
 {% set rand_id = range(1, 5000) | random %}
 <div class="card border-dark shadow">
-    <div class="card-header text-center bg-dark text-white">
-        {{name}}
-    </div>
+    
     <div class="card-body">
         <table class="table table-hover" id="table-{{rand_id}}">
             <thead>
@@ -195,9 +193,7 @@
 
 {% macro get_results(rows, columns, name) -%}
 <div class="container">
-    <div class="card-header text-center bg-dark text-white">
-        {{name}}
-    </div>
+    
     {% for row in rows %}
     
     {% for key in columns %}
@@ -264,6 +260,34 @@
     {% endfor %}
 
 {% endfor %}                
+
+</div>
+{%- endmacro %}
+
+{% macro get_results3(rows, columns, name) -%}
+<div class="container">
+   <div>
+        {% for key in columns %}
+                {% if columns[key] != "Species" %}
+                    <p scope="col" style="width: 10%">{{ columns[key] }}</p>
+                    {% endif %}
+                    {% endfor %}
+            
+        
+       
+            {% for row in rows %}
+       
+                {% for key in columns %}
+                
+       
+                        {{ row[key]|safe }}
+       
+                    
+                {% endfor %}
+       
+            {% endfor %}                
+
+    </div>
 
 </div>
 {%- endmacro %}
