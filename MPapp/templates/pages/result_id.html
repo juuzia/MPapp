@@ -374,7 +374,7 @@ div#draw-shapes {
 .container-fluid > div:nth-child(7){
  
   grid-column: span 4;
-  position: relative;
+  
 }
 .container-fluid .fa-solid{
             color: rgb(255,89,0);
@@ -540,6 +540,7 @@ for (var ranges =0; ranges<15;ranges++){
     }
 $(document).ready(function(){
   changeData('#rvr-data')
+
 });
 
   </script>
@@ -763,55 +764,8 @@ $(document).ready(function(){
 {% endif %}
 <script type="text/javascript">
 $(document).ready(function(){
-
-  var json_result= $("#rvr-data").data();
-console.log(djangoData2)
-  var result = $("miss-data").data()
-  variants = {}
-  json_result.dr_variants.forEach((item, i) => {
-    variants[item.genome_pos] = item
-  });
-  json_result.other_variants.forEach((item, i) => {
-    variants[item.genome_pos] = item
-  });
-  console.log(variants)
-
-    
-   
-        
-        var options = {
-            // Example of fully specifying a reference .  We could alternatively use  "genome: 'hg19'"
-            reference: {
-                    id: "Mtb",
-                    fastaURL: "{{ url_for('static', filename='tbdb.fasta')}}",
-            },
-            locus: locus,
-            tracks: [
-                {
-                    type: "alignment",
-                    format: "bam",
-                    name: "s"
-                    
-                    
-                },
-                {
-                    type: "annotation",
-                    format: "gff3",
-                    name: "Genes",
-                    
-                    displayMode: "EXPANDED"
-                }
-            ]
-        }
-        var igvDiv = document.getElementById("igvDiv");
-
-        igv.createBrowser(igvDiv, options)
-            .then(function (browser) {
-                window.setPileupView = function(objButton){
-                    pos = Number(objButton.getAttribute("pos"))
-                    browser.search("Chromosome:"+(pos-10)+"-"+(pos+10))
-                }
-            })
+  
+console.log($(document).width());
    })
 
 
