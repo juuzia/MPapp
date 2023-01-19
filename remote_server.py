@@ -23,6 +23,7 @@ def main(args):
 
     def process_run(run_file):
         runs_in_progress.add(run_file)
+        sys.stderr.write(f"scp {username}@{host}:{watch_directory}/{run_file} {processing_dir}/")
         run_cmd(f"scp {username}@{host}:{watch_directory}/{run_file} {processing_dir}/")
         conf = json.load(open(run_file))
         for f in conf['files']:
