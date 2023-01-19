@@ -55,7 +55,7 @@ def main(args):
     while True:
         time.sleep(1)
         for l in cmd_out(f"ssh {username}@{host} 'ls {watch_directory}/*run_file.json'"):
-            run_file = l.strip()
+            run_file = l.strip().split("/")[-1]
             if run_file not in runs_in_progress:
                 process_run(run_file)
 
