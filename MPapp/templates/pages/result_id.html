@@ -6,7 +6,9 @@
 {% if status == "OK" %}
 <head>
   <scripts>
-    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sofia+Sans:wght@300&display=swap" rel="stylesheet">
 <script src="https://cdn.amcharts.com/lib/5/percent.js"></script>
 <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
 <script src="https://cdn.amcharts.com/lib/5/map.js"></script>
@@ -15,9 +17,10 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g==" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" integrity="sha512-sMXtMNL1zRzolHYKEujM2AqCLUR9F2C4/05cdbxjjLSRvMQIciEPCQZo++nk7go3BtSuK9kfa/s+a4f4i5pLkw==" crossorigin="anonymous"
     />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" integrity="sha512-sMXtMNL1zRzolHYKEujM2AqCLUR9F2C4/05cdbxjjLSRvMQIciEPCQZo++nk7go3BtSuK9kfa/s+a4f4i5pLkw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.1/p5.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/igv@2.7.4/dist/igv.min.js"></script>
 
 <script>
 
@@ -338,7 +341,7 @@ div#draw-shapes {
   
   justify-content: center; /* center horizontal */
   align-items: center; /* center vertical */
-  
+  font-family:'Sofia Sans', sans-serif;
 }
 
  .header{
@@ -379,51 +382,61 @@ div#draw-shapes {
         }
 
 .container2 {
-  height: inherit;
-  width: 33%;
-  display: grid;
-   
-  margin-top: -10px;
-  grid-template-columns: repeat(1, 1fr);
-  grid-template-rows: repeat(3, 1fr);
+  height: 40%;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+ 
 }
         .container2 > div:nth-child(1){
   width:80%;
   height: 70%;
-  grid-column-start: 1;
-  grid-row-start: 1;
   
-  position: relative;
+ 
 }
 .container2 > div:nth-child(2){
   width:80%;
   height: 70%;
-  grid-column-start: 1;
-  grid-row-start: 2;
   
-  position: relative;
+  margin: 10px;
+  
 }
 .container2 > div:nth-child(3){
   width:80%;
   height: 70%;
   grid-column-start: 1;
   grid-row-start: 3;
-  position: relative;
-  
+ 
+  margin: 10px;
+}
+.container2 > div:nth-child(4){
+  width:80%;
+  height: 70%;
+  flex-direction: column;
+  margin: 10px;
 }
 .container3{
   clear: both;
-  position: absolute;
-  top:33%;
-  left:15%;
-  width:85%
+  display: flex;
+  flex-direction: column;
+  
+}
+.container4{
+  clear: both;
+  display: flex;
+  float:left;
+  width:33%;
+  height: inherit;
+  flex-direction: column;
 }
 
 .btn-outline-success{
   background-color: rgb(74,74,74);;
   color: white !important;
   border-color: rgb(74,74,74) !important; 
-  width:200px
+  width:200px;
+  font-size:15px;
+  font-family: 'Sofia Sans', sans-serif;
 }
 .btn-outline-success:hover{
 background-color: rgb(255,89,0);
@@ -446,90 +459,11 @@ color: #eee !important;
     box-shadow: 0 0 0 .2rem rgba(119, 204, 204, 0.5)
 }
 
-#chromosome01{
-  position: absolute;
-  top:2%;
-  left:20%;
-  font-size: 13px;
-}
-#chromosome02{
-  position: absolute;
-  top:2%;
-  left:25.7%;
-  font-size: 13px;
-}
-#chromosome03{
-  position: absolute;
-  top:2%;
-  left:31.4%;
-  font-size: 13px;
-}
-#chromosome04{
-  position: absolute;
-  top:2%;
-  left:37.1%;
-  font-size: 13px;
-}
-#chromosome05{
-  position: absolute;
-  top:2%;
-  left:42.8%;
-  font-size: 13px;
-  
-}
-#chromosome06{
-  position: absolute;
-  top:2%;
-  left:48.5%;
-  font-size: 13px;
-}
-#chromosome07{
-  position: absolute;
-  top:2%;
-  left:54.2%;
-  font-size: 13px;
-}
-#chromosome08{
-  position: absolute;
-  top:2%;
-  left:59.9%;
-  font-size: 13px;
-}
-#chromosome09{
-  position: absolute;
-  top:2%;
-  left:65.6%;
-  font-size: 13px;
-}
-#chromosome10{
-  position: absolute;
-  top:2%;
-  left:71.3%;
-  font-size: 13px;
-}
-#chromosome11{
-  position: absolute;
-  top:2%;
-  left: 77%;
-  font-size: 13px;
-}
-#chromosome12{
-  position: absolute;
-  top:2%;
-  left: 82.7%;
-  font-size: 13px;
-}
-#chromosome13{
-  position: absolute;
-  top:2%;
-  left:88.4%;
-  font-size: 13px;
-}
-#chromosome14{
-  position: absolute;
-  top:2%;
-  left:94.1%;
-  font-size: 13px;
+.resistance .btn-outline-success{
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-family: 'Sofia Sans', sans-serif;;
 }
 .buttonHere{
   display: flex;
@@ -543,11 +477,24 @@ color: #eee !important;
   background-color: rgb(255,89,0);
   border-color: rgb(255,89,0);
   width:50%;
+  font-family: 'Sofia Sans', sans-serif;;
 
 }
 .item{
-  padding: 40px;
+width:inherit;
   text-align: center;
+}
+table {
+    table-layout: fixed;
+    word-wrap: break-word;
+}
+.dropdown-menu {
+  color: white !important;
+  background-color: rgb(74,74,74) !important;
+  }
+
+.dropdown-item{
+  color: white;
 }
   </style>
   <script type="text/javascript">
@@ -601,7 +548,7 @@ $(document).ready(function(){
 </head>
 <div class="container-fluid" style="margin-top: 25px;">
   <div class="1">
-    <h4><b>Result ID:</b> {{run_id}}</h4>
+    <h4><b>RESULT ID: </b> {{run_id}}</h4>
     <div class="date">
       {% for key in tables %}
       {% if key == 'General information' %}
@@ -660,10 +607,15 @@ $(document).ready(function(){
     {% for row in tables[key][0] %}
     {% if key == 'Geoclassification' %}
     <meta id="region" data-name="{{row}}" >
+    <p style="text-align: center; margin-top: 5px; font-family: 'Sofia Sans', sans-serif;">{{row['region']}}</p>
     {% endif %}
     {% endfor %}
     {% endfor %}
-    <div id="chartdiv" style="width: 100%; height: 75%;"></div></div>
+    <div id="chartdiv" style="width: 100%; height: 60%; display: flex-box;
+    
+    justify-content: center; /* center horizontal */
+    align-items: center; /* center vertical */
+    overflow: hidden;"></div></div>
   <div class="5">
     <div class="card-header text-center bg-light" style="border-top-left-radius: 15px;border-top-right-radius: 15px;">
       <h4>Analysis</h4>
@@ -691,11 +643,13 @@ $(document).ready(function(){
   <div  class="7" id="7"> {% set values = [] %}
     
     <div class="container2" style="">
+      <div class="card-header text-center bg-light" style="border-top-left-radius: 15px;border-top-right-radius: 15px;">
+        <h4>Chromosome view</h4>
+      </div>
+
       <div class="Resistance">
-        <div class="card-header text-center bg-light" style="border-top-left-radius: 15px;border-top-right-radius: 15px;">
-          <h4>Chromosome view</h4>
-        </div>
-        <a type=button class="btn btn-outline-success btn-lg active" onclick="changeData('#rvr-data')">Resistance variants</a>
+        
+        <a type=button class="btn btn-outline-success btn-lg active" onclick="changeData('#rvr-data')">RESISTANCE VARIANTS</a>
         {% for key in tables %}
     
     {% for row in tables[key][0] %}
@@ -709,7 +663,7 @@ $(document).ready(function(){
 
       </div>
       <div class="otherVariants">
-        <a  class="btn btn-outline-success btn-lg" onclick="changeData('#other-data')">Other Variants</a>
+        <a  class="btn btn-outline-success btn-lg" onclick="changeData('#other-data')">OTHER VARIANTS</a>
         {% for key in tables %}
     
     {% for row in tables[key][0] %}
@@ -722,7 +676,7 @@ $(document).ready(function(){
         <meta id="other-data" data-name="{{values}}" >
       </div>
       <div class="Missing">
-        <a  class="btn btn-outline-success btn-lg" onclick="changeData('#miss-data')">Missing Positions</a>
+        <a  class="btn btn-outline-success btn-lg" onclick="changeData('#miss-data')">MISSING POSITIONS</a>
         {% for key in tables %}
     
     {% for row in tables[key][0] %}
@@ -735,17 +689,28 @@ $(document).ready(function(){
         <meta id="miss-data" data-name="{{values}}" >
       </div>
     </div>
-    <div class="chromosomeList">
+    <div class="container4">
       
-      {% for n in range(1,15) %}
-
-      <div id="chromosome{{"%02.0f" % n}}" style="display: none; cursor: pointer;" onclick="drawChrom({{n}})" >Chromosome {{n}}</div>
-      {% endfor %}
-    </div>
-
-      <div class="container3">
-        <div  id="canvasForHTML"></div>  
+      <div class="chromosomeList">
+        <button type="button" class="btn btn-outline-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          ACTION
+        </button>
+        <div class="dropdown-menu">
+          {% for n in range(1,15) %}
+          <div class="dropdown-item" id="chromosome{{"%02.0f" % n}}" style="display: none; cursor: pointer;" onclick="drawChrom({{n}})" >Chromosome {{n}}</div>
+        
+         
+          {% endfor %}
+        </div>
+        
+  
+        
+        
       </div>
+    </div>
+    <div class="container3">
+        <div  id="canvasForHTML"></div>  
+    </div>
       
     
     
@@ -756,13 +721,104 @@ $(document).ready(function(){
 <section class="button" style="margin-top:50px">
   <div class="container" id="buttonbit">
     <div class="buttonHere">
-      <button type="submit" class="btn btn-success btn" name="result_download" id="result_download"><i class="fa fa-download"></i> Download</button>
+      <button type="submit" class="btn btn-success btn" name="result_download" id="result_download"><i class="fa fa-download"></i> DOWNLOAD</button>
     </div>
   </div>
   
 </section>
 &nbsp;
 &nbsp;
+{% if bam_found %}
+<div class="row justify-content-md-center">
+    <div class="col-md-10">
+        <div class="card border-dark mb-3 shadow">
+        <div class="card-header bg-dark text-white text-center">Pileup</div>
+      <div class="card-body text-dark">
+        <div class="row">
+          <div class="col-md-12" id="pileup-mutations">
+            <div class="">
+              The raw alignment can be visualised here.
+              Click on a mutation to center and zoom the view to
+              the correct genomic location. Drug resistant mutations
+              are coloured in blue and non-associated mutations are
+              coloured in green.
+            </div>
+            <hr>
+            {% for var in result["dr_variants"]%}
+              <button type="button" class="btn btn-outline-primary mb-3" onclick="setPileupView(this)" pos="{{ var['genome_pos'] }}">{{ var["gene"] }} {{ var["change"] }}</button>
+            {% endfor %}
+            {% for var in result["other_variants"] %}
+              <button type="button" class="btn btn-outline-success mb-3" onclick="setPileupView(this)" pos="{{ var['genome_pos'] }}">{{ var["gene"] }} {{ var["change"] }}</button>
+            {% endfor %}
+          </div>
+
+        </div>
+        <hr>
+          <div id="igvDiv"></div>
+        </div>
+      </div>
+    </div>
+</div>
+
+{% endif %}
+<script type="text/javascript">
+$(document).ready(function(){
+
+  var json_result= $("#rvr-data").data();
+console.log(djangoData2)
+  var result = $("miss-data").data()
+  variants = {}
+  json_result.dr_variants.forEach((item, i) => {
+    variants[item.genome_pos] = item
+  });
+  json_result.other_variants.forEach((item, i) => {
+    variants[item.genome_pos] = item
+  });
+  console.log(variants)
+
+    
+   
+        
+        var options = {
+            // Example of fully specifying a reference .  We could alternatively use  "genome: 'hg19'"
+            reference: {
+                    id: "Mtb",
+                    fastaURL: "{{ url_for('static', filename='tbdb.fasta')}}",
+            },
+            locus: locus,
+            tracks: [
+                {
+                    type: "alignment",
+                    format: "bam",
+                    name: "s"
+                    
+                    
+                },
+                {
+                    type: "annotation",
+                    format: "gff3",
+                    name: "Genes",
+                    
+                    displayMode: "EXPANDED"
+                }
+            ]
+        }
+        var igvDiv = document.getElementById("igvDiv");
+
+        igv.createBrowser(igvDiv, options)
+            .then(function (browser) {
+                window.setPileupView = function(objButton){
+                    pos = Number(objButton.getAttribute("pos"))
+                    browser.search("Chromosome:"+(pos-10)+"-"+(pos+10))
+                }
+            })
+   })
+
+
+</script>
+
+
+
 
 <script  type=text/javascript>
   $('.btn-outline-success').click(function(e) {

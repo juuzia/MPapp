@@ -16,7 +16,7 @@
        }
     </style>
     
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" integrity="sha512-sMXtMNL1zRzolHYKEujM2AqCLUR9F2C4/05cdbxjjLSRvMQIciEPCQZo++nk7go3BtSuK9kfa/s+a4f4i5pLkw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <scripts>
  
@@ -179,15 +179,15 @@
 {% macro generic_table(rows, columns, name) -%}
 
 {% set rand_id = range(1, 5000) | random %}
-<div class="card border-dark shadow">
+<div class="card shadow" style="height: inherit;">
     
     <div class="card-body">
         <table class="table table-hover" id="table-{{rand_id}}">
             <thead>
                 <tr>
-                    {% for key in columns %}
-                        <th scope="col" style="width: 10%">{{ columns[key] }}</th>
-                    {% endfor %}
+                    <th scope="col" style="width: 10%">Drug</th>    
+                    <th scope="col" style="width: 5%">Genotypic Resistance</th>
+                    <th scope="col" style="width: 10%">Mutations</th>
                 </tr>
             </thead>
             <tbody id="resultsTable">
@@ -268,7 +268,7 @@
  {% for row in rows %}
   {% for key in columns %}
       {% if not '-' in row[key] %}
-      <p style="float: right; font-size: 20px; font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">{{ row[key] }}</p>
+      <p style="">{{ row[key] }}</p>
          
      {% else %} 
     
@@ -284,61 +284,72 @@
 
 <div class="owl-carousel">{% set values = [] %}
     {% for row in rows %}
-    {% for key in columns %}
-    {{ loop.index }}
-    {{values.append(row[key]) or ""}}
-    
-        <div class="item">
-            
-            <table class="" id="table-{{rand_id}}">
+                    {% for key in columns %}
+                    {{values.append(row[key]) or ""}}
+                    {% if loop.index0 == 3 %}
+    <div class="item">
+
+        <table class="table table-hover" id="table-{{rand_id}}">
                 <thead>
-                    <tr>
-                        
-                        <th scope="col" style="width: 10%;">Gene</th>   
-                        <th scope="col" style="width: 10%;">Locus Tag</th>   
-                        <th scope="col" style="width: 10%;">Cutoff</th>   
-                        <th scope="col" style="width: 10%;">Fraction</th>   
-                    </tr>
-                </thead>
-                <tbody id="resultsTable">
+                <tr>
+                    <th scope="col" style="width: 10%;">Gene</th>   
+                    <th scope="col" style="width: 10%;">Locus Tag</th>   
+                    <th scope="col" style="width: 10%;">Cutoff</th>   
+                    <th scope="col" style="width: 10%;">Fraction</th>   
+                </tr>
+            </thead>
+                
                     
-                  
-                    <tr>
-                        
-                    <td>
-                            {{ values[0]}}
+            <tbody id="resultsTable">
+                    
+                <tr>
+                    <td class="col-md-2" >
+                        {{ values[0]}}
                     </td>
-                    <td>
+                    <td class="col-md-2">
                         {{ values[1]}}
-                </td>
-                <td>
+                    </td class="col-md-2">
+                    <td>
                     {{ values[2]}}
-            </td>
-            <td>
-                {{ values[3]}}
-            </td>
-                    </tr>
-                      
+                    </td >
+                    <td class="col-md-2">
+                    {{ values[3]}}
+                    </td>
+                </tr>
+                   
+                    {{values.clear() or ""}}
+                   
                     
+        
+        
                 </tbody>
             </table>
             
         </div>
-        
+        {% endif %}
         {% endfor %}    
-            {% endfor %}
+                {% endfor %}
+       
             
       </div>
         
-<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.js"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.theme.default.css"></script>
     <script>
        $(document).ready(function() {
         $(".owl-carousel").owlCarousel({
             loop:true,
+            autoplay:true,
+    autoplayTimeout:2000,
+    autoplayHoverPause:true, 
             margin:10,
-            nav:false,
+            dots:true,
+            
             items: 1,
             singleItem:true,
+            
                    });
                 });
 
