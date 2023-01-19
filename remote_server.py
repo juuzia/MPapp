@@ -23,7 +23,7 @@ def main(args):
 
     def process_run(run_file):
         runs_in_progress.add(run_file)
-        sys.stderr.write(f"scp {username}@{host}:{watch_directory}/{run_file} {processing_dir}/")
+        sys.stderr.write(f"scp {username}@{host}:{watch_directory}/{run_file} {processing_dir}/\n")
         run_cmd(f"scp {username}@{host}:{watch_directory}/{run_file} {processing_dir}/")
         conf = json.load(open(run_file))
         for f in conf['files']:
@@ -47,6 +47,7 @@ def main(args):
 
         completion_json_file = f"{rid}.completed.json"
         json.dump(created_files,open(completion_json_file,"w"))
+        sys.stderr.write(f"scp {completion_json_file} {' '.join(created_files.values())}  {username}@{host}:{watch_directory}/\n")
         run_cmd(f"scp {completion_json_file} {' '.join(created_files.values())}  {username}@{host}:{watch_directory}/")
 
 
