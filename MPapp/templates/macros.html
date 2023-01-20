@@ -193,17 +193,19 @@
             <thead>
                 <tr>
                     <th scope="col" style="width: 10%">Drug</th>    
-                    <th scope="col" style="width: 5%">Genotypic Resistance</th>
-                    <th scope="col" style="width: 10%">Mutations</th>
+                   <th scope="col" style="width: 30%">Mutations</th>
                 </tr>
             </thead>
             <tbody id="resultsTable">
                 {% for row in rows %}
                     <tr>
                     {% for key in columns %}
+                    {% if key != 'Genotypic Resistance' %}
+
                         <td>
                             {{ row[key]|safe }}
                         </td>
+                        {% endif %}
                     {% endfor %}
                     </tr>
                 {% endfor %}                
