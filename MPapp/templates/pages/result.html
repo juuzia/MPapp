@@ -3,6 +3,82 @@
 {% block header %}
 {% endblock %}
 {% block content %}
+
+
+<style>
+    html, body, main {
+  height: 100%; }
+
+main {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 0 30px;
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: center;
+  font-family: 'Open Sans', Helvetica, Arial, sans-serif; }
+
+h1 {
+  margin-bottom: 20px;
+  font-size: 30px;
+  font-weight: 300;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  color: #bbb; }
+  h1 span {
+    border: 2px solid #dfdfdf;
+    padding: 3px 2px 3px 7px;
+    border-radius: 6px;
+    font-weight: 400; }
+
+p {
+  margin-top: 10px;
+  font-size: 15px;
+  font-weight: bold;
+  color: rgb(255,89,0);
+  opacity: .4;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 1px; }
+
+.tags-input {
+  border: 2px solid #dfdfdf;
+  border-radius: 40px;
+  height: 40px;
+  padding: 0 11px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  color: #888; 
+width: 100%;}
+ 
+@keyframes blink {
+  0% {
+    opacity: 1; }
+  49% {
+    opacity: 1; }
+  50% {
+    opacity: 0; }
+  100% {
+    opacity: 0; } }
+    .form-control {
+    border: 0;
+}
+.no-border {
+    border: 0;
+    box-shadow: none; /* You may want to include this as bootstrap applies these styles too */
+}
+
+.form-control:focus, input:focus{
+    outline: none;
+}
+*:focus {
+    outline: none;
+}
+
+</style>
 <div class="row justify-content-center">
     <div class="col-md-6">
         {{macros.result_retriever()}}

@@ -23,16 +23,49 @@
     /><script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" integrity="sha512-sMXtMNL1zRzolHYKEujM2AqCLUR9F2C4/05cdbxjjLSRvMQIciEPCQZo++nk7go3BtSuK9kfa/s+a4f4i5pLkw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style media="screen">
+        
         .row {
             padding-top: 10px;
             padding-bottom: 10px;
         }
+        .btn-outline-success{
+  background-color: rgb(74,74,74);;
+  color: white !important;
+  border-color: rgb(74,74,74) !important; 
+  width:200px;
+  font-size:15px;
+  font-family: 'Sofia Sans', sans-serif;
+}
+.btn-outline-success:hover{
+background-color: rgb(255,89,0);
+color: #eee !important;
+  border-color: rgb(231, 139, 90) !important; 
+}
+
+
+.btn-outline-success:not(:disabled):not(.disabled):active,
+.btn-outline-success:not(:disabled):not(.disabled).active,
+.show>.btn-outline-success.dropdown-toggle {
+  background-color: rgb(255,89,0);
+color: #eee !important;
+  border-color: rgb(231, 139, 90) !important; 
+}
+
+.btn-outline-success:not(:disabled):not(.disabled):active:focus,
+.btn-outline-success:not(:disabled):not(.disabled).active:focus,
+.show>.btn-outline-success.dropdown-toggle:focus {
+    box-shadow: 0 0 0 .2rem rgba(119, 204, 204, 0.5)
+}
+.navbar, .navbar a{
+    background-color:  rgb(74,74,74);;
+    color: white;
+}
     </style>
     {% block header %}
     {% endblock %}
   </head>
   <body>
-        <nav class="navbar navbar-expand-lg sticky-top navbar-dark bg-dark font-weight-bold ">
+        <nav class="navbar navbar-expand-lg sticky-top  font-weight-bold ">
             <a class="navbar-brand" href="{{ url_for('main.index') }}"><i class="fa-solid fa-mosquito"></i> Malaria-Profiler </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
