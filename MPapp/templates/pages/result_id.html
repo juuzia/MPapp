@@ -549,7 +549,7 @@ table {
         
 {% endfor %}
         <meta id="other-data" data-name="{{values}}" >
-         <a  class="orange btn btn-outline-success btn-lg" >OTHER VARIANTS</a>
+         <a  class="orange btn btn-outline-success btn-lg" onclick="changeData('#other-data')">OTHER VARIANTS</a>
          {% set values = [] %}
         {% for key in tables %}
     
@@ -563,6 +563,9 @@ table {
             <meta id="miss-data" data-name="{{values}}" >
          <a  class="orange btn btn-outline-success btn-lg" onclick="changeData('#miss-data')">MISSING POSITIONS</a>
         </span>
+        </div>
+        <div>
+          <a  class="btn btn-outline-success btn-lg" >MISSING POSITIONS</a>
         </div>
          
    
@@ -651,11 +654,7 @@ function changeData(data,gene,protein){
   STATIC_URL = 'static/'
   {# {% load static %} #}
   var djangoData = $(data).data();
-dict = {}
-newDict = {}
-myDict = {
-    
-}
+
 for (var a in djangoData){
   
   var rvrValues = Object.values(djangoData);
@@ -681,20 +680,15 @@ var currentChromosome = chromArray[1]
 var currentPos = resistancePosArray[1]
 if (currentChromosome.includes("0")){
   currentChromosome = currentChromosome.replace('0','')
-  console.log(currentPos)
 }else{
-console.log("no")
-}
 
+}
 
 var initiallocus = "chr"+currentChromosome+":"+currentPos
 const locus = initiallocus.replace(/\s+/g, '')
 var igvDiv = document.getElementById("igvDiv");
-
-
       var options =
         {
-           
           genome:"hg38",
             locus: locus,
             tracks: [
@@ -706,10 +700,8 @@ var igvDiv = document.getElementById("igvDiv");
                 }
             ]
         };
-
         igv.createBrowser(igvDiv, options)
                 .then(function (browser) {
-                   
                 })
     }
 
