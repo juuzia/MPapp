@@ -537,7 +537,7 @@ table {
         
 {% endfor %}
 <meta id="rvr-data" data-name="{{values}}" >
-         <a  class="btn btn-outline-success btn-lg active" onclick="changeData('#rvr-data')">RESISTANCE REPORT</a>
+         <a  class="orange btn btn-outline-success btn-lg active" onclick="changeData('#rvr-data')">RESISTANCE REPORT</a>
          {% set values = [] %}
          {% for key in tables %}
     
@@ -549,7 +549,7 @@ table {
         
 {% endfor %}
         <meta id="other-data" data-name="{{values}}" >
-         <a  class="btn btn-outline-success btn-lg" >OTHER VARIANTS</a>
+         <a  class="orange btn btn-outline-success btn-lg" >OTHER VARIANTS</a>
          {% set values = [] %}
         {% for key in tables %}
     
@@ -561,7 +561,7 @@ table {
             
     {% endfor %}
             <meta id="miss-data" data-name="{{values}}" >
-         <a  class="btn btn-outline-success btn-lg" onclick="changeData('#miss-data')">MISSING POSITIONS</a>
+         <a  class="orange btn btn-outline-success btn-lg" onclick="changeData('#miss-data')">MISSING POSITIONS</a>
         </span>
         </div>
          
@@ -669,7 +669,7 @@ for(var i =1; i<splitValues.length;i++){
 
   var split2 =splitValues[i].split(",")
 
-  if(split2.find(a =>a.includes(gene))){
+  if(split2.find(a =>a.includes(protein))){
     chromArray = split2[0].split("_");
     resistancePosArray = split2[1].split(":")
 
@@ -679,8 +679,15 @@ for(var i =1; i<splitValues.length;i++){
 }
 var currentChromosome = chromArray[1]
 var currentPos = resistancePosArray[1]
-console.log(currentChromosome,currentPos)
-var initiallocus = "chromosome"+currentChromosome+":"+currentPos+"-"+currentPos
+if (currentChromosome.includes("0")){
+  currentChromosome = currentChromosome.replace('0','')
+  console.log(currentPos)
+}else{
+console.log("no")
+}
+
+
+var initiallocus = "chr"+currentChromosome+":"+currentPos
 const locus = initiallocus.replace(/\s+/g, '')
 var igvDiv = document.getElementById("igvDiv");
 
@@ -715,10 +722,10 @@ var igvDiv = document.getElementById("igvDiv");
 
 
 <script  type=text/javascript>
-  $('.btn-outline-success').click(function(e) {
+  $('.orange').click(function(e) {
     e.preventDefault();
   
-  $('.btn-outline-success').removeClass('active');
+  $('.orange').removeClass('active');
   $(this).addClass('active');
 })
 </script>
