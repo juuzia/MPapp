@@ -19,9 +19,9 @@
     />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" integrity="sha512-sMXtMNL1zRzolHYKEujM2AqCLUR9F2C4/05cdbxjjLSRvMQIciEPCQZo++nk7go3BtSuK9kfa/s+a4f4i5pLkw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.1/p5.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/igv@2.7.4/dist/igv.min.js"></script>
 
+
+<script src="https://cdn.jsdelivr.net/npm/igv@2.13.9/dist/igv.min.js"></script>
 <script>
 
 
@@ -469,53 +469,7 @@ table {
   color: white;
 }
   </style>
-  <script type="text/javascript">
-    function changeData(data){
-      clear()
-  noStroke();
-      var djangoData = $(data).data();
-dict = {}
-for (var a in djangoData){
   
-  var rvrValues = Object.values(djangoData);
-  firstValue = rvrValues[0]
-  
-var splitValues = firstValue.split("{'chrom':")
-var chromosomes = []
-
-for(var i =1; i<splitValues.length;i++){
-  var split2 =splitValues[i].split(",")
-
-    var chromArray = split2[0].split("_");
-    var resistancePosArray = split2[1].split(":")
-    
-    if (!(chromArray[1] in dict)) {
-      dict[chromArray[1]] = [];
-    }
-    dict[chromArray[1]].push(resistancePosArray[1]);
-  }
-}
-const keys =Object.keys(dict)
-for (var ranges =0; ranges<15;ranges++){
-  if(ranges <10){
-    rangeStr = "0" + ranges
-  }else{
-    rangeStr = ranges
-  }
-  $("#chromosome"+rangeStr).hide()
-}
-  for (var j =0;j<keys.length;j++){
-    var chrom = keys[j]
-  
-    $("#chromosome"+chrom).show()
-  }
-    }
-$(document).ready(function(){
-  changeData('#rvr-data')
-
-});
-
-  </script>
 
   
 </head>
@@ -568,7 +522,49 @@ $(document).ready(function(){
             {% endif %}
           {% endfor %}
         </div>
-      </div>    
+      </div>
+        <div style="">
+        <span style="display: table;
+        margin: 0 auto;">
+        {% set values = [] %}
+        {% for key in tables %}
+    
+    {% for row in tables[key][0] %}
+    {% if key == 'Resistance variants report' %}
+    {{ values.append(row) or "" }}
+   {% endif %}
+    {% endfor %}
+        
+{% endfor %}
+<meta id="rvr-data" data-name="{{values}}" >
+         <a  class="btn btn-outline-success btn-lg active" onclick="changeData('#rvr-data')">RESISTANCE REPORT</a>
+         {% set values = [] %}
+         {% for key in tables %}
+    
+    {% for row in tables[key][0] %}
+    {% if key == 'Other variants' %}
+    {{ values.append(row) or "" }}
+   {% endif %}
+    {% endfor %}
+        
+{% endfor %}
+        <meta id="other-data" data-name="{{values}}" >
+         <a  class="btn btn-outline-success btn-lg" >OTHER VARIANTS</a>
+         {% set values = [] %}
+        {% for key in tables %}
+    
+        {% for row in tables[key][0] %}
+        {% if key == 'Missing positions report' %}
+        {{ values.append(row) or "" }}
+       {% endif %}
+        {% endfor %}
+            
+    {% endfor %}
+            <meta id="miss-data" data-name="{{values}}" >
+         <a  class="btn btn-outline-success btn-lg" onclick="changeData('#miss-data')">MISSING POSITIONS</a>
+        </span>
+        </div>
+         
    
   </div>
   <div class="4">
@@ -613,80 +609,9 @@ $(document).ready(function(){
     {% endfor %}
     </div>
     </div>
-  <div  class="7" id="7"> {% set values = [] %}
-    
-    <div class="container2" style="">
-      <div class="card-header text-center bg-light" style="border-top-left-radius: 15px;border-top-right-radius: 15px;">
-        <h4>Chromosome view</h4>
-      </div>
+  <div  class="7" id="7"> 
 
-      <div class="Resistance">
-        
-        <a type=button class="btn btn-outline-success btn-lg active" onclick="changeData('#rvr-data')">RESISTANCE VARIANTS</a>
-        {% for key in tables %}
-    
-    {% for row in tables[key][0] %}
-    {% if key == 'Resistance variants report' %}
-    {{ values.append(row) or "" }}
-   {% endif %}
-    {% endfor %}
-        
-{% endfor %}
-<meta id="rvr-data" data-name="{{values}}" >
-
-      </div>
-      <div class="otherVariants">
-        <a  class="btn btn-outline-success btn-lg" onclick="changeData('#other-data')">OTHER VARIANTS</a>
-        {% for key in tables %}
-    
-    {% for row in tables[key][0] %}
-    {% if key == 'Other variants' %}
-    {{ values.append(row) or "" }}
-   {% endif %}
-    {% endfor %}
-        
-{% endfor %}
-        <meta id="other-data" data-name="{{values}}" >
-      </div>
-      <div class="Missing">
-        <a  class="btn btn-outline-success btn-lg" onclick="changeData('#miss-data')">MISSING POSITIONS</a>
-        {% for key in tables %}
-    
-    {% for row in tables[key][0] %}
-    {% if key == 'Missing positions report' %}
-    {{ values.append(row) or "" }}
-   {% endif %}
-    {% endfor %}
-        
-{% endfor %}
-        <meta id="miss-data" data-name="{{values}}" >
-      </div>
-    </div>
-    <div class="container4">
-      
-      <div class="chromosomeList">
-        <button type="button" class="btn btn-outline-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          ACTION
-        </button>
-        <div class="dropdown-menu">
-          {% for n in range(1,15) %}
-          <div class="dropdown-item" id="chromosome{{"%02.0f" % n}}" style="display: none; cursor: pointer;" onclick="drawChrom({{n}})" >Chromosome {{n}}</div>
-        
-         
-          {% endfor %}
-        </div>
-        
-  
-        
-        
-      </div>
-    </div>
-    <div class="container3">
-        <div  id="canvasForHTML"></div>  
-    </div>
-      
-    
-    <div class="igvDiv"></div>
+    <div class="igvDiv" id="igvDiv" style="width: 100%; height:auto; overflow: hidden; border-radius: 25px;"></div>
 </div>
 
    
@@ -704,45 +629,84 @@ $(document).ready(function(){
 
 
 <script type="text/javascript">
-
-  json_result = {{ tables|tojson|safe }}
-  console.log(json_result)
-  variants = {}
+  function strip(html) {
+    return html.replace(/<\s*[^>]*>/gi, '');
+}
+  function showGene2(number) {
+      var gene = document.getElementById("dropdownMenu"+number).textContent
+      var genesArray = gene.split(/\s+/)
+   
+      gene = genesArray[1]
+      protein = genesArray[2]
+      changeData("#rvr-data",gene,protein)
+  }
   
-  console.log(variants)
+  function showGene(item,number) {
+document.getElementById("dropdownMenu"+number).innerHTML = item.innerHTML;
+}
+  
+function changeData(data,gene,protein){
+  
+  igv.removeAllBrowsers()
+  STATIC_URL = 'static/'
+  {# {% load static %} #}
+  var djangoData = $(data).data();
+dict = {}
+newDict = {}
+myDict = {
+    
+}
+for (var a in djangoData){
+  
+  var rvrValues = Object.values(djangoData);
+  firstValue = rvrValues[0]
+  
+var splitValues = firstValue.split("{'chrom':")
+var chromosomes = []
+var chromArray = []
+var resistancePosArray = []
+for(var i =1; i<splitValues.length;i++){
 
-    document.addEventListener("DOMContentLoaded", function () {
-        {% if tables['dr_variants']|length > 0 %}
-            locus = "Chromosome:{{tables['dr_variants'][0]['genome_pos']|int-10}}-{{tables['dr_variants'][0]['genome_pos']|int+10}}"
-        {% elif  tables['dr_variants']|length > 0 %}
-            locus = "Chromosome:{{tables['other_variants'][0]['genome_pos']|int-10}}-{{tables['other_variants'][0]['genome_pos']|int+10}}"
-        {% else %}
-            locus = "Chromosome:1-100"
-        {% endif %}
-        var options = {
-            // Example of fully specifying a reference .  We could alternatively use  "genome: 'hg19'"
-            reference: {
-                    id: "Mtb",
-                    fastaURL: "{{ url_for('static', filename='tbdb.fasta')}}",
-            },
+  var split2 =splitValues[i].split(",")
+
+  if(split2.find(a =>a.includes(gene))){
+    chromArray = split2[0].split("_");
+    resistancePosArray = split2[1].split(":")
+
+  }
+    
+  }
+}
+var currentChromosome = chromArray[1]
+var currentPos = resistancePosArray[1]
+console.log(currentChromosome,currentPos)
+var initiallocus = "chromosome"+currentChromosome+":"+currentPos+"-"+currentPos
+const locus = initiallocus.replace(/\s+/g, '')
+var igvDiv = document.getElementById("igvDiv");
+
+
+      var options =
+        {
+           
+          genome:"hg38",
             locus: locus,
             tracks: [
                 {
-                   
-                },
-                
+                    "name": gene,
+                    "url": "https://s3.amazonaws.com/1000genomes/data/HG00103/alignment/HG00103.alt_bwamem_GRCh38DH.20150718.GBR.low_coverage.cram",
+                    "indexURL": "https://s3.amazonaws.com/1000genomes/data/HG00103/alignment/HG00103.alt_bwamem_GRCh38DH.20150718.GBR.low_coverage.cram.crai",
+                    "height":"50"
+                }
             ]
-        }
-        var igvDiv = document.getElementById("igvDiv");
+        };
 
         igv.createBrowser(igvDiv, options)
-            .then(function (browser) {
-                window.setPileupView = function(objButton){
-                    pos = Number(objButton.getAttribute("pos"))
-                    browser.search("Chromosome:"+(pos-10)+"-"+(pos+10))
-                }
-            })
-    })
+                .then(function (browser) {
+                   
+                })
+    }
+
+            
 
 
 </script>
@@ -757,6 +721,9 @@ $(document).ready(function(){
   $('.btn-outline-success').removeClass('active');
   $(this).addClass('active');
 })
+</script>
+<script>
+  
 </script>
 <!--
   <div class="row justify-content-center text-center">

@@ -193,23 +193,50 @@
             <thead>
                 <tr>
                     <th scope="col" style="width: 10%">Drug</th>    
-                   <th scope="col" style="width: 30%">Mutations</th>
+                    <th scope="col" style="width: 30%">Mutations</th>
                 </tr>
             </thead>
             <tbody id="resultsTable">
                 {% for row in rows %}
+                {% set my_counter = loop.index %}
                     <tr>
                     {% for key in columns %}
                     {% if key != 'Genotypic Resistance' %}
+                    {% if row[key] == "Chloroquine" or row[key] == "Mefloquine" or row[key] == "Pyrimethamine" or row[key] == "Sulfadoxine" or row[key] == "Artemisinin"  %}
+                    
+                    <td>
+                        {{ row[key]|safe }}
+                    </td>
+                    {% else %}
+                    
+                    
 
                         <td>
-                            {{ row[key]|safe }}
-                        </td>
+                            <button type="button" id="dropdownMenu{{my_counter}}" class="btn btn-outline-success dropdown-toggle" data-toggle="dropdown" aria-expanded="false" >
+                                SELECT MUTATION
+                              </button>
+                              <div class="dropdown-menu" aria-labelledby="dropdownMenu{{my_counter}}">
+                                {% set row = row[key]|string %}
+                                {% for item in row.split(',') %}
+                                
+                                  <div  class="dropdown-item " onclick="showGene(this,{{my_counter}})" data-value={{ item|safe }}>
+                                    {{ item|safe }}
+                                </div>
+                                {% endfor %}
+                              </div>
+                              <a  class="btn btn-outline-success" onclick="showGene2({{my_counter}})" >VIEW IN IGV</a>
+                              
+                            </td>
                         {% endif %}
+                        {% endif %}
+                        
                     {% endfor %}
+                    
                     </tr>
-                {% endfor %}                
+                {% endfor %} 
+                
             </tbody>
+
         </table>
     </div>
 </div>
@@ -235,6 +262,9 @@
     {% elif row[key] == 'knowlesi' %}
     <i class="fa-solid fa-p fa-6x"></i>
     <i class="fa-solid fa-k fa-3x"></i>
+    {% elif row[key] == 'brasilianum' %}
+    <i class="fa-solid fa-p fa-6x"></i>
+    <i class="fa-solid fa-b fa-3x"></i>
     {% else %}
     
     
