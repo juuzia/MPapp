@@ -458,6 +458,7 @@ width:inherit;
 }
 table {
     table-layout: fixed;
+    overflow-y: scroll;
     word-wrap: break-word;
 }
 .dropdown-menu {
@@ -467,6 +468,12 @@ table {
 
 .dropdown-item{
   color: white;
+}
+#remove2,#remove1,#remove3{
+  overflow-y:  scroll;
+}
+.tabby{
+max-height: 400px;
 }
   </style>
   
@@ -501,24 +508,20 @@ table {
     {% endif %}
     {% endfor %}                 
   </div>
-  <div class="3" id="3">
+  <div class="3" id="three">
     <div class="card-header text-center bg-light" style="border-top-left-radius: 15px;border-top-right-radius: 15px;">
-      <h4>Resistance report</h4>
+      <h4>Genomic variants</h4>
     </div>
       <div class="tabby" id="remove1">    
         <div class="tab-content" id="tabcontent">  
           
           {% for key in tables %}     
-            
-              {% set keyname = key.replace(' ', '') %}
                 {% if key == "Resistance report" %}
                 <div class="tab-pane fade show active" id="{{ keyname }}-tabs" role="tabpanel" aria-labelledby="{{ keyname }}-tab">
-                  {{macros.resistanceTable(tables[key][0], tables[key][1], key)}}
+                  {{macros.generic_table(tables[key][0], tables[key][1], key)}}
                 </div>       
             
-                <div class="tab-pane fade" id="{{ keyname }}-tabs" role="tabpanel" aria-labelledby="{{ keyname }}-tab">
-                  {{macros.resistanceTable(tables[key][0], tables[key][1], key)}}
-                </div>  
+                
             {% endif %}
           {% endfor %}
         </div>
@@ -527,17 +530,12 @@ table {
         <div class="tab-content" id="tabcontent">  
           
           {% for key in tables %}     
-            
-              {% set keyname = key.replace(' ', '') %}
-             
                 {% if key == "Other variants" %}
                 <div class="tab-pane fade show active" id="{{ keyname }}-tabs" role="tabpanel" aria-labelledby="{{ keyname }}-tab">
                   {{macros.generic_table(tables[key][0], tables[key][1], key)}}
                 </div>       
             
-                <div class="tab-pane fade" id="{{ keyname }}-tabs" role="tabpanel" aria-labelledby="{{ keyname }}-tab">
-                  {{macros.generic_table(tables[key][0], tables[key][1], key)}}
-                </div>  
+              
             {% endif %}
           {% endfor %}
         </div>
@@ -546,17 +544,12 @@ table {
         <div class="tab-content" id="tabcontent">  
           
           {% for key in tables %}     
-            
-              {% set keyname = key.replace(' ', '') %}
-              
                 {% if key == "Missing positions report" %}
                 <div class="tab-pane fade show active" id="{{ keyname }}-tabs" role="tabpanel" aria-labelledby="{{ keyname }}-tab">
                   {{macros.generic_table(tables[key][0], tables[key][1], key)}}
                 </div>       
             
-                <div class="tab-pane fade" id="{{ keyname }}-tabs" role="tabpanel" aria-labelledby="{{ keyname }}-tab">
-                  {{macros.generic_table(tables[key][0], tables[key][1], key)}}
-                </div>  
+                
             {% endif %}
           {% endfor %}
         </div>
@@ -566,6 +559,7 @@ table {
         <span style="display: table;
         margin: 0 auto;">
         {% set values = [] %}
+
         {% for key in tables %}
     
     {% for row in tables[key][0] %}
@@ -579,6 +573,7 @@ table {
          <a  class="orange btn btn-outline-success btn-lg active" onclick="showDiv('remove1')">RESISTANCE REPORT</a>
        
          {% set values = [] %}
+    
          {% for key in tables %}
     
     {% for row in tables[key][0] %}
@@ -592,6 +587,7 @@ table {
          <a  class="orange btn btn-outline-success btn-lg"  onclick="showDiv('remove2')">OTHER VARIANTS</a>
          
          {% set values = [] %}
+  
         {% for key in tables %}
     
         {% for row in tables[key][0] %}
@@ -601,22 +597,39 @@ table {
         {% endfor %}
             
     {% endfor %}
-            <meta id="miss-data" data-name="{{values}}" >
+            <meta id="miss-data " data-name="{{values}}" >
          <a  class="orange btn btn-outline-success btn-lg" onclick="showDiv('remove3')">MISSING POSITIONS</a>
         </span>
         </div>
         <div class="moreButtons">
           <span style="display: table;
         margin: 0 auto;">
-          <a  class="btn btn-outline-success btn-lg" >SHOW MORE INFO</a>
+          <a  data-toggle="modal" data-target=".bd-example-modal-lg" class=" btn btn-outline-success btn-lg" style="margin-top: 10px;" >SHOW MORE INFO</a>
           </span>
         </div>
-         
-   
+       
+        <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+               <div class="tabb"  >    
+                <div class="tab-content" id="tabcontent"> 
+                  {% for key in tables %}     
+                {% if key == "Resistance variants report" or key == 'Missing positions report' or key == 'Other variants' %}
+                <div class="tab-pane fade show active" id="{{ keyname }}-tabs" role="tabpanel" aria-labelledby="{{ keyname }}-tab">
+                  {{macros.resistanceTable(tables[key][0], tables[key][1], key)}}
+                </div> 
+                {% endif %}
+                {% endfor %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>   
+      
   </div>
   <div class="4">
     <div class="card-header text-center bg-light" style="border-top-left-radius: 15px;border-top-right-radius: 15px;">
-      <h4>Region of Origin</h4>
+      <h4>Estimated Region of Origin</h4>
   </div>
   {% for key in tables %}
     
@@ -676,6 +689,7 @@ table {
 
 
 <script type="text/javascript">
+
   function showDiv(divId) {
     var divs = document.getElementsByClassName("tabby");
     for (var i = 0; i < divs.length; i++) {
@@ -703,9 +717,10 @@ function changeData(data,gene,protein){
   {# {% load static %} #}
   var djangoData = $(data).data();
 
-for (var a in djangoData){
+
   
   var rvrValues = Object.values(djangoData);
+  console.log(rvrValues)
   firstValue = rvrValues[0]
   
 var splitValues = firstValue.split("{'chrom':")
@@ -723,7 +738,7 @@ for(var i =1; i<splitValues.length;i++){
   }
     
   }
-}
+
 var currentChromosome = chromArray[1]
 var currentPos = resistancePosArray[1]
 if (currentChromosome.includes("0")){

@@ -187,55 +187,64 @@
 
 {% set rand_id = range(1, 5000) | random %}
 <div class=" " style="height: inherit;">
-    
+    {% set ns = namespace(current_var='') %}
+    {% set gene_var_dict = {} %}
+    {% set ns2 = namespace(current_gene = "") %}
+    {% for row in rows %}
+        {% for key in columns %}
+            {% if key == "gene" %}
+                {% set ns2.current_gene = row[key] %}
+            {% endif %}
+            {% if key == "change" %}
+                {% set ns.current_var = row[key] %}
+            {% endif %}
+        {% endfor %}
+        {% if ns2.current_gene not in gene_var_dict %}
+            {% set gene_var_dict = gene_var_dict.update({(ns2.current_gene):[ns.current_var]}) %}
+            {{gene_var_dict[ns2.current_gene]}}
+        {% else %}
+        {% set vars_list = gene_var_dict[ns2.current_gene] %}
+{% set vars_list = vars_list + [ns.current_var] %}
+{% set gene_var_dict = gene_var_dict.update({ns2.current_gene:vars_list}) %}
+
+                 {% endif %}
+    {% endfor %}
+
+
+   
+        
     <div class="card-body">
         <table class="table table-hover" id="table-{{rand_id}}">
             <thead>
                 <tr>
-                    <th scope="col" style="width: 10%">Drug</th>    
+                    <th scope="col" style="width: 10%">Gene</th>    
                     <th scope="col" style="width: 30%">Mutations</th>
                 </tr>
             </thead>
             <tbody id="resultsTable">
-                {% for row in rows %}
-                {% set my_counter = loop.index %}
+                {% for key, values in gene_var_dict.items() %}
                     <tr>
-                    {% for key in columns %}
-                    {% if key != 'Genotypic Resistance' %}
-                    {% if row[key] == "Chloroquine" or row[key] == "Mefloquine" or row[key] == "Pyrimethamine" or row[key] == "Sulfadoxine" or row[key] == "Artemisinin"  %}
-                    
-                    <td>
-                        {{ row[key]|safe }}
-                    </td>
-                    {% else %}
-                    
-                    
-
                         <td>
-                            <button type="button" id="dropdownMenu{{my_counter}}" class="btn btn-outline-success dropdown-toggle" data-toggle="dropdown" aria-expanded="false" >
+                            {{key | safe}}
+                        </td>
+                        <td>
+                            <button type="button" id="dropdownMenu{{loop.index}}" class="btn btn-outline-success dropdown-toggle" data-toggle="dropdown" aria-expanded="false" >
                                 SELECT MUTATION
                               </button>
-                              <div class="dropdown-menu" aria-labelledby="dropdownMenu{{my_counter}}">
-                                {% set row = row[key]|string %}
-                                {% for item in row.split(',') %}
-                                
-                                  <div  class="dropdown-item " onclick="showGene(this,{{my_counter}})" data-value={{ item|safe }}>
-                                    {{ item|safe }}
+                              <div class="dropdown-menu" aria-labelledby="dropdownMenu{{loop.index}}">
+                                  {% for value in values %}
+                                  <div  class="dropdown-item " onclick="showGene(this,{{loop.index}})" data-value={{ value|safe }}>
+                                    {{ value|safe }}
                                 </div>
                                 {% endfor %}
                               </div>
-                              <a  class="btn btn-outline-success" onclick="showGene2({{my_counter}})" >VIEW IN IGV</a>
-                              
-                            </td>
-                        {% endif %}
-                        {% endif %}
-                        
-                    {% endfor %}
-                    
+                              <a  class="btn btn-outline-success"onclick="showGene2({{loop.index}})" >VIEW IN IGV</a>
+                        </td>
                     </tr>
-                {% endfor %} 
-                
+                    {% endfor %}
             </tbody>
+            
+
 
         </table>
     </div>
@@ -243,6 +252,39 @@
 
 {%- endmacro %}
 
+
+{% macro generic_table(rows, columns, name) -%}
+
+{% set rand_id = range(1, 5000) | random %}
+<div class="card border-dark shadow">
+    <div class="card-header text-center bg-dark text-white">
+        {{name}}
+    </div>
+    <div class="card-body">
+        <table class="table table-hover" id="table-{{rand_id}}">
+            <thead>
+                <tr>
+                    {% for key in columns %}
+                        <th scope="col" style="width: 10%">{{ columns[key] }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody id="resultsTable">
+                {% for row in rows %}
+                    <tr>
+                    {% for key in columns %}
+                        <td>
+                            {{ row[key]|safe }}
+                        </td>
+                    {% endfor %}
+                    </tr>
+                {% endfor %}                
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{%- endmacro %}
 {% macro get_results(rows, columns, name) -%}
 <div class="container">
     
@@ -258,7 +300,7 @@
     <i class="fa-solid fa-o fa-3x"></i>
     {% elif row[key] == 'vivax' %}
     <i class="fa-solid fa-p fa-6x"></i>
-    <i class="fa-solid fa-v fa-3x"></i>
+    <i class="fa-solid fa-v fa-3x"></i>]
     {% elif row[key] == 'knowlesi' %}
     <i class="fa-solid fa-p fa-6x"></i>
     <i class="fa-solid fa-k fa-3x"></i>
