@@ -475,6 +475,21 @@ table {
 .tabby{
 max-height: 400px;
 }
+th, tr{
+  text-align: center;
+}
+.text-center p{
+  font-family: 'Sofia Sans', sans-serif;
+}
+.generic_table .card-header,.rtablerr .card-header,.rtableov .card-header,.rtablemp .card-header{
+  background-color: rgba(255,89,0,0.5);
+  
+  color: black;
+}
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+  background-color: rgba(255,89,0,0.7);
+  color: white;
+}
   </style>
   
 
@@ -597,7 +612,7 @@ max-height: 400px;
         {% endfor %}
             
     {% endfor %}
-            <meta id="miss-data " data-name="{{values}}" >
+    <meta id="miss-data" data-name="{{values}}" >
          <a  class="orange btn btn-outline-success btn-lg" onclick="showDiv('remove3')">MISSING POSITIONS</a>
         </span>
         </div>
@@ -614,9 +629,17 @@ max-height: 400px;
                <div class="tabb"  >    
                 <div class="tab-content" id="tabcontent"> 
                   {% for key in tables %}     
-                {% if key == "Resistance variants report" or key == 'Missing positions report' or key == 'Other variants' %}
+                  {% if key == "Resistance variants report" %}
+                  <div class="tab-pane fade show active" id="{{ keyname }}-tabs" role="tabpanel" aria-labelledby="{{ keyname }}-tab">
+                  {{macros.resistanceTable1(tables[key][0], tables[key][1], key)}}
+                </div> 
+                {% elif key == "Other variants" %}
                 <div class="tab-pane fade show active" id="{{ keyname }}-tabs" role="tabpanel" aria-labelledby="{{ keyname }}-tab">
-                  {{macros.resistanceTable(tables[key][0], tables[key][1], key)}}
+                  {{macros.resistanceTable2(tables[key][0], tables[key][1], key)}}
+                </div> 
+                {% elif key == "Missing positions report" %}
+                <div class="tab-pane fade show active" id="{{ keyname }}-tabs" role="tabpanel" aria-labelledby="{{ keyname }}-tab">
+                  {{macros.resistanceTable3(tables[key][0], tables[key][1], key)}}
                 </div> 
                 {% endif %}
                 {% endfor %}
@@ -714,33 +737,41 @@ max-height: 400px;
     }
     document.getElementById(divId).style.display = "block";
 }
-  function showGene2(number) {
-    var protein = document.getElementById("dropdownMenu"+number).innerText
-
-      var gene = document.getElementById("dropdownMenu"+number).parentNode.querySelector("[data-keyz]").getAttribute("data-keyz");
-    
-      changeData("#other-data",gene,protein)
+  function showGene2(number,dataN) {
+   
+    var gene = document.getElementById("dropdownMenu"+number).parentNode.querySelector("[data-keyz]").getAttribute("data-keyz");
+      var protein = document.getElementById("dropdownMenu"+number).innerText  
+  
+      changeData(dataN,gene,protein)
       
   }
   
   function showGene(item,number) {
+    
 document.getElementById("dropdownMenu"+number).innerHTML = item.innerHTML;
+
+    
 }
   
 function changeData(data,gene,protein){
-  
+
   igv.removeAllBrowsers()
   STATIC_URL = 'static/'
   {# {% load static %} #}
+
   var djangoData = $(data).data();
 
 
   
   var rvrValues = Object.values(djangoData);
-  
+  var splitvalues = []
   firstValue = rvrValues[0]
-  
-var splitValues = firstValue.split("{'chrom':")
+  if( data=='#rvr-data' || data=='#other-data' ){
+splitValues = firstValue.split("{'chrom':")
+  }else{
+splitValues = firstValue.split("{")
+
+  }
 var nucleotideArray = []
 var chromArray = []
 var resistancePosArray = []
@@ -748,31 +779,81 @@ var resistancePosArray = []
 for(var i =1; i<splitValues.length;i++){
 
   var split2 =splitValues[i].split(",")
-
+  
   if(split2.find(a =>a.includes(gene))){
-    chromArray.push(split2[0].split("_")[1])
-    resistancePosArray.push(split2[1].split(":")[1])
-    var curr = split2[11].split(":")[1]
-    curr = curr.replace(/['"]+/g, '').trim();
-   console.log(split2)
-    nucleotideArray.push(curr)
+  
     
+    if(data == '#rvr-data'){
+      
+      chromArray.push(split2[0].split("_")[1])
+    resistancePosArray.push(split2[1].split(":")[1])
+      var curr = split2[12].split(":")[1]
+    curr = curr.replace(/['"]+/g, '').trim();
+   
+    nucleotideArray.push(curr)
+    }else if(data == '#other-data'){
+     
+      chromArray.push(split2[0].split("_")[1])
+    resistancePosArray.push(split2[1].split(":")[1])
+      var curr = split2[11].split(":")[1]
+    curr = curr.replace(/['"]+/g, '').trim();
+   
+    nucleotideArray.push(curr)
+    }else{
+     
+      var tempArray = split2[1].split(":")[1]
+      
+      console.log(tempArray)
+      var tempVar = tempArray.split("_")[1];
+      chromArray.push(tempVar.slice(0,2))      
+    resistancePosArray.push(split2[0].split(":")[1])
+      var curr = split2[3].split(":")[1]
+    curr = curr.replace(/['"]+/g, '').trim();
+   
+    nucleotideArray.push(curr)
+    }
   }
   }
   proteins = protein.trim();
-  console.log(proteins,nucleotideArray)
-  var currIndex = nucleotideArray.indexOf(proteins)
-       console.log(chromArray,currIndex)
-var currentChromosome = chromArray[currIndex]
-var currentPos = resistancePosArray[currIndex]
+  function getAllIndexes(arr, val) {
+    var indexes = [], i = -1;
+    while ((i = arr.indexOf(val, i+1)) != -1){
+        indexes.push(i);
+    }
+    return indexes;
+}
+var currentChromosome = "";
+var currentPos = "";
+var currIndex = nucleotideArray.indexOf(proteins)
+  if( data=='#rvr-data' || data=='#other-data' ){
+    currentPos = resistancePosArray[currIndex]
+  }else{
+    var indexes = getAllIndexes(nucleotideArray, proteins);
+
+    tempChr = []
+  for (var i = 0; i < indexes.length; i++) {
+    tempChr.push(resistancePosArray[indexes[i]])
+}
+    firstPos = tempChr[0];
+    lastPos = tempChr[tempChr.length-1];  
+    
+  }
+  currentChromosome = chromArray[currIndex]
 if (currentChromosome.includes("0")){
   currentChromosome = currentChromosome.replace('0','')
 }else{
 
 }
+var initiallocus = ""
+if( data=='#rvr-data' || data=='#other-data' ){
+   initiallocus = "chr"+currentChromosome+":"+currentPos
 
-var initiallocus = "chr"+currentChromosome+":"+currentPos
-const locus = initiallocus.replace(/\s+/g, '')
+  }else{
+   initiallocus = "chr"+currentChromosome+":"+firstPos+"-"+lastPos
+   
+  }
+  var locus = initiallocus.replace(/\s+/g, '')
+console.log(locus)
 var igvDiv = document.getElementById("igvDiv");
       var options =
         {
