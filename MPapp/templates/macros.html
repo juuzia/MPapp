@@ -201,7 +201,7 @@
         {% endfor %}
         {% if ns2.current_gene not in gene_var_dict %}
             {% set gene_var_dict = gene_var_dict.update({(ns2.current_gene):[ns.current_var]}) %}
-            {{gene_var_dict[ns2.current_gene]}}
+           
         {% else %}
         {% set vars_list = gene_var_dict[ns2.current_gene] %}
 {% set vars_list = vars_list + [ns.current_var] %}
@@ -209,7 +209,6 @@
 
                  {% endif %}
     {% endfor %}
-
 
    
         
@@ -223,9 +222,11 @@
             </thead>
             <tbody id="resultsTable">
                 {% for key, values in gene_var_dict.items() %}
+                {% set my_counter = loop.index %}
                     <tr>
                         <td>
-                            {{key | safe}}
+                            {{key | safe}} 
+                            {% set keyz = key|string %}
                         </td>
                         <td>
                             <button type="button" id="dropdownMenu{{loop.index}}" class="btn btn-outline-success dropdown-toggle" data-toggle="dropdown" aria-expanded="false" >
@@ -233,12 +234,13 @@
                               </button>
                               <div class="dropdown-menu" aria-labelledby="dropdownMenu{{loop.index}}">
                                   {% for value in values %}
-                                  <div  class="dropdown-item " onclick="showGene(this,{{loop.index}})" data-value={{ value|safe }}>
-                                    {{ value|safe }}
+                                  <div  class="dropdown-item " onclick="showGene(this,{{my_counter}})" data-value={{ value }}>
+                                    {{ value }}
+                                    
                                 </div>
                                 {% endfor %}
                               </div>
-                              <a  class="btn btn-outline-success"onclick="showGene2({{loop.index}})" >VIEW IN IGV</a>
+                              <a  class="btn btn-outline-success"onclick="showGene2({{loop.index}})" data-keyz="{{keyz}}" >VIEW IN IGV</a>
                         </td>
                     </tr>
                     {% endfor %}
@@ -362,7 +364,7 @@
 {%- endmacro %}
 
 {% macro get_analysis(rows, columns, name) -%}
-
+<div class="coverage">
 <div class="owl-carousel">{% set values = [] %}
     {% for row in rows %}
                     {% for key in columns %}
@@ -413,7 +415,14 @@
        
             
       </div>
-        
+      <div class="buttonhere">
+        <span style="display: table;
+        margin: 0 auto; margin-bottom: 10px;">
+        <a  class="btn btn-outline-success btn-lg active" data-toggle="modal" data-target=".bd-modal-lg"
+        >SEE ALL</a>
+        </span>
+      </div>
+</div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.js"></script>
 
 

@@ -668,6 +668,23 @@ max-height: 400px;
     {% endif %}
     {% endfor %}
     </div>
+    <div class="modal fade bd-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+           <div class="tabb"  >    
+            <div class="tab-content" id="tabcontent"> 
+              {% for key in tables %}     
+            {% if key == "Coverage report" %}
+            <div class="tab-pane fade show active" id="{{ keyname }}-tabs" role="tabpanel" aria-labelledby="{{ keyname }}-tab">
+              {{macros.generic_table(tables[key][0], tables[key][1], key)}}
+            </div> 
+            {% endif %}
+            {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>   
     </div>
   <div  class="7" id="7"> 
 
@@ -698,12 +715,12 @@ max-height: 400px;
     document.getElementById(divId).style.display = "block";
 }
   function showGene2(number) {
-      var gene = document.getElementById("dropdownMenu"+number).textContent
-      var genesArray = gene.split(/\s+/)
-   
-      gene = genesArray[1]
-      protein = genesArray[2]
-      changeData("#rvr-data",gene,protein)
+    var protein = document.getElementById("dropdownMenu"+number).innerText
+
+      var gene = document.getElementById("dropdownMenu"+number).parentNode.querySelector("[data-keyz]").getAttribute("data-keyz");
+    
+      changeData("#other-data",gene,protein)
+      
   }
   
   function showGene(item,number) {
@@ -720,27 +737,34 @@ function changeData(data,gene,protein){
 
   
   var rvrValues = Object.values(djangoData);
-  console.log(rvrValues)
+  
   firstValue = rvrValues[0]
   
 var splitValues = firstValue.split("{'chrom':")
-var chromosomes = []
+var nucleotideArray = []
 var chromArray = []
 var resistancePosArray = []
+
 for(var i =1; i<splitValues.length;i++){
 
   var split2 =splitValues[i].split(",")
 
-  if(split2.find(a =>a.includes(protein))){
-    chromArray = split2[0].split("_");
-    resistancePosArray = split2[1].split(":")
-
-  }
+  if(split2.find(a =>a.includes(gene))){
+    chromArray.push(split2[0].split("_")[1])
+    resistancePosArray.push(split2[1].split(":")[1])
+    var curr = split2[11].split(":")[1]
+    curr = curr.replace(/['"]+/g, '').trim();
+   console.log(split2)
+    nucleotideArray.push(curr)
     
   }
-
-var currentChromosome = chromArray[1]
-var currentPos = resistancePosArray[1]
+  }
+  proteins = protein.trim();
+  console.log(proteins,nucleotideArray)
+  var currIndex = nucleotideArray.indexOf(proteins)
+       console.log(chromArray,currIndex)
+var currentChromosome = chromArray[currIndex]
+var currentPos = resistancePosArray[currIndex]
 if (currentChromosome.includes("0")){
   currentChromosome = currentChromosome.replace('0','')
 }else{
