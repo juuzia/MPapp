@@ -420,19 +420,24 @@
             <thead>
                 <tr>
                     {% for key in columns %}
+                    {% if key != 'Genotypic Resistance' %}
                         <th scope="col" style="width: 10%">{{ columns[key] }}</th>
-                    {% endfor %}
+                        {% endif %}
+                        {% endfor %}
                 </tr>
             </thead>
             <tbody id="resultsTable">
                 {% for row in rows %}
                     <tr>
                     {% for key in columns %}
+                    {% if key != 'Genotypic Resistance' %}
                         <td>
                             {{ row[key]|safe }}
                         </td>
+                        {% endif %}
                     {% endfor %}
                     </tr>
+                    
                 {% endfor %}                
             </tbody>
         </table>
@@ -446,26 +451,47 @@
     {% for row in rows %}
     
     {% for key in columns %}
-    
-    {% if row[key] == 'falciparum' %}
-    <i class="fa-solid fa-p fa-6x"></i>
-    <i class="fa-solid fa-f fa-3x"></i>
-    {% elif row[key] == 'ovale' %}
-    <i class="fa-solid fa-p fa-6x"></i>
-    <i class="fa-solid fa-o fa-3x"></i>
-    {% elif row[key] == 'vivax' %}
-    <i class="fa-solid fa-p fa-6x"></i>
-    <i class="fa-solid fa-v fa-3x"></i>]
-    {% elif row[key] == 'knowlesi' %}
-    <i class="fa-solid fa-p fa-6x"></i>
-    <i class="fa-solid fa-k fa-3x"></i>
-    {% elif row[key] == 'brasilianum' %}
-    <i class="fa-solid fa-p fa-6x"></i>
-    <i class="fa-solid fa-b fa-3x"></i>
-    {% else %}
-    
-    
-            {% endif %}
+    <div class="font_awesome d-flex  align-items-center justify-content-center"  >
+        {% if row[key] == 'falciparum' %}
+        <i class="fa-solid fa-p fa-6x"></i>
+        <i class="fa-solid fa-f fa-3x"></i>
+        {% elif row[key] == 'ovale' %}
+        <i class="fa-solid fa-p fa-6x"></i>
+        <i class="fa-solid fa-o fa-3x"></i>
+        {% elif row[key] == 'vivax' %}
+        <i class="fa-solid fa-p fa-6x"></i>
+        <i class="fa-solid fa-v fa-3x"></i>]
+        {% elif row[key] == 'knowlesi' %}
+        <i class="fa-solid fa-p fa-6x"></i>
+        <i class="fa-solid fa-k fa-3x"></i>
+        {% elif row[key] == 'brasilianum' %}
+        <i class="fa-solid fa-p fa-6x"></i>
+        <i class="fa-solid fa-b fa-3x"></i>
+        
+        
+        {% else %}
+        
+        
+                {% endif %}
+                
+    </div>
+    <div class="text d-flex  align-items-center justify-content-center">
+        {% if row[key] == 'falciparum' %}
+        <p><em>Plasmodium {{row[key]}}</em></p>
+        {% elif row[key] == 'ovale' %}
+        <p><em>Plasmodium {{row[key]}}</em></p>
+        {% elif row[key] == 'vivax' %}
+        <p><em>Plasmodium {{row[key]}}</em></p>
+        {% elif row[key] == 'knowlesi' %}
+        <p><em><em>Plasmodium {{row[key]}}</em></em></p>
+        {% elif row[key] == 'brasilianum' %}
+        
+        
+        {% else %}
+        
+        
+                {% endif %}
+    </div>
         {% endfor %}
     {% endfor %}
 
@@ -568,13 +594,7 @@
        
             
       </div>
-      <div class="buttonhere">
-        <span style="display: table;
-        margin: 0 auto; margin-bottom: 10px;">
-        <a  class="btn btn-outline-success btn-lg " data-toggle="modal" data-target=".bd-modal-lg"
-        >SEE ALL</a>
-        </span>
-      </div>
+     
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.js"></script>
 

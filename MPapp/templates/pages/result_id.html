@@ -22,69 +22,7 @@
 
 
 <script src="https://cdn.jsdelivr.net/npm/igv@2.13.9/dist/igv.min.js"></script>
-<script>
 
-
-function setup() {
-    var canvasDiv = document.getElementById('canvasForHTML');
-    var width = canvasDiv.offsetWidth;
-    var sketchCanvas = createCanvas(width,height);
-   
-    sketchCanvas.parent("canvasForHTML");
-} 
-PfMaxLength = 3300000
-var chromWidth
-
-var pfLengthsDict = {
-  "1" : 643000,"2" : 947000,"3" : 1100000,"4" : 1200000,
-  "5" : 1300000,  "6" : 1400000,"7" : 1400000,"8" : 1300000,
-  "9" : 1500000,"10" : 1700000,  "11" : 2000000,"12" : 2300000,
-  "13" : 2700000,"14" : 3300000
-}
-
-function drawChrom(chroma) {
-  clear()
-  noStroke();
-let c = color(255,89,0)
-fill(c)
-var chromaLength = 0
-
-if( pfLengthsDict.hasOwnProperty(chroma) ) {
-    chromaLength = pfLengthsDict[chroma];
-    
-}
-chromWidth = chromaLength/PfMaxLength * 100;
-
-var length = width/1.5
-var total = chromWidth / 100 * length
-  rect(width/3.5, 10, total,height/2, 25);
-drawPositions(chroma,chromaLength,total)
-}
-function drawPositions(chroma,length,total){
-  var chromosomeNumber = 0
- 
-for (var k in dict) {
-        if ( k.indexOf(chroma) !== -1) 
-            chromosomeNumber = dict[k]
-    }
-    for( var val =0; val<chromosomeNumber.length;val++){
-      var percentage = (chromosomeNumber[val] * 100) / length ;
-      var currPos = percentage /100 * total
-
-      stroke(0)
- strokeWeight(2);
- 
- line(currPos+width/3.5,11,currPos+width/3.5,height/1.7)
-    }
-  
-    
-    
-    
-    
-  
-}
-
-</script>
     
     <script type="text/javascript">
       am5.ready(function() {
@@ -298,7 +236,9 @@ chart.appear(1000, 100);
    
   </scripts>
   <style>
-
+#table-{
+  text-align: left;
+}
 div#draw-shapes {
   width: 95%;
   height: 600px;
@@ -307,21 +247,9 @@ div#draw-shapes {
     body{
       background-color: RGB(240,240,240)
     }
-    .container-fluid {
+    
 
-   width: 80%;
-   background-color: #eee;
-   display: grid;
-   
-  gap:15px ;
-   grid-template-columns: repeat(4, 1fr);
-   grid-template-rows: repeat(.5fr, 1.5fr,1.5fr,.5fr);
-   
-   
-
-}
-
-.container-fluid > div{
+#desktop_dashboard .container-fluid > div{
   box-shadow: 2px 2px 10px ;
   height: auto;
  border-radius: 15px;
@@ -472,12 +400,10 @@ table {
 #remove2,#remove1,#remove3{
   overflow-y:  scroll;
 }
-.tabby{
+#desktop_dashboard .tabby{
 max-height: 400px;
 }
-th, tr{
-  text-align: center;
-}
+
 .text-center p{
   font-family: 'Sofia Sans', sans-serif;
 }
@@ -486,16 +412,221 @@ th, tr{
   
   color: black;
 }
+th,tr{
+  text-align: center;
+}
+
 .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
   background-color: rgba(255,89,0,0.7);
   color: white;
 }
+@media only screen and (min-width: 1597px) {
+
+  #desktop_dashboard .container-fluid {
+
+width: 80%;
+background-color: #eee;
+display: grid;
+
+gap:15px ;
+grid-template-columns: repeat(4, 1fr);
+grid-template-rows: repeat(.5fr, 1.5fr,1.5fr,.5fr);
+
+
+
+}
+
+  #resistanceButton,#otherButton,#missingButton,#showButton,#seeButton{
+margin-top: 50px;
+}
+  #chartdiv{
+    width: 100%; height: 60%; display: flex-box;
+    
+    justify-content: center; /* center horizontal */
+    align-items: center; /* center vertical */
+    overflow: hidden;
+  }
+  #mobile_dashboard,#hidden1,#hidden2,#hidden3,#hidden4,#hidden5,#hidden6,#hidden7{
+  display: none;
+ }
+}
+@media only screen and (max-width: 1597px) {
+  #desktop_dashboard .container-fluid {
+
+width: 80%;
+background-color: #eee;
+display: grid;
+
+gap:15px ;
+grid-template-columns: repeat(4, 1fr);
+grid-template-rows: repeat(.5fr, 1.5fr,1.5fr,.5fr);
+
+
+
+}
+  #resistanceButton,#otherButton,#missingButton,#showButton,#seeButton{
+margin-top: 30px;
+}
+  th, tr{
+  text-align: center;
+  font-size: 12px;
+}
+#resistanceButton,#otherButton,#missingButton,#showButton,#seeButton{
+  width: 150px;
+  font-size: 12px;
+}
+#chartdiv{
+  width: 100%;
+   height: 45%;
+    display: flexbox;
+    
+    justify-content: center; /* center horizontal */
+    align-items: center; /* center vertical */
+    overflow: hidden;
+}
+.text p,.font_awesome{
+   font-size: 16px; 
+  }
+  #mobile_dashboard,#hidden1,#hidden2,#hidden3,#hidden4,#hidden5,#hidden6,#hidden7{
+  display: none;
+ }
+}
+@media only screen and (max-width: 1244px) {
+  #desktop_dashboard .container-fluid {
+
+width: 90%;
+background-color: #eee;
+display: grid;
+
+gap:15px ;
+grid-template-columns: repeat(4, 1fr);
+grid-template-rows: repeat(.5fr, 1.5fr,1.5fr,.5fr);
+
+
+
+}
+  #resistanceButton,#otherButton,#missingButton,#showButton,#seeButton{
+margin-top: 10px;
+}
+  th, tr{
+  text-align: center;
+  font-size: 10px;
+}
+#resistanceButton,#otherButton,#missingButton,#showButton,#seeButton{
+  width: 110px;
+  font-size: 10px;
+}
+.text p,.font_awesome{
+   font-size: 14px; 
+  }
+  #mobile_dashboard,#hidden1,#hidden2,#hidden3,#hidden4,#hidden5,#hidden6,#hidden7{
+  display: none;
+ }
+}
+@media only screen and (max-width: 1000px) {
+  #desktop_dashboard .container-fluid {
+
+width: 100%;
+background-color: #eee;
+display: grid;
+
+gap:15px ;
+grid-template-columns: repeat(4, 1fr);
+grid-template-rows: repeat(.5fr, 1.5fr,1.5fr,.5fr);
+
+
+
+}
+  th, tr{
+  text-align: center;
+  font-size: 10px;
+}
+#resistanceButton,#otherButton,#missingButton,#showButton,#seeButton{
+  width: 110px;
+ 
+  font-size: 10px;
+}
+.text p,.font_awesome{
+   font-size: 10px; 
+  }
+  #mobile_dashboard,#hidden1,#hidden2,#hidden3,#hidden4,#hidden5,#hidden6,#hidden7{
+  display: none;
+ }
+}
+
+
+@media only screen and (max-width: 830px) {
+    #desktop_dashboard {
+        display: none;
+    }
+    #mobile_dashboard{
+      display: block;
+    }
+    #desktop_dashboard .container-fluid {
+
+width: 80%;
+background-color: #eee;
+display: grid;
+
+gap:15px ;
+grid-template-columns: repeat(4, 1fr);
+grid-template-rows: repeat(.5fr, 1.5fr,1.5fr,.5fr);
+
+
+
+}
+
+  .goback,#resistanceButton,#otherButton,#missingButton,#showButton,#seeButton{
+width: auto;
+height: auto;
+}
+  #chartdiv{
+    width: 100%; height: 60%; display: flex-box;
+    
+    justify-content: center; /* center horizontal */
+    align-items: center; /* center vertical */
+    overflow: hidden;
+  }
+  
+}
+
+#mobile_dashboard .col-md-12{
+  background-color: rgb(74,74,74);
+  color: white;
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
+#mobile_dashboard .row{
+  background-color: rgb(74,74,74)
+}
+#mobile_dashboard  .container-fluid{
+  background-color: #eee;
+  width: 100%;
+}
+#mobile_dashboard .col-md-12:hover{
+  background-color: rgb(255,89,0);
+  
+  border-radius: 10px;
+  cursor: pointer;
+  --x: 50%;
+	--y: 50%;
+  border: 2px solid transparent;
+	background: linear-gradient(rgb(255,89,0),rgb(255,89,0)) padding-box, radial-gradient(farthest-corner at var(--x) var(--y), #ddecea, #e29f75) border-box;
+}
+.font_awesome{
+  display:inline-block;
+    
+    text-align: center;
+    vertical-align: bottom;
+}
+ 
   </style>
   
 
   
 </head>
-<div class="container-fluid" style="margin-top: 25px;">
+<section id="desktop_dashboard">
+<div class="container-fluid" id="changeable" style="margin-top: 25px;">
   <div class="1">
     <h4><b>RESULT ID: </b> {{run_id}}</h4>
     <div class="date">
@@ -585,7 +716,7 @@ th, tr{
         
 {% endfor %}
 <meta id="rvr-data" data-name="{{values}}" >
-         <a  class="orange btn btn-outline-success btn-lg active" onclick="showDiv('remove1')">RESISTANCE REPORT</a>
+         <a  class="orange btn btn-outline-success btn-lg active" id="resistanceButton" onclick="showDiv('remove1')">RESISTANCE REPORT</a>
        
          {% set values = [] %}
     
@@ -599,7 +730,7 @@ th, tr{
         
 {% endfor %}
         <meta id="other-data" data-name="{{values}}" >
-         <a  class="orange btn btn-outline-success btn-lg"  onclick="showDiv('remove2')">OTHER VARIANTS</a>
+         <a  class="orange btn btn-outline-success btn-lg"  id="otherButton" onclick="showDiv('remove2')">OTHER VARIANTS</a>
          
          {% set values = [] %}
   
@@ -613,13 +744,13 @@ th, tr{
             
     {% endfor %}
     <meta id="miss-data" data-name="{{values}}" >
-         <a  class="orange btn btn-outline-success btn-lg" onclick="showDiv('remove3')">MISSING POSITIONS</a>
+         <a  class="orange btn btn-outline-success btn-lg" id="missingButton" onclick="showDiv('remove3')">MISSING POSITIONS</a>
         </span>
         </div>
         <div class="moreButtons">
           <span style="display: table;
         margin: 0 auto;">
-          <a  data-toggle="modal" data-target=".bd-example-modal-lg" class=" btn btn-outline-success btn-lg" style="margin-top: 10px;" >SHOW MORE INFO</a>
+          <a  data-toggle="modal" data-target=".bd-example-modal-lg" class=" btn btn-outline-success btn-lg" style="margin-top: 10px;" id="showButton">SHOW MORE INFO</a>
           </span>
         </div>
        
@@ -663,11 +794,7 @@ th, tr{
     {% endif %}
     {% endfor %}
     {% endfor %}
-    <div id="chartdiv" style="width: 100%; height: 60%; display: flex-box;
-    
-    justify-content: center; /* center horizontal */
-    align-items: center; /* center vertical */
-    overflow: hidden;"></div></div>
+    <div id="chartdiv" ></div></div>
   <div class="5">
     <div class="card-header text-center bg-light" style="border-top-left-radius: 15px;border-top-right-radius: 15px;">
       <h4>Analysis</h4>
@@ -691,11 +818,18 @@ th, tr{
     {% endif %}
     {% endfor %}
     </div>
+    <div class="buttonhere">
+      <span style="display: table;
+      margin: 0 auto; margin-bottom: 10px;">
+      <a  class="btn btn-outline-success btn-lg " id="seeButton" data-toggle="modal" data-target=".bd-modal-lg"
+      >SEE ALL</a>
+      </span>
+    </div>
     <div class="modal fade bd-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
            <div class="tabb"  >    
-            <div class="tab-content" id="tabcontent"> 
+            <div class="tab-content" id="tabcontent" style="text-align: left;"> 
               {% for key in tables %}     
             {% if key == "Coverage report" %}
             <div class="tab-pane fade show active" id="{{ keyname }}-tabs" role="tabpanel" aria-labelledby="{{ keyname }}-tab">
@@ -716,6 +850,8 @@ th, tr{
 
    
 </div>
+
+
 <section class="button" style="margin-top:50px">
   <div class="container" id="buttonbit">
     <div class="buttonHere">
@@ -724,12 +860,392 @@ th, tr{
   </div>
   
 </section>
+</section>
 &nbsp;
 &nbsp;
+<section id="mobile_dashboard" style="height: 100vh; background-color: rgb(74,74,74);">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12" onclick="showHidden('#hidden1')">
+        <h4>
+          RESULT ID
+        </h4>
+      </div>
+      <div class="col-md-12"onclick="showHidden('#hidden2')">
+        <h4>
+          SPECIES
+        </h4>
+      </div>
+      <div class="col-md-12"onclick="showHidden('#hidden3')">
+        <h4>
+          GENOMIC VARIANTS
+        </h4>
+      </div>
+      <div class="col-md-12"onclick="showHidden('#hidden4')">
+        <h4>
+          ESTIMATED ORIGIN OF REGION
+        </h4>
+      </div>
+      <div class="col-md-12"onclick="showHidden('#hidden5')">
+        <h4>
+          ANALYSIS
+        </h4>
+      </div>
+      <div class="col-md-12"onclick="showHidden('#hidden6')">
+        <h4>
+          COVERAGE REPORT
+        </h4>
+      </div>
+      <div class="col-md-12" onclick="showHidden('#hidden7')">
+        <h4>
+          SHOW MORE INFO
+        </h4>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hiddenbit" id="hidden1" >
+  <div class="container-fluid">
+    <div class="row" style="height: 100vh;">
+      <div class="col-md-12">
+        <div class="1">
+          <h4><b>RESULT ID: </b> {{run_id}}</h4>
+          <div class="date">
+            {% for key in tables %}
+            {% if key == 'General information' %}
+            {{macros.get_results2(tables[key][0], tables[key][1], key)}}
+            
+            {% endif %}
+            {% endfor %}              
+          </div>
+          <div class="id">
+            <form method="get" action="{{ url_for('main.download', run_id=run_id) }}">          
+            </div>
+            
+        </div>
+        <div class="goback">
+          <span  style="display: table; margin: 0 auto;" >
+          <a  class="btn btn-outline-success btn-lg" id="goback" style="display: table-cell;" onclick="showMobile('#hidden1')">BACK</a>
+          </span>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+<section class="hiddenbit" id="hidden2" >
+  <div class="container-fluid" >
+    <div class="row" style="height: 100vh;">
+      <div class="col-md-12">
+        <div class="2">
+          <div class="card-header text-center bg-light" style="border-top-left-radius: 15px;border-top-right-radius: 15px;">
+            <h4>Species</h4>
+          </div>
+          {% for key in tables %}
+          {% if key == 'Species' %}
+          {{macros.get_results(tables[key][0], tables[key][1], key)}}
+          
+          {% endif %}
+          {% endfor %}                 
+        </div>
+        <div class="goback">
+          <span  style="display: table; margin: 0 auto;" >
+          <a  class="btn btn-outline-success btn-lg" id="goback" style="display: table-cell;" onclick="showMobile('#hidden2')">BACK</a>
+          </span>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<section class="hiddenbit" id="hidden3" >
+  <div class="container-fluid" >
+    <div class="row" style="height: 100vh;">
+      <div class="col-md-12">
+        <div class="tree">
+          <div class="card-header text-center bg-light" style="border-top-left-radius: 15px;border-top-right-radius: 15px;">
+            <h4>Genomic variants</h4>
+          </div>
+            <div class="tabby" id="md-remove1">    
+              <div class="tab-content" id="tabcontent">  
+                
+                {% for key in tables %}     
+                      {% if key == "Resistance report" %}
+                      <div class="tab-pane fade show active" id="{{ keyname }}-tabs" role="tabpanel" aria-labelledby="{{ keyname }}-tab">
+                        {{macros.generic_table(tables[key][0], tables[key][1], key)}}
+                      </div>       
+                  
+                      
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+            <div class="tabby" id="md-remove2" style="display:none;">    
+              <div class="tab-content" id="tabcontent">  
+                
+                {% for key in tables %}     
+                      {% if key == "Other variants" %}
+                      <div class="tab-pane fade show active" id="{{ keyname }}-tabs" role="tabpanel" aria-labelledby="{{ keyname }}-tab">
+                        {{macros.generic_table(tables[key][0], tables[key][1], key)}}
+                      </div>       
+                  
+                    
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+            <div class="tabby" id="md-remove3" style="display:none;">    
+              <div class="tab-content" id="tabcontent">  
+                
+                {% for key in tables %}     
+                      {% if key == "Missing positions report" %}
+                      <div class="tab-pane fade show active" id="{{ keyname }}-tabs" role="tabpanel" aria-labelledby="{{ keyname }}-tab">
+                        {{macros.generic_table(tables[key][0], tables[key][1], key)}}
+                      </div>       
+                  
+                      
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+            
+              <div class="buttons" style="margin-top:100px;">
+              <span style="display: table;
+              margin: 0 auto;">
+              {% set values = [] %}
+      
+              {% for key in tables %}
+          
+          {% for row in tables[key][0] %}
+          {% if key == 'Resistance variants report' %}
+          {{ values.append(row) or "" }}
+         {% endif %}
+          {% endfor %}
+              
+      {% endfor %}
+      <meta id="rvr-data" data-name="{{values}}" >
+               <a  class="orange btn btn-outline-success btn-lg active" id="resistanceButton" onclick="showDiv('md-remove1')">RESISTANCE REPORT</a>
+             
+               {% set values = [] %}
+          
+               {% for key in tables %}
+          
+          {% for row in tables[key][0] %}
+          {% if key == 'Other variants' %}
+          {{ values.append(row) or "" }}
+         {% endif %}
+          {% endfor %}
+              
+      {% endfor %}
+              <meta id="other-data" data-name="{{values}}" >
+               <a  class="orange btn btn-outline-success btn-lg"  id="otherButton" onclick="showDiv('md-remove2')">OTHER VARIANTS</a>
+               
+               {% set values = [] %}
+        
+              {% for key in tables %}
+          
+              {% for row in tables[key][0] %}
+              {% if key == 'Missing positions report' %}
+              {{ values.append(row) or "" }}
+             {% endif %}
+              {% endfor %}
+                  
+          {% endfor %}
+          <meta id="miss-data" data-name="{{values}}" >
+               <a  class="orange btn btn-outline-success btn-lg" id="missingButton" onclick="showDiv('md-remove3')">MISSING POSITIONS</a>
+              </span>
+              </div>
+              
+             
+              <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                  <div class="modal-content">
+                     <div class="tabb"  >    
+                      <div class="tab-content" id="tabcontent"> 
+                        {% for key in tables %}     
+                        {% if key == "Resistance variants report" %}
+                        <div class="tab-pane fade show active" id="{{ keyname }}-tabs" role="tabpanel" aria-labelledby="{{ keyname }}-tab">
+                        {{macros.resistanceTable1(tables[key][0], tables[key][1], key)}}
+                      </div> 
+                      {% elif key == "Other variants" %}
+                      <div class="tab-pane fade show active" id="{{ keyname }}-tabs" role="tabpanel" aria-labelledby="{{ keyname }}-tab">
+                        {{macros.resistanceTable2(tables[key][0], tables[key][1], key)}}
+                      </div> 
+                      {% elif key == "Missing positions report" %}
+                      <div class="tab-pane fade show active" id="{{ keyname }}-tabs" role="tabpanel" aria-labelledby="{{ keyname }}-tab">
+                        {{macros.resistanceTable3(tables[key][0], tables[key][1], key)}}
+                      </div> 
+                      {% endif %}
+                      {% endfor %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>   
+            
+        </div>
+        <div class="goback">
+          <span  style="display: table; margin: 0 auto;" >
+          <a  class="btn btn-outline-success btn-lg" id="goback" style="display: table-cell;" onclick="showMobile('#hidden3')">BACK</a>
+          </span>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<section class="hiddenbit" id="hidden4" >
+  <div class="container-fluid" >
+    <div class="row" style="height: 100vh;">
+      <div class="col-md-12">
+        <div class="4">
+          <div class="card-header text-center bg-light" style="border-top-left-radius: 15px;border-top-right-radius: 15px;">
+            <h4>Estimated Region of Origin</h4>
+        </div>
+        {% for key in tables %}
+          
+          {% for row in tables[key][0] %}
+          {% if key == 'Geoclassification' %}
+          <meta id="region" data-name="{{row}}" >
+          <p style="text-align: center; margin-top: 5px; font-family: 'Sofia Sans', sans-serif;">{{row['region']}}</p>
+          {% endif %}
+          {% endfor %}
+          {% endfor %}
+          <div id="chartdiv" ></div></div>
+        <div class="goback">
+          <span  style="display: table; margin: 0 auto;" >
+          <a  class="btn btn-outline-success btn-lg" id="goback" style="display: table-cell;" onclick="showMobile('#hidden4')">BACK</a>
+          </span>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<section class="hiddenbit" id="hidden5" >
+  <div class="container-fluid" >
+    <div class="row" style="height: 100vh;">
+      <div class="col-md-12">
+        <div class="2">
+          <div class="5">
+            <div class="card-header text-center bg-light" style="border-top-left-radius: 15px;border-top-right-radius: 15px;">
+              <h4>Analysis</h4>
+            </div>
+            {% for key in tables %}
+            {% if key == 'Analysis' %}
+            {{macros.get_results(tables[key][0], tables[key][1], key)}}
+            
+            {% endif %}
+            {% endfor %}  
+          </div>
+        <div class="goback">
+          <span  style="display: table; margin: 0 auto;" >
+          <a  class="btn btn-outline-success btn-lg" id="goback" style="display: table-cell;" onclick="showMobile('#hidden5')">BACK</a>
+          </span>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<section class="hiddenbit" id="hidden6" >
+  <div class="container-fluid" >
+    <div class="row" style="height: 100vh;">
+      <div class="col-md-12">
+        <div class="6">
+          <div class="card-header text-center bg-light" style="border-top-left-radius: 15px;border-top-right-radius: 15px;">
+            <h4>Coverage report</h4>
+          </div>
+          <div class="carousel">
+            {% for key in tables %}
+          {% if key == 'Coverage report' %}
+          {{macros.generic_table(tables[key][0], tables[key][1], key)}}
+          
+          {% endif %}
+          {% endfor %}
+          </div>
+             
+          </div>
+        <div class="goback">
+          <span  style="display: table; margin: 0 auto;" >
+          <a  class="btn btn-outline-success btn-lg" id="goback" style="display: table-cell;" onclick="showMobile('#hidden6')">BACK</a>
+          </span>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<section class="hiddenbit" id="hidden7" >
+  <div class="container-fluid" >
+    <div class="row" style="height: 100vh;">
+      <div class="col-md-12">
+        <div class="2">
+          <div class="card-header text-center bg-light" style="border-top-left-radius: 15px;border-top-right-radius: 15px;">
+            <h4>Species</h4>
+          </div>
+          {% for key in tables %}
+          {% if key == 'Species' %}
+          {{macros.get_results(tables[key][0], tables[key][1], key)}}
+          
+          {% endif %}
+          {% endfor %}                 
+        </div>
+        <div class="goback">
+          <span  style="display: table; margin: 0 auto;" >
+          <a  class="btn btn-outline-success btn-lg" id="goback" style="display: table-cell;" onclick="showMobile('#hidden7')">BACK</a>
+          </span>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
 
 
 <script type="text/javascript">
+  
+  function showHidden(div){
+    $(div).slideDown(1000);
 
+    $("#mobile_dashboard").slideUp(1000);
+  }
+  function showMobile(div){
+    $("#mobile_dashboard").slideDown(1000);
+    $(div).slideUp(1000);
+  
+    
+  }
+</script>
+
+<script type="text/javascript">
+$( document ).ready(function() {
+  var w = window.innerWidth;
+var h = window.innerHeight; 
+console.log(w,h)
+
+
+
+});
   function showDiv(divId) {
     var divs = document.getElementsByClassName("tabby");
     for (var i = 0; i < divs.length; i++) {
