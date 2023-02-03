@@ -46,7 +46,8 @@ def analysis():
             run_id = str(uuid4())
             with open("%s/%s.log" % (app.config["RESULTS_DIR"], run_id), "w") as O:
                 O.write("Starting job: %s\n" % run_id)
-            remote_profile.delay(f.type, f.files, run_id, app.config["RESULTS_DIR"], platform)
+            # remote_profile.delay(f.type, f.files, run_id, app.config["RESULTS_DIR"], platform)
+            run_mp.delay(f.type, f.files, run_id, app.config["RESULTS_DIR"], platform)
             runs.append({"id":run_id, "files":f.files})
         with io.StringIO() as O:
             writer = csv.DictWriter(O,list(runs[0]))

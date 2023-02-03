@@ -4,6 +4,7 @@ import json
 import sys
 from MPapp.worker import run_mp
 import argparse
+import 
 
 def cmd_out(cmd,verbose=1):
     res = sp.Popen(cmd,shell=True,stdout=sp.PIPE)
@@ -43,6 +44,7 @@ def main(args):
         created_files = {
             "results_txt": f"{processing_dir}/{rid}.results.txt",
             "results_json": f"{processing_dir}/{rid}.results.json",
+            "results_bam": f"{processing_dir}/{rid}.bam"
         }
 
         completion_json_file = f"{rid}.completed.json"

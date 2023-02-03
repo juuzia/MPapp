@@ -7,6 +7,8 @@ import subprocess as sp #TODO check multiprocessing
 from celery.utils.log import get_task_logger #TODO logger
 import time 
 import shutil
+import pathogenprofiler as pp
+import sys
 
 BASH_TIMEOUT = os.environ.get('BASH_TIMEOUT', 1200)
 
@@ -52,10 +54,17 @@ def run_mp(ftype, files, run_id, results_dir, platform, threads = 1):
         tmp = f"-a {files[0]}"
 
     sp.call("malaria-profiler profile --dir %s %s --prefix %s --platform %s -t %s --txt" % (results_dir, tmp, run_id, platform, threads), shell=True)
+    db_name = json.load(open(f"{results_dir}/{run_id}.results.json"))["resistance_db_version"]["name"]
+    bed_file = f"{sys.base_prefix}/share/malaria_profiler/{db_name}.bed"
+    print(bed_file)
+    sp.call(f"samtools view -bL {bed_file} {results_dir}/{run_id}.bam > {results_dir}/{run_id}.bed.bam", shell=True)
+    sp.call(f"mv {results_dir}/{run_id}.bed.bam {results_dir}/{run_id}.bam", shell=True)
+    sp.call(f"samtools index {results_dir}/{run_id}.bam", shell=True)
 
+    
 
 @celery.task
-def remote_profile(ftype, files, run_id, results_dir, platform):
+def remote_profile(ftype, files, run_id, results_dir, platform, threads = 1):
     tmp_dir = f"/tmp/runs/"
     conf = {
         "run_id": run_id,
