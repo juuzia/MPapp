@@ -4,7 +4,6 @@ import json
 import sys
 from MPapp.worker import run_mp
 import argparse
-import 
 
 def cmd_out(cmd,verbose=1):
     res = sp.Popen(cmd,shell=True,stdout=sp.PIPE)
