@@ -43,6 +43,7 @@ def main(args):
         created_files = {
             "results_txt": f"{processing_dir}/{rid}.results.txt",
             "results_json": f"{processing_dir}/{rid}.results.json",
+            "results_bam": f"{processing_dir}/{rid}.bam"
         }
 
         completion_json_file = f"{rid}.completed.json"

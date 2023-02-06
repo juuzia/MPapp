@@ -46,7 +46,12 @@ def analysis():
             run_id = str(uuid4())
             with open("%s/%s.log" % (app.config["RESULTS_DIR"], run_id), "w") as O:
                 O.write("Starting job: %s\n" % run_id)
-            remote_profile.delay(f.type, f.files, run_id, app.config["RESULTS_DIR"], platform)
+            if app.config["RUN_SUBMISSION"]=="local":
+                run_mp.delay(f.type, f.files, run_id, app.config["RESULTS_DIR"], platform)
+            elif app.config["RUN_SUBMISSION"]=="remote":
+                remote_profile.delay(f.type, f.files, run_id, app.config["RESULTS_DIR"], platform)
+            else:
+                raise Exception("Unknown RUN_SUBMISSION type: %s" % app.config["RUN_SUBMISSION"])
             runs.append({"id":run_id, "files":f.files})
         with io.StringIO() as O:
             writer = csv.DictWriter(O,list(runs[0]))
