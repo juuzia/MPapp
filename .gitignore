@@ -15,3 +15,4 @@ MPapp/__pycache__
 MPapp.egg-info/
 MPapp.egg-info/*.txt
 build
+malaria-db/
