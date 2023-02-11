@@ -364,25 +364,6 @@ var igvDiv = document.getElementById("igvDiv");
     }
 
 
-    $('.orange').click(function(e) {
-        e.preventDefault();
-      
-      $('.orange').removeClass('active');
-      $(this).addClass('active');
-    })
+    
 
-
-    $(document).ready(function() {
-      $(".owl-carousel").owlCarousel({
-          loop:true,
-          autoplay:true,
-  autoplayTimeout:2000,
-  autoplayHoverPause:true, 
-          margin:10,
-          dots:true,
-          
-          items: 1,
-          singleItem:true,
-          
-                 });
-              });
+    
