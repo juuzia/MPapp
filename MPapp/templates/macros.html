@@ -183,8 +183,7 @@
 
 
 
-{% macro resistanceTable1(rows, columns, name) -%}
-
+{% macro resistanceTable1(rows, columns, name, genus) -%}
 {% set rand_id = range(1, 5000) | random %}
 <div class="rtablerr" style="height: inherit;">
     {% set ns = namespace(current_var='') %}
@@ -243,7 +242,8 @@
                                 </div>
                                 {% endfor %}
                               </div>
-                              <a  class="btn btn-outline-success"onclick="showGene2({{loop.index+1000}},'#rvr-data')" data-keyz="{{keyz}}" >VIEW IN IGV</a>
+                            
+                            <a  class="btn btn-outline-success"onclick="showGene2({{loop.index+1000}},'#rvr-data','{{genus}}')" data-keyz="{{keyz}}" >VIEW IN IGV</a>
                         </td>
                     </tr>
                     {% endfor %}
@@ -258,8 +258,7 @@
 {%- endmacro %}
 
 
-{% macro resistanceTable2 (rows, columns, name) -%}
-
+{% macro resistanceTable2 (rows, columns, name, genus) -%}
 {% set rand_id = range(1, 5000) | random %}
 <div class="rtableov" style="height: inherit;">
     {% set ns = namespace(current_var='') %}
@@ -318,7 +317,7 @@
                                 </div>
                                 {% endfor %}
                               </div>
-                              <a  class="btn btn-outline-success"onclick="showGene2({{loop.index+2000}},'#other-data')" data-keyz="{{keyz}}" >VIEW IN IGV</a>
+                              <a  class="btn btn-outline-success"onclick="showGene2({{loop.index+2000}},'#other-data', '{{genus}}')" data-keyz="{{keyz}}" >VIEW IN IGV</a>
                         </td>
                     </tr>
                     {% endfor %}
@@ -333,7 +332,7 @@
 {%- endmacro %}
 
 
-{% macro resistanceTable3(rows, columns, name) -%}
+{% macro resistanceTable3(rows, columns, name, genus) -%}
 
 {% set rand_id = range(1, 5000) | random %}
 <div class="rtablemp" style="height: inherit;">
@@ -393,7 +392,7 @@
                                 </div>
                                 {% endfor %}
                               </div>
-                              <a  class="btn btn-outline-success"onclick="showGene2({{loop.index+3000}},'#miss-data')" data-keyz="{{keyz}}" >VIEW IN IGV</a>
+                              <a  class="btn btn-outline-success"onclick="showGene2({{loop.index+3000}},'#miss-data', '{{genus}}')" data-keyz="{{keyz}}" >VIEW IN IGV</a>
                         </td>
                     </tr>
                     {% endfor %}
@@ -458,15 +457,15 @@
         {% elif row[key] == 'ovale' %}
         <i class="fa-solid fa-p fa-6x"></i>
         <i class="fa-solid fa-o fa-3x"></i>
-        {% elif row[key] == 'vivax' %}
+        {% elif row[key] == 'vivax_simium' %}
         <i class="fa-solid fa-p fa-6x"></i>
-        <i class="fa-solid fa-v fa-3x"></i>]
+        <i class="fa-solid fa-v fa-3x"></i>
         {% elif row[key] == 'knowlesi' %}
         <i class="fa-solid fa-p fa-6x"></i>
         <i class="fa-solid fa-k fa-3x"></i>
-        {% elif row[key] == 'brasilianum' %}
+        {% elif row[key] == 'malariae' %}
         <i class="fa-solid fa-p fa-6x"></i>
-        <i class="fa-solid fa-b fa-3x"></i>
+        <i class="fa-solid fa-m fa-3x"></i>
         
         
         {% else %}
@@ -480,12 +479,12 @@
         <p><em>Plasmodium {{row[key]}}</em></p>
         {% elif row[key] == 'ovale' %}
         <p><em>Plasmodium {{row[key]}}</em></p>
-        {% elif row[key] == 'vivax' %}
+        {% elif row[key] == 'vivax_simium' %}
         <p><em>Plasmodium {{row[key]}}</em></p>
         {% elif row[key] == 'knowlesi' %}
         <p><em><em>Plasmodium {{row[key]}}</em></em></p>
-        {% elif row[key] == 'brasilianum' %}
-        
+        {% elif row[key] == 'malariae' %}
+        <p><em><em>Plasmodium {{row[key]}}</em></em></p>
         
         {% else %}
         
@@ -499,8 +498,10 @@
         <thead>
             <tr>
                 {% for key in columns %}
+                
                 {% if columns[key] != "Species" %}
-                    <th scope="col" style="width: 10%">{{ columns[key] }}</th>
+                    
+                    <th scope="col" >{{ columns[key] }}</th>
                     {% endif %}
                     {% endfor %}
             </tr>
@@ -509,7 +510,7 @@
             {% for row in rows %}
                 <tr>
                 {% for key in columns %}
-                {% if row[key] != 'falciparum' %}
+                {% if row[key] not in ['vivax_simium', 'falciparum', 'malariae', 'knowlesi', 'ovale'] %}
                     <td>
                         {{ row[key]|safe }}
                     </td>
@@ -596,27 +597,7 @@
       </div>
      
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.js"></script>
 
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.theme.default.css"></script>
-    <script>
-       $(document).ready(function() {
-        $(".owl-carousel").owlCarousel({
-            loop:true,
-            autoplay:true,
-    autoplayTimeout:2000,
-    autoplayHoverPause:true, 
-            margin:10,
-            dots:true,
-            
-            items: 1,
-            singleItem:true,
-            
-                   });
-                });
-
-    </script>
 {%- endmacro %}
 
 </div>   

@@ -19,3 +19,6 @@ malaria-db/
 MPapp/static/Plasmodium_falciparum.ASM276v2.dna.chromosome.1.fa.gz
 MPapp/static/Plasmodium_falciparum.ASM276v2.dna.chromosome.1.fa.gz
 *.gz
+*.fna
+*.fai
+*.gzi
