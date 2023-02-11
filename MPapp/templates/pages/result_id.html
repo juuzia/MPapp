@@ -23,19 +23,12 @@
 <script src="{{url_for('static', filename='js/app.js')}}"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/igv@2.13.9/dist/igv.min.js"></script>
-
-    
-    <script type="text/javascript">
-     
-
-    </script>
-   
+ 
   </scripts>
- 
- 
 
-  
 </head>
+
+
 <section id="desktop_dashboard">
 <div class="container-fluid" id="changeable" style="margin-top: 25px;">
   <div class="1">
@@ -274,6 +267,8 @@
 </section>
 &nbsp;
 &nbsp;
+
+<section class="mobile">
 <section id="mobile_dashboard" style="height: 100vh; background-color: rgb(74,74,74);">
   <div class="container-fluid">
     <div class="row">
@@ -631,263 +626,20 @@
   </div>
 
 </section>
+</section>
 
-
-<script type="text/javascript">
-  
-  function showHidden(div){
-    $(div).slideDown(1000);
-
-    $("#mobile_dashboard").slideUp(1000);
-  }
-  function showMobile(div){
-    $("#mobile_dashboard").slideDown(1000);
-    $(div).slideUp(1000);
-  
+<scripts>
+  <script  type=text/javascript>
+    $('.orange').click(function(e) {
+      e.preventDefault();
     
-  }
-</script>
+    $('.orange').removeClass('active');
+    $(this).addClass('active');
+  })
+  </script>
 
-<script type="text/javascript">
-$( document ).ready(function() {
-  var w = window.innerWidth;
-var h = window.innerHeight; 
-console.log(w,h)
+</scripts>
 
-
-
-});
-  function showDiv(divId) {
-    var divs = document.getElementsByClassName("tabby");
-    for (var i = 0; i < divs.length; i++) {
-        divs[i].style.display = "none";
-    }
-    document.getElementById(divId).style.display = "block";
-}
-function showGene2(number,dataN,genus) {
-
-var genusForIGV = genus.toString()
-var gene = document.getElementById("dropdownMenu"+number).parentNode.querySelector("[data-keyz]").getAttribute("data-keyz");
-  var protein = document.getElementById("dropdownMenu"+number).innerText  
-  changeData(dataN,gene,protein,genusForIGV)
-  
-}
-
-function showGene(item,number) {
-
-document.getElementById("dropdownMenu"+number).innerHTML = item.innerHTML;
-
-
-}
-
-function changeData(data,gene,protein,genus){
-
-igv.removeAllBrowsers()
-
-
-var djangoData = $(data).data();
-
-
-
-var rvrValues = Object.values(djangoData);
-var splitvalues = []
-firstValue = rvrValues[0]
-if( data=='#rvr-data' || data=='#other-data' ){
-splitValues = firstValue.split("{'chrom':")
-}else{
-splitValues = firstValue.split("{")
-
-}
-var nucleotideArray = []
-var chromArray = []
-var resistancePosArray = []
-
-for(var i =1; i<splitValues.length;i++){
-
-var split2 =splitValues[i].split(",")
-
-if(split2.find(a =>a.includes(gene))){
-
-
-if(data == '#rvr-data'){
-  
-  chromArray.push(split2[0].split("_")[1])
-resistancePosArray.push(split2[1].split(":")[1])
-  var curr = split2[12].split(":")[1]
-curr = curr.replace(/['"]+/g, '').trim();
-
-nucleotideArray.push(curr)
-}else if(data == '#other-data'){
- 
-  chromArray.push(split2[0].split("_")[1])
-resistancePosArray.push(split2[1].split(":")[1])
-  var curr = split2[11].split(":")[1]
-curr = curr.replace(/['"]+/g, '').trim();
-
-nucleotideArray.push(curr)
-}else{
- 
-  var tempArray = split2[1].split(":")[1]
-  
-  
-  var tempVar = tempArray.split("_")[1];
-  chromArray.push(tempVar.slice(0,2))      
-resistancePosArray.push(split2[0].split(":")[1])
-  var curr = split2[3].split(":")[1]
-curr = curr.replace(/['"]+/g, '').trim();
-
-nucleotideArray.push(curr)
-}
-}
-}
-proteins = protein.trim();
-function getAllIndexes(arr, val) {
-var indexes = [], i = -1;
-while ((i = arr.indexOf(val, i+1)) != -1){
-    indexes.push(i);
-}
-return indexes;
-}
-var currentChromosome = "";
-var currentPos = "";
-var currIndex = nucleotideArray.indexOf(proteins)
-if( data=='#rvr-data' || data=='#other-data' ){
-currentPos = resistancePosArray[currIndex]
-}else{
-var indexes = getAllIndexes(nucleotideArray, proteins);
-
-tempChr = []
-for (var i = 0; i < indexes.length; i++) {
-tempChr.push(resistancePosArray[indexes[i]])
-}
-firstPos = tempChr[0];
-lastPos = tempChr[tempChr.length-1];  
-
-}
-currentChromosome = chromArray[currIndex]
-if (currentChromosome.includes("0")){
-currentChromosome = currentChromosome.replace('0','')
-}else{
-
-}
-var initiallocus = ""
-if( data=='#rvr-data' || data=='#other-data' ){
-initiallocus = "chr"+currentChromosome+":"+currentPos
-
-}else{
-initiallocus = "chr"+currentChromosome+":"+firstPos+"-"+lastPos
-
-}
-var locus = initiallocus.replace(/\s+/g, '')
-var url = ""
-url = '/static/fastafiles/'+ genus +'.fna.gz'
-index = '/static/fastafiles/'+ genus +'.fna.gz.fai'
-
-
-var igvDiv = document.getElementById("igvDiv");
-  var options =
-    {
-      reference:{
-        id: genus,
-        fastaURL: url,
-        indexURL: index,
-      },
-      id: genus,
-        locus: locus,
-        
-    };
-    igv.createBrowser(igvDiv, options)
-            .then(function (browser) {
-            })
-}
-
-            
-
-
-</script>
-
-
-
-
-<script  type=text/javascript>
-  $('.orange').click(function(e) {
-    e.preventDefault();
-  
-  $('.orange').removeClass('active');
-  $(this).addClass('active');
-})
-</script>
-<script>
-  
-</script>
-<!--
-  <div class="row justify-content-center text-center">
-    <div class="col-md-6">
-      <h4><b>Result ID:</b> {{run_id}}</h4>
-        <div id="f3" class="row justify-content-center">
-          <form method="get" action="{{ url_for('main.download', run_id=run_id) }}">          
-          <button type="submit" class="btn btn-success btn-lg" name="result_download" id="result_download"><i class="fa fa-download"></i> Download</button>
-          </form>
-        </div>
-        <hr>  
-    </div>
-  </div class="row justify-content-center text-center">
-  
-  <div class="row justify-content-center text-center">
-    <div class="col-md-6">
-      <ul class="nav nav-tabs" id="nav-tab" role="tablist">
-        {% for key in tables %}
-          {% if tables[key] != None %}
-            {% set keyname = key.replace(' ', '') %}
-              <li class="nav-item" role="presentation">
-                {% if loop.index0 == 0 %}                    
-                  <a class="nav-link active" id="{{ keyname }}-tab" data-toggle="tab" href="#{{ keyname }}-tabs" role="tab" aria-controls="{{ keyname }}-tabs" aria-selected="true">{{key}}</a>
-                {% else %}
-                  <a class="nav-link" id="{{ keyname }}-tab" data-toggle="tab" href="#{{ keyname }}-tabs" role="tab" aria-controls="{{ keyname }}-tabs" aria-selected="false">{{key}}</a>
-                {% endif %}
-              </li>
-          {% endif %}            
-        {% endfor %}
-      </ul>
-    </div>
-  </div>
-
-  <div class="row justify-content-center text-center">
-    <div class="col-md-6">    
-      <div class="tab-content" id="tabcontent">  
-        {% for key in tables %}     
-          {% if tables[key] != None %}         
-            {% set keyname = key.replace(' ', '') %}
-            {% if loop.index0 == 0 %}  
-              <div class="tab-pane fade show active" id="{{ keyname }}-tabs" role="tabpanel" aria-labelledby="{{ keyname }}-tab">
-                {{macros.generic_table(tables[key][0], tables[key][1], key)}}
-              </div>       
-            {% elif loop.index0 != 0 %}
-            <div class="tab-pane fade" id="{{ keyname }}-tabs" role="tabpanel" aria-labelledby="{{ keyname }}-tab">
-                {{macros.generic_table(tables[key][0], tables[key][1], key)}}
-              </div>  
-            {% endif %}
-          {% endif %}
-        {% endfor %}
-      </div>
-    </div>    
-  </div>
-  
-{% elif status == "Processing" %}
-  <div class="row justify-content-center">
-    <div class="loader"></div>
-  </div>
-  <div class="row justify-content-center">
-    <h4 id="resultid">{{run_id}}</h4>
-
-  -->
-  
-  <script>
-
-    setTimeout(function(){
-        window.location.reload(1);
-    }, 5000);
-  </script> 
 
 {% endif %}
 {% endblock %}

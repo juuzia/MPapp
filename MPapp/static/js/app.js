@@ -204,3 +204,171 @@ am5.ready(function() {
   
   
   }); 
+
+
+
+
+  $( document ).ready(function() {
+    var w = window.innerWidth;
+  var h = window.innerHeight; 
+  console.log(w,h)
+  
+  
+  
+  });
+    function showDiv(divId) {
+      var divs = document.getElementsByClassName("tabby");
+      for (var i = 0; i < divs.length; i++) {
+          divs[i].style.display = "none";
+      }
+      document.getElementById(divId).style.display = "block";
+  }
+  function showGene2(number,dataN,genus) {
+  
+  var genusForIGV = genus.toString()
+  var gene = document.getElementById("dropdownMenu"+number).parentNode.querySelector("[data-keyz]").getAttribute("data-keyz");
+    var protein = document.getElementById("dropdownMenu"+number).innerText  
+    changeData(dataN,gene,protein,genusForIGV)
+    
+  }
+  
+  function showGene(item,number) {
+  
+  document.getElementById("dropdownMenu"+number).innerHTML = item.innerHTML;
+  
+  
+  }
+  
+  function changeData(data,gene,protein,genus){
+  
+  igv.removeAllBrowsers()
+  
+  
+  var djangoData = $(data).data();
+  
+  
+  
+  var rvrValues = Object.values(djangoData);
+  var splitvalues = []
+  firstValue = rvrValues[0]
+  if( data=='#rvr-data' || data=='#other-data' ){
+  splitValues = firstValue.split("{'chrom':")
+  }else{
+  splitValues = firstValue.split("{")
+  
+  }
+  var nucleotideArray = []
+  var chromArray = []
+  var resistancePosArray = []
+  
+  for(var i =1; i<splitValues.length;i++){
+  
+  var split2 =splitValues[i].split(",")
+  
+  if(split2.find(a =>a.includes(gene))){
+  
+  
+  if(data == '#rvr-data'){
+    
+    chromArray.push(split2[0].split("_")[1])
+  resistancePosArray.push(split2[1].split(":")[1])
+    var curr = split2[12].split(":")[1]
+  curr = curr.replace(/['"]+/g, '').trim();
+  
+  nucleotideArray.push(curr)
+  }else if(data == '#other-data'){
+   
+    chromArray.push(split2[0].split("_")[1])
+  resistancePosArray.push(split2[1].split(":")[1])
+    var curr = split2[11].split(":")[1]
+  curr = curr.replace(/['"]+/g, '').trim();
+  
+  nucleotideArray.push(curr)
+  }else{
+   
+    var tempArray = split2[1].split(":")[1]
+    
+    
+    var tempVar = tempArray.split("_")[1];
+    chromArray.push(tempVar.slice(0,2))      
+  resistancePosArray.push(split2[0].split(":")[1])
+    var curr = split2[3].split(":")[1]
+  curr = curr.replace(/['"]+/g, '').trim();
+  
+  nucleotideArray.push(curr)
+  }
+  }
+  }
+  proteins = protein.trim();
+  function getAllIndexes(arr, val) {
+  var indexes = [], i = -1;
+  while ((i = arr.indexOf(val, i+1)) != -1){
+      indexes.push(i);
+  }
+  return indexes;
+  }
+  var currentChromosome = "";
+  var currentPos = "";
+  var currIndex = nucleotideArray.indexOf(proteins)
+  if( data=='#rvr-data' || data=='#other-data' ){
+  currentPos = resistancePosArray[currIndex]
+  }else{
+  var indexes = getAllIndexes(nucleotideArray, proteins);
+  
+  tempChr = []
+  for (var i = 0; i < indexes.length; i++) {
+  tempChr.push(resistancePosArray[indexes[i]])
+  }
+  firstPos = tempChr[0];
+  lastPos = tempChr[tempChr.length-1];  
+  
+  }
+  currentChromosome = chromArray[currIndex]
+  if (currentChromosome.includes("0")){
+  currentChromosome = currentChromosome.replace('0','')
+  }else{
+  
+  }
+  var initiallocus = ""
+  if( data=='#rvr-data' || data=='#other-data' ){
+  initiallocus = "chr"+currentChromosome+":"+currentPos
+  
+  }else{
+  initiallocus = "chr"+currentChromosome+":"+firstPos+"-"+lastPos
+  
+  }
+  var locus = initiallocus.replace(/\s+/g, '')
+  var url = ""
+  url = '/static/fastafiles/'+ genus +'.fna.gz'
+  index = '/static/fastafiles/'+ genus +'.fna.gz.fai'
+  
+  
+  var igvDiv = document.getElementById("igvDiv");
+    var options =
+      {
+        reference:{
+          id: genus,
+          fastaURL: url,
+          indexURL: index,
+        },
+        id: genus,
+          locus: locus,
+          
+      };
+      igv.createBrowser(igvDiv, options)
+              .then(function (browser) {
+              })
+  }
+  
+              
+  function showHidden(div){
+    $(div).slideDown(1000);
+
+    $("#mobile_dashboard").slideUp(1000);
+  }
+  function showMobile(div){
+    $("#mobile_dashboard").slideDown(1000);
+    $(div).slideUp(1000);
+  
+    
+  }  
