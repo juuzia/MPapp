@@ -458,15 +458,15 @@
         {% elif row[key] == 'ovale' %}
         <i class="fa-solid fa-p fa-6x"></i>
         <i class="fa-solid fa-o fa-3x"></i>
-        {% elif row[key] == 'vivax' %}
+        {% elif row[key] == 'vivax_simium' %}
         <i class="fa-solid fa-p fa-6x"></i>
-        <i class="fa-solid fa-v fa-3x"></i>]
+        <i class="fa-solid fa-v fa-3x"></i>
         {% elif row[key] == 'knowlesi' %}
         <i class="fa-solid fa-p fa-6x"></i>
         <i class="fa-solid fa-k fa-3x"></i>
-        {% elif row[key] == 'brasilianum' %}
+        {% elif row[key] == 'malariae' %}
         <i class="fa-solid fa-p fa-6x"></i>
-        <i class="fa-solid fa-b fa-3x"></i>
+        <i class="fa-solid fa-m fa-3x"></i>
         
         
         {% else %}
@@ -480,12 +480,12 @@
         <p><em>Plasmodium {{row[key]}}</em></p>
         {% elif row[key] == 'ovale' %}
         <p><em>Plasmodium {{row[key]}}</em></p>
-        {% elif row[key] == 'vivax' %}
+        {% elif row[key] == 'vivax_simium' %}
         <p><em>Plasmodium {{row[key]}}</em></p>
         {% elif row[key] == 'knowlesi' %}
         <p><em><em>Plasmodium {{row[key]}}</em></em></p>
-        {% elif row[key] == 'brasilianum' %}
-        
+        {% elif row[key] == 'malariae' %}
+        <p><em><em>Plasmodium {{row[key]}}</em></em></p>
         
         {% else %}
         
@@ -499,8 +499,10 @@
         <thead>
             <tr>
                 {% for key in columns %}
+                
                 {% if columns[key] != "Species" %}
-                    <th scope="col" style="width: 10%">{{ columns[key] }}</th>
+                    
+                    <th scope="col" >{{ columns[key] }}</th>
                     {% endif %}
                     {% endfor %}
             </tr>
@@ -509,7 +511,7 @@
             {% for row in rows %}
                 <tr>
                 {% for key in columns %}
-                {% if row[key] != 'falciparum' %}
+                {% if row[key] not in ['vivax_simium', 'falciparum', 'malariae', 'knowlesi', 'ovale'] %}
                     <td>
                         {{ row[key]|safe }}
                     </td>
@@ -620,4 +622,3 @@
 {%- endmacro %}
 
 </div>   
-    
