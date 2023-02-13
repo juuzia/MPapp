@@ -36,6 +36,7 @@ def main(args):
             files = local_file_paths, 
             run_id = conf['run_id'], 
             platform = conf['platform'],
+            species = conf['species'],
             results_dir = processing_dir,
             threads = args.threads
         )

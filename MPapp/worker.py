@@ -68,13 +68,14 @@ def run_mp(ftype, files, run_id, results_dir, platform, species, threads = 1):
     
 
 @celery.task
-def remote_profile(ftype, files, run_id, results_dir, platform, threads = 1):
+def remote_profile(ftype, files, run_id, results_dir, platform, species, threads = 1):
     tmp_dir = f"/tmp/runs/"
     conf = {
         "run_id": run_id,
         "ftype": ftype,
         "platform": platform,
-        "files": files
+        "files": files,
+        "species": species
     }
     run_file = f"{tmp_dir}/{run_id}.run_file.json"
     json.dump(conf,open(run_file,"w"))
