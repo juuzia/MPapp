@@ -53,13 +53,17 @@ def analysis():
             else:
                 raise Exception("Unknown RUN_SUBMISSION type: %s" % app.config["RUN_SUBMISSION"])
             runs.append({"id":run_id, "files":f.files})
-        with io.StringIO() as O:
-            writer = csv.DictWriter(O,list(runs[0]))
-            writer.writeheader()
-            writer.writerows(runs)
-            csv_text = O.getvalue()
-        return Response(csv_text,mimetype="text/csv",headers={"Content-disposition": "attachment; filename=run-ids.csv"})
-        
+        analysis_id = str(uuid4())
+        with open("%s/%s.json" % (app.config["RESULTS_DIR"],analysis_id), "w") as O:
+            json.dump(runs,O)
+        return redirect(url_for("main.analysis_runs_id", analysis_id=analysis_id))
+        # with io.StringIO() as O:
+        #     writer = csv.DictWriter(O,list(runs[0]))
+        #     writer.writeheader()
+        #     writer.writerows(runs)
+        #     csv_text = O.getvalue()
+        # return Response(csv_text,mimetype="text/csv",headers={"Content-disposition": "attachment; filename=run-ids.csv"})
+
     return render_template("pages/analysis.html", random_id=random_id)
 
 file_patterns = {
@@ -68,6 +72,14 @@ file_patterns = {
     "bam": "\.bam$",
     "cram": "\.cram$"
 }
+
+@bp.route('/run_result/<uuid:analysis_id>')
+def analysis_runs_id(analysis_id):
+    data = json.load(open("%s/%s.json" % (app.config["RESULTS_DIR"], analysis_id)))
+    for d in data:
+        d["link"] = '<a href="' + url_for("main.result_id", run_id=d["id"]) + '">' + d["id"] + '</a>'
+        d["files"] = ", ".join([x.split("/")[-1] for x in d["files"]])
+    return render_template('/pages/analysis_id.html', runs = data)
 
 def get_filetype(filename):
     for key,pattern in file_patterns.items():
@@ -89,7 +101,7 @@ def get_files_in_dir(upload_dir):
             files.append(File((f,),ftype))
 
     pattern = "(.*)(_R?[12])(\.fastq.[A-Za-z]*$)|(.*)(_R?[12])(\.fq.[A-Za-z]*$)"
-    
+
     fastqs = sorted(fastqs)
     while len(fastqs)>0:
         f = fastqs.pop(0)
@@ -139,8 +151,8 @@ def parse_result_summary(json_file):
     with open(json_file) as json_file:
         json_results = json.load(json_file, parse_float=lambda x: round(float(x), 2))
 
-    conf = get_conf(json_results)    
-    
+    conf = get_conf(json_results)
+
     info = ([{"id" : json_results['id'], "date": time.ctime()}],
             {"id": "Identifier",
              "date": "Date"})
@@ -163,14 +175,14 @@ def parse_result_summary(json_file):
             geoclass = (converted,
                         {"region": "Region"})
 
-        if "drugs" in conf:            
+        if "drugs" in conf:
             json_results['drug_table'] = [[y for y in json_results['drug_table'] if y["Drug"].upper()==d.upper()][0] for d in conf['drugs']]
             drugs = (json_results['drug_table'],
                     {"Drug": "Drug",
                      "Genotypic Resistance": "Genotypic Resistance",
                      "Mutations": "Mutations"})
 
-        if "dr_variants" in json_results: #TODO is this condition okay 
+        if "dr_variants" in json_results: #TODO is this condition okay
             for var in json_results['dr_variants']:
                 var['drug'] = ", ".join([d["drug"] for d in var['drugs']])
             var_drug = (json_results['dr_variants'],
@@ -190,7 +202,7 @@ def parse_result_summary(json_file):
                         "gene": "Gene Name",
                         "change": "Change",
                         "freq": "Estimated fraction"})
-        
+
         if "gene_coverage" in json_results['qc']:
             gene_coverage = (json_results['qc']['gene_coverage'],
                             {"gene": "Gene",
@@ -204,7 +216,7 @@ def parse_result_summary(json_file):
                        "locus_tag": "Locus tag",
                        "position": "Position",
                        "variants": "Variants",
-                       "drugs": "Drugs"})          
+                       "drugs": "Drugs"})
 
     tables = {
         "General information" : info,
@@ -280,7 +292,7 @@ def file_upload(upload_id):
             f.seek(int(request.form['dzchunkbyteoffset']))
             f.write(file.stream.read())
     except OSError:
-        # log.exception will include the traceback so we can see what's wrong 
+        # log.exception will include the traceback so we can see what's wrong
         # log.exception('Could not write to file')
         return make_response(("Not sure why,"
                               " but we couldn't write the file to disk", 500))

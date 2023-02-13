@@ -398,43 +398,60 @@
 {%- endmacro %}
 
 
-{% macro generic_table(rows, columns, name) -%}
+{% macro generic_table(rows, columns, name,buttons=False) -%}
 <div class="generic_table">
-{% set rand_id = range(1, 5000) | random %}
-<div class="card shadow">
-    <div class="card-header text-center ">
-        {{name}}
-    </div>
-    <div class="card-body">
-        <table class="table table-hover" id="table-{{rand_id}}">
-            <thead>
-                <tr>
-                    {% for key in columns %}
-                    {% if key != 'Genotypic Resistance' %}
-                        <th scope="col" style="width: 10%">{{ columns[key] }}</th>
-                        {% endif %}
-                        {% endfor %}
-                </tr>
-            </thead>
-            <tbody id="resultsTable">
-                {% for row in rows %}
+    {% set rand_id = range(1, 5000) | random %}
+    <div class="card shadow">
+        <div class="card-header text-center ">
+            {{name}}
+        </div>
+        <div class="card-body">
+            <table class="table table-hover" id="table-{{rand_id}}">
+                <thead>
                     <tr>
-                    {% for key in columns %}
-                    {% if key != 'Genotypic Resistance' %}
-                        <td>
-                            {{ row[key]|safe }}
-                        </td>
-                        {% endif %}
-                    {% endfor %}
+                        {% for key in columns %}
+                        {% if key != 'Genotypic Resistance' %}
+                            <th scope="col" style="width: 10%">{{ columns[key] }}</th>
+                            {% endif %}
+                            {% endfor %}
                     </tr>
-                    
-                {% endfor %}                
-            </tbody>
-        </table>
+                </thead>
+                <tbody id="resultsTable">
+                    {% for row in rows %}
+                        <tr>
+                        {% for key in columns %}
+                        {% if key != 'Genotypic Resistance' %}
+                            <td>
+                                {{ row[key]|safe }}
+                            </td>
+                            {% endif %}
+                        {% endfor %}
+                        </tr>
+                        
+                    {% endfor %}                
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
-</div>
+{% if buttons %}
+<script type="text/javascript">
+	var table = $("#table-{{rand_id}}").DataTable( {
+		"aaSorting": [[1,'desc']],
+		select: true,
+		"scrollX": true,
+
+		dom: 'Bfrtip',
+        buttons: [
+            'csv', 'pdf'
+        ]
+
+	})
+</script>
+{% endif %}
 {%- endmacro %}
+
+
 {% macro get_results(rows, columns, name) -%}
 <div class="container">
     
