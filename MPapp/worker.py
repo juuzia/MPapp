@@ -90,5 +90,6 @@ def remote_profile(ftype, files, run_id, results_dir, platform, species, threads
         local_file_name = val.split("/")[-1]
         shutil.copyfile(f"{tmp_dir}/{local_file_name}",f"{results_dir}/{local_file_name}" )
         os.remove(f"{tmp_dir}/{local_file_name}")
+    sp.call(f"samtools index {results_dir}/{run_id}.bam", shell=True)
     os.remove(server_result_file)
     os.remove(run_file)
