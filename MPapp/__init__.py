@@ -10,7 +10,7 @@ def create_app(test_config=None):
         UPLOAD_FOLDER="/tmp",
         RUN_SUBMISSION="local",
         APP_ROOT=os.path.dirname(os.path.abspath(__file__)),
-        RESULTS_DIR=os.path.dirname(os.path.abspath(__file__))+"/results"
+        RESULTS_DIR=os.path.dirname(os.path.abspath(__file__))+"/static/results"
     )
 
     if test_config is None:

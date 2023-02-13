@@ -417,8 +417,8 @@ am5.ready(function() {
     genus = genus.replace(/\s+/g, '')
     var  url = '/static/fastafiles/'+ genus +'.fasta'
   var index = '/static/fastafiles/'+ genus +'.fasta.fai'
-  bam = '/results/'+filename+".bam"
-  bai = '/results/' +filename+ ".bam.bai"
+  bam = '/static/results/'+filename+".bam"
+  bai = '/static/results/' +filename+ ".bam.bai"
     var igvDiv = document.getElementById("igvDiv");
     var options =
       {
@@ -449,6 +449,7 @@ am5.ready(function() {
     var resultsFirst = resultsValue[0]
     var resultsSplit = resultsFirst.split("[{'id':")
     var resultsSplitAgain = resultsSplit[1].split(",");
-    filenameRef[0] = resultsSplitAgain[0].replace(/[^\w\s!?]/g,'');
-    filenameRef[0] = filenameRef[0].replace(/\s+/g, '')
+    filenameRef[0] = resultsSplitAgain[0].replace(/[ \']/g,'');
+    filenameRef[0] = filenameRef[0]//.replace(/\s+/g, '')
+    console.log(filenameRef[0])
 }
