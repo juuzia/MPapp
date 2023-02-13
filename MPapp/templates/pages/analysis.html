@@ -5,18 +5,75 @@
 
 {% endblock %}
 {% block content %}
-<div id="desc", class="container">
-  <div id="first" class="row justify-content-center">
+
+<style>
+  body{
+    
+  }
+ h1 {
+  margin-bottom: 20px;
+  font-size: 30px;
+  font-weight: 500;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  color: #bbb; }
+  h2 {
+  margin-bottom: 20px;
+  font-size: 25px;
+  font-weight: 300;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  color: #bbb; }
+  p {
+  margin-top: 10px;
+  font-size: 15px;
+  font-weight: bold;
+  color: rgb(255,89,0);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+opacity: .5; }
+  .headerAnalysis{
+    margin-top: 100px;
+  }
+  
+
+.dropzone {
+    border: none !important;
+    box-shadow: 2px 2px 5px #333;
+    border-radius: 50px;
+    padding: 0 !important;
+    background: white !important;
+    min-height: 200px !important;
+    width: 100%;
+    margin-bottom: 20px;
+    line-height: 200px;
+    vertical-align: middle;
+    color: #263238;
+    text-align: center !important;
+}
+</style>
+<div class="main">
+  
+    
+<div class="headerAnalysis">
+  <h1>IMPORT DATA FILE</h1>
+</div>
+
+<div class="container">
+<div class="row justify-content-center">
+
     <div class="col-md-12">      
       {{macros.description()}}
     </div>
-  </div>
 </div>
-<div id="uploader", class="container">
-  <div id="first" class="row justify-content-center">
+  <div class="row justify-content-center">
     <div class="col-md-12">      
       {{macros.file_dropper(random_id)}}
     </div>
-  </div>
+  </div>  
+</div>
 </div>
 {% endblock %}

@@ -1,184 +1,552 @@
+<html lang="en">
+    
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>PathogenSeq lab</title>
+        <links>
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+            <link href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap" rel="stylesheet">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="https://kit.fontawesome.com/f8a9821c7d.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css" integrity="sha512-wR4oNhLBHf7smjy0K4oqzdWumd+r5/+6QO/vDda76MW5iug4PT7v86FoEkySIJft3XA0Ae6axhIvHrqwm793Nw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.css" integrity="sha512-6lLUdeQ5uheMFbWm3CP271l14RsX1xtx+J5x2yeIDkkiBpeVTNhTqijME7GgRKKi6hCqovwCoBTlRBEC20M8Mg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Serif:ital,opsz,wght@0,8..144,500;1,8..144,500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@600&display=swap" rel="stylesheet">
+        </links>
+        
+        
+    </head>
+    <style>
+      @media only screen and (max-width: 1307px) {
+        .card-header,#lead2{
+  font-size: 15px;
+}
+#disclaimer{
+  font-size: 15px;
+}
+        .second .btn{
+    font-size: 10px !important;
+    font-family: 'Oswald',sans-serif;
+    text-align:center;
+    flex-shrink: 0;
+ 
+}
+#content1,#content2{
+  font-size: 30px;
+  
+  font-family: 'Oswald', sans-serif;
+}
+#lead{
+  font-size: 15px;
+}
+.second-row {
+    display: block;
+}
+#f0{
+  position: absolute;
+  top: 25%;
+  left:15%;
+  
+  
+  
+}
+#f1{
+  position: absolute;
+  top: 35%;
+  left:10%
+  
+}
+#f2{
+  position: absolute;
+  top: 40%;
+  left: 64%;
+  width: fit-content;
+}
+#f3{
+  position: absolute;
+  top: 50%;
+  left: 60%;
+  width: fit-content;
+}
+.upload{
+  font-family: 'Oswald', sans-serif;
+  font-size: 50px;
+}
+}
+      @media only screen and (max-width: 820px) {
+        #content1,#content2{
+  font-size: 25px;
+  
+  font-family: 'Oswald', sans-serif;
+  width: fit-content;
+}
+.upload{
+  font-family: 'Oswald', sans-serif;
+  font-size: 50px;
+  text-align: center;
+  display: inline-block;
+}
+.header{
+  font-size: 14px;
+}
+.text{
+  font-size: 10px;
+}
+.third .btn{
+  width:50%;
+  font-size: 15px !important;
+  font-family: 'Oswald',sans-serif;
+}
+
+#lead{
+  font-size: 10px;
+}
+
+.second-row {
+    display: block;
+}
+}
+@media only screen and (min-width: 1307px) {
+ 
+  
+  .upload{
+  font-family: 'Oswald', sans-serif;
+  font-size: 70px;
+  margin-bottom: 40px;
+}
+  #content1,#content2{
+  
+  
+  font-family: 'Oswald', sans-serif;
+}
+
+
+ .second .row > * {
+  flex-shrink: 0;
+  width: 100%;
+  max-width: 100%;
+  padding-right: calc(var(--bs-gutter-x) * .5);
+  padding-left: calc(var(--bs-gutter-x) * .5);
+  margin-top: var(--bs-gutter-y);
+}
+#f0{
+  position: absolute;
+  top: 25%;
+  left:15%;
+  
+  
+  
+}
+#f1{
+  position: absolute;
+  top: 35%;
+  left:10%
+  
+}
+#f2{
+  position: absolute;
+  top: 40%;
+  left: 64%;
+  
+}
+#f3{
+  position: absolute;
+  top: 50%;
+  left: 60%;
+  
+}
+
+}
+.col-md-12,.col-md-12 i, .col-md-12 .d-block{
+  color: white;
+}
+.first{
+    height: 92%;
+
+  }
+  .second{
+    height: 80%;
+  }
+
+
+.custom-shape-divider-bottom-1671531086 {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+}
+.custom-shape-divider-bottom-1671531086 svg {
+    position: relative;
+    display: block;
+    width: calc(168% + 1.3px);
+    height: 250px;
+    transform: rotateY(180deg);
+}
+
+.custom-shape-divider-bottom-1671531086 .shape-fill {
+    fill: rgb(52,58,64);}
+
+.second,.third,.fourth{
+  position: relative;
+}
+.second .custom-shape-divider-top-1671531582 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    transform: rotate(180deg);
+}
+
+.second .custom-shape-divider-top-1671531582 svg {
+    position: relative;
+    display: block;
+    width: calc(168% + 1.3px);
+    height: 250px;
+    transform: rotateY(180deg);
+}
+
+.second .custom-shape-divider-top-1671531582 .shape-fill {
+    fill: rgb(52,58,64);
+}
+.third .custom-shape-divider-top-1671532754 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    transform: rotate(180deg);
+}
+
+.third .custom-shape-divider-top-1671532754 svg {
+    position: relative;
+    display: block;
+    width: calc(100% + 1.3px);
+    height: 140px;
+}
+
+.third .custom-shape-divider-top-1671532754 .shape-fill {
+    fill: white;
+}
+
+.custom-shape-divider-bottom-1671537441 {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+}
+
+.custom-shape-divider-bottom-1671537441 svg {
+    position: relative;
+    display: block;
+    width: calc(100% + 1.3px);
+    height: 138px;
+}
+
+.custom-shape-divider-bottom-1671537441 .shape-fill {
+    fill:white
+}
+.icon{
+    display:inline-block;
+   
+    line-height: 50px;
+  
+    text-align: center;
+    vertical-align: bottom;
+}
+
+.btn{
+  color: white;
+  background-color: rgb(25,135,84)
+}
+.btn:hover{
+  color: white;
+  background-color: rgb(21,115,71);
+
+}
+.fourth{
+  color: white;
+  height: inherit;
+}
+
+   </style>
+
+
+
 {% extends "base.html" %}
 {% block header %}
 {% endblock %}
 {% block content %}
-<div id="first" class="row justify-content-center">
-  <div class="col-md-6">    
-    <div id="f0" class="row justify-content-center">
-      <h1 class="display-4">Malaria-Profiler</h1>
-    </div>
-    <div id="f1" class="row justify-content-center">
-      <p class="lead">
-        Welcome to the webserver of <b>Malaria-Profiler</b> - a pipeline which allows users to analyse <i>Plasmodium</i> malaria whole genome sequencing data to predict
-        species and potential drug resistance. Follow the instructions below to upload a new sample or view analysed runs.
-      </p>
-      <!-- <a class="btn btn-outline-secondary btn-lg" href="{{ url_for('main.result_id', run_id='7039884b-0ec9-4ec1-a05c-79d6257ef35b') }}" role="button">Example analysis</a>      -->
-    </div>
- 
-    <div id="f2" class="row justify-content-center">
-      <h1 class="display-5">How does it work?</h1>
-    </div>
-   
-    <div id="f3" class="row justify-content-center">
-      <p class="lead">
-        The pipeline searches for small variants (SNPs and indels) in genes associated with drug resistance. It will also report the species and geographical location. 
-        By default it uses Trimmomatic to trim the reads, BWA (or minimap2 for nanopore) to align to the reference genome and freebayes to call variants.
-      </p>
-      <div id="ex" class="row justify-content-center">
-        <a class="btn btn-secondary btn-lg" href="{{ url_for('main.result_id', run_id='d61749da-9e7b-40a2-bc98-6b8b3798dbae') }}" role="button">Example report</a>     
-      </div>
-    </div> 
-  </div>
-</div>
 
-<div class="container">
-  <div id="second" class="row justify-content-center">
-    <div class="col-md-6 d-flex align-self-stretch">
-      <div class="card border-dark">
-        <div class="card-header bg-dark text-white text-center">
-            Step 1 - Profile your sample
+
+<div class="main">
+
+<section class="first" >
+  <div class="custom-shape-divider-bottom-1671531086">
+    <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+        <path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z" class="shape-fill"></path>
+    </svg>
+  </div>
+    <div class="container" style="height: inherit;">
+      <div class="col-4" id="f0">    
+            <div  class="row">
+              <h1 id="content1">Malaria-Profiler</h1>
+            </div>
+      </div>
+      <div class="col-4 float-end" id="f1">
+            <div  class="row ">
+              <p class="lead" id="lead">
+                Welcome to the webserver of <b>Malaria-Profiler</b> - a pipeline which allows users to analyse <i>Plasmodium</i> malaria whole genome sequencing data to predict
+                species and potential drug resistance. Follow the instructions below to upload a new sample or view analysed runs.
+              </p>
+              <!-- <a class="btn btn-outline-secondary btn-lg" href="/malaria-profiler/result/7039884b-0ec9-4ec1-a05c-79d6257ef35b" role="button">Example analysis</a>      -->
+            </div>
+      
+      </div>
+    </div>
+  
+</section>
+<section class="second" >
+  <div class="custom-shape-divider-top-1671531582">
+    <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+        <path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z" class="shape-fill"></path>
+    </svg>
+</div>
+    <div class="container" style="height: inherit; margin-left: 100px;">
+      <div class="col-md-4 " id="f2" >    
+            <div  class="row">
+              <h1 id="content2" >How does it work?</h1>
+            </div>
+      </div>
+      <div class="col-md-4 float-end" id="f3">
+            <div  class="row " >
+              <p class="lead" id="lead">
+                The pipeline searches for small variants (SNPs and indels) in genes associated with drug resistance. It will also report the species and geographical location. 
+                By default it uses Trimmomatic to trim the reads, BWA (or minimap2 for nanopore) to align to the reference genome and freebayes to call variants.
+              </p>
+              <div id="ex" class="row " id="row2">
+                <a class="btn btn-outline-success btn-lg" href="{{ url_for('main.result_id', run_id='d61749da-9e7b-40a2-bc98-6b8b3798dbae') }}" role="button">EXAMPLE REPORT</a>     
+              </div>
+              <!-- <a class="btn btn-outline-secondary btn-lg" href="/malaria-profiler/result/7039884b-0ec9-4ec1-a05c-79d6257ef35b" role="button">Example analysis</a>      -->
+            </div>
+      
+      </div>
+    </div>
+  
+</section >
+  
+        <section class="third" style="height: 100%; background-color: rgb(52,58,64);;">
+          <div class="custom-shape-divider-top-1671532754">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M600,112.77C268.63,112.77,0,65.52,0,7.23V120H1200V7.23C1200,65.52,931.37,112.77,600,112.77Z" class="shape-fill"></path>
+            </svg>
         </div>
-        <div class="card-body" >
-            <p class="card-text" style="margin-bottom: 25px;">
-              Upload your next generation sequencing data in <b>fastq</b> or <b>bam</b> format. When you upload your data, the run will be be assigned a unique <b>Result ID</b>.            </p>
-          <hr>
-          <div class="d-flex justify-content-center">
-            <a class="btn btn-success btn-lg" href="{{ url_for('main.analysis') }}" role="button" style="margin-bottom: auto;">Run analysis</a>
+        <div class="container d-flex align-items-center justify-content-center" style="height: 60px;">
+        <div class="headers">
+          
+        </div>
+        </div>
+        <div class="container d-flex align-items-center justify-content-center">
+          <div class="headers">
+            <h1 class="upload" style="color: white;">Upload your samples</h1>
+          </div>
+      </div>
+        <div class="container  d-flex align-items-center justify-content-center">
+          
+          <div id="second" class="row align-items-center justify-content-center" >
+            <div class="col-6 d-flex  align-items-center justify-content-center " >
+              
+                <div class="block" style=" margin-bottom: 70px; background-color: white; height: 500px; border-radius: 50px;  box-shadow: 0 1px 6px rgb(255,255,255,0.1), 0 1px 4px rgba(255,255,255,0.5);">
+                  <div class="d-flex align-items-center justify-content-center" style="height: 50%;">
+                    <i class="fa-solid fa-file-import fa-8x"></i>
+                  </div>
+                  <div class="header" style="text-align: center; height: 10%;">
+                    Step 1 - Profile your sample
+                  </div>
+                  <div class="text-body" style="height: 20%;">
+                    <p class="text" style="text-align: center; " >
+                      Upload your next generation sequencing data in <b>fastq</b> or <b>bam</b> format. When you upload your data, the run will be be assigned a unique <b>Result ID</b>.            </p>
+                    </div> 
+                    <div class="button-body">
+                  <div class="d-flex align-items-center justify-content-center" style="clear: both;">
+                    <a class="btn  btn-lg" href="{{ url_for('main.analysis') }}" role="button" style="margin-bottom: auto;">Run analysis</a>
+                  </div>
+                </div> 
+                </div>
+                
+             
+            </div>
+            <div class="col-6 d-flex  align-items-center justify-content-center " >
+              
+              <div class="block" style="margin-bottom: 70px; background-color: white; height: 500px; border-radius: 50px;  box-shadow: 0 1px 6px rgb(255,255,255,0.1), 0 1px 4px rgba(255,255,255,0.5);">
+                <div class="d-flex align-items-center justify-content-center" style="height: 50%;">
+                  <i class="fa-solid fa-magnifying-glass fa-8x"></i>
+                </div>
+                <div class="header" style="text-align: center; height: 10%;">
+                  Step 2 - View the results
+                </div>
+                <div class="text-body" style="height: 20%;">
+                  <p class="text" style="text-align: center; " >
+                    If you have run analysis before, find your results by entering your unique <b>Result ID</b> into the search box.
+                    </p></div>
+                    <div class="button-body">
+                <div class="d-flex  align-items-center justify-content-center" style="clear: both;">
+                  <a class="btn btn-lg"  href="{{ url_for('main.result') }}" role="button" style="margin-bottom: auto;">Run analysis</a>
+                </div>
+                    </div>
+              </div>    
+              </div></div> 
+              
+           
+          </div>
+           
+        
+        
+        
+      </section>
+
+      <section class=fourth style="background-color: rgb(52,58,64); height:100vh;">
+        
+      <div class="container">
+        <div id="faq" class="row justify-content-center">
+          <h1 class="display-5" style="color: white;">FAQ</h1>
+        </div>
+        
+        <!-- vol1 -->
+        <div class="row justify-content-center">
+          <div class="col-md-12">
+            <h5 class="card-header expandable">
+              <a data-toggle="collapse" href="#collapse-example-1" aria-expanded="false" aria-controls="collapse-example-1" id="heading-example-1" class="d-block">
+                  <i class="rotate fa fa-chevron-down "></i>
+                  Which mutations are being used to predict resistance?
+              </a>
+            </h5>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="col-md-6 d-flex align-items-stretch">
-      <div class="card border-dark">
-        <div class="card-header bg-dark text-white text-center">
-            Step 2 - View the results
+        <div class="row justify-content-center">
+          <div class="col-md-12">
+            <div id="collapse-example-1" class="collapse" aria-labelledby="heading-example-1">
+              <div class="card-body">
+                <p class="lead" id="lead2">
+                  Species, resistance and geographical region is predicted using the curated <i>Plasmodium</i> database. This database has been tested using over 10,000 samples
+                  with genotypic data.
+                  You can read more about the markers present in the library at the time of testing here or you can take a look at the up to date CSV file here.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="card-body justify-content-center">
-            <p class="card-text" style="margin-bottom: 25px;">
-              If you have run analysis before, find your results by entering your unique <b>Result ID</b> into the search box.
+        
+        <!-- vol2 -->
+        <div class="row justify-content-center">
+          <div class="col-md-12">
+            <h5 class="card-header expandable">
+              <a data-toggle="collapse" href="#collapse-example-2" aria-expanded="false" aria-controls="collapse-example-2" id="heading-example-2" class="d-block">
+                  <i class="rotate fa fa-chevron-down "></i>
+                  Can I run <b>Malaria-Profiler</b> on my own computer?
+              </a>
+            </h5>
+          </div>
+        </div>
+        <div class="row justify-content-center ">
+          <div class="col-md-12">
+            <div id="collapse-example-2" class="collapse" aria-labelledby="heading-example-2">
+              <div class="card-body">
+                <p class="lead" id="lead2">
+                  If you have access to a linux or osX operating system then you can download the commandline version of <b>Malaria-Profiler</b>. For more information on this please
+                  visit the github repository. 
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+          
+        <!-- vol3 -->
+        <div class="row justify-content-center">
+          <div class="col-md-12">
+            <h5 class="card-header expandable">
+              <a data-toggle="collapse"  href="#collapse-example-3" aria-expanded="false" aria-controls="collapse-example-3" id="heading-example-3" class="d-block">
+                  <i class="rotate fa fa-chevron-down " ></i>
+                  Give feedback or request a feature?
+              </a>
+            </h5>
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-md-12">
+            <div id="collapse-example-3"  class="collapse" aria-labelledby="heading-example-3">
+              <div class="card-body">
+                <p class="lead" id="lead2">
+                  We are always looking to improve <b>Malaria-Profiler</b>. If you see some results that don't look right or would like to see some additional
+                  functionality in the future, don't hesitate to get in touch via the section on our GitHub page.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- vol4 -->
+        <div class="row justify-content-center">
+          <div class="col-md-12">
+            <h5 class="card-header expandable">
+              <a data-toggle="collapse"   href="#collapse-example-4" aria-expanded="false" aria-controls="collapse-example-4" id="heading-example-4" class="d-block">
+                  <i class="rotate fa fa-chevron-down " ></i>
+                  How to cite?
+              </a>
+            </h5>
+          </div>
+        </div>
+        
+        <div class="row justify-content-center">
+        <div class="col-md-12">   
+          <div id="collapse-example-4" class="collapse" aria-labelledby="heading-example-4">
+            <div class="card-body">
+              <p class="lead" id="lead2">Phelan, J. E. et al. in press</p>
+            </div>
+          </div>
+          <br>
+        </div>
+        </div>
+        
+        <section class="footer" >
+          <div class="container" id="footer">
+            
+            <p id="disclaimer">
+            <b>Disclaimer: </b> This tool is for Research Use Only. It has not been approved, cleared, or licensed by any regulatory authority.
+            By submitting sequence data the user acknowledges no intended medical purpose or objective such as clinical diagnosis, patient management, or human clinical trials.
             </p>
-          <hr>  
-          <div class="d-flex justify-content-center">
-            <a class="btn btn-success btn-lg" href="{{ url_for('main.result') }}" role="button" style="margin-bottom: auto;">Get results</a>
-          </div>        
-      </div>
-    </div>
-  </div>
-</div>
-
-<div id="faq" class="row justify-content-center">
-  <h1 class="display-5">FAQ</h1>
-</div>
-
-<!-- vol1 -->
-<div class="row justify-content-center">
-  <div class="col-md-12">
-    <h5 class="card-header expandable">
-      <a data-toggle="collapse" href="#collapse-example-1" aria-expanded="false" aria-controls="collapse-example-1" id="heading-example-1" class="d-block">
-          <i class="rotate fa fa-chevron-down "></i>
-          Which mutations are being used to predict resistance?
-      </a>
-    </h5>
-  </div>
-</div>
-<div class="row justify-content-center">
-  <div class="col-md-12">
-    <div id="collapse-example-1" class="collapse" aria-labelledby="heading-example-1">
-      <div class="card-body">
-        <p class="lead">
-          Species, resistance and geographical region is predicted using the curated <i>Plasmodium</i> database. This database has been tested using over 10,000 samples
-          with genotypic data.
-          You can read more about the markers present in the library at the time of testing here or you can take a look at the up to date CSV file here.
-        </p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- vol2 -->
-<div class="row justify-content-center">
-  <div class="col-md-12">
-    <h5 class="card-header expandable">
-      <a data-toggle="collapse" href="#collapse-example-2" aria-expanded="false" aria-controls="collapse-example-2" id="heading-example-2" class="d-block">
-          <i class="rotate fa fa-chevron-down "></i>
-          Can I run <b>Malaria-Profiler</b> on my own computer?
-      </a>
-    </h5>
-  </div>
-</div>
-<div class="row justify-content-center ">
-  <div class="col-md-12">
-    <div id="collapse-example-2" class="collapse" aria-labelledby="heading-example-2">
-      <div class="card-body">
-        <p class="lead">
-          If you have access to a linux or osX operating system then you can download the commandline version of <b>Malaria-Profiler</b>. For more information on this please
-          visit the github repository. 
-        </p>
-      </div>
-    </div>
-  </div>
-</div>
-  
-<!-- vol3 -->
-<div class="row justify-content-center">
-  <div class="col-md-12">
-    <h5 class="card-header expandable">
-      <a data-toggle="collapse" href="#collapse-example-3" aria-expanded="false" aria-controls="collapse-example-3" id="heading-example-3" class="d-block">
-          <i class="rotate fa fa-chevron-down "></i>
-          Give feedback or request a feature?
-      </a>
-    </h5>
-  </div>
-</div>
-<div class="row justify-content-center">
-  <div class="col-md-12">
-    <div id="collapse-example-3" class="collapse" aria-labelledby="heading-example-3">
-      <div class="card-body">
-        <p class="lead">
-          We are always looking to improve <b>Malaria-Profiler</b>. If you see some results that don't look right or would like to see some additional
-          functionality in the future, don't hesitate to get in touch via the section on our GitHub page.
-        </p>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- vol4 -->
-<div class="row justify-content-center">
-  <div class="col-md-12">
-    <h5 class="card-header expandable">
-      <a data-toggle="collapse" href="#collapse-example-4" aria-expanded="false" aria-controls="collapse-example-4" id="heading-example-4" class="d-block">
-          <i class="rotate fa fa-chevron-down "></i>
-          How to cite?
-      </a>
-    </h5>
-  </div>
-</div>
-
-<div class="row justify-content-center">
-<div class="col-md-12">   
-  <div id="collapse-example-4" class="collapse" aria-labelledby="heading-example-4">
-    <div class="card-body">
-      <p class="lead">Phelan, J. E. et al. in press</p>
-    </div>
-  </div>
-  <br>
-</div>
-</div>
-
-<div class="row justify-content-center">
-  <p class="lead">
-    <a class="btn btn-outline-success btn-lg" href="#" role="button" title="E-mail us!"><i class="fa-solid fa-envelope"></i></a>
-    <a class="btn btn-outline-dark btn-lg" href="https://github.com/jodyphelan/malaria-profiler" role="button" title="GitHub"><i class="fa-brands fa-github"></i></a>
-    <a class="btn btn-outline-primary btn-lg" href="https://pathogenseq.lshtm.ac.uk" role="button", title="PathogenSeq webpage"><i class="fa-solid fa-school"></i></a>
-  </p>
-</div>             
-<hr>
-
-<div id="footer">
-  <p>
-  <b>Disclaimer: </b> This tool is for Research Use Only. It has not been approved, cleared, or licensed by any regulatory authority.
-  By submitting sequence data the user acknowledges no intended medical purpose or objective such as clinical diagnosis, patient management, or human clinical trials.
-  </p>
-</div>
-
+            <div class="row justify-content-center">
+              <p class="lead">
+                <a class="btn btn-outline btn-lg" href="#" role="button" title="E-mail us!"><i class="fa-solid fa-envelope"></i></a>
+                <a class="btn btn-outline btn-lg" href="https://github.com/jodyphelan/malaria-profiler" role="button" title="GitHub"><i class="fa-brands fa-github"></i></a>
+                <a class="btn btn-outline btn-lg" href="https://pathogenseq.lshtm.ac.uk" role="button" ,="" title="PathogenSeq webpage"><i class="fa-solid fa-school"></i></a>
+              </p>
+            </div>    
+          </div>
+        </section>
+          </div>      
+      </section>
+      
+                   
+      <script type="text/javascript">
+        $(document).ready(function(){
+          
+        console.log($(document).width());
+           })
+        
+        
+        </script>           
 {% endblock %}
+

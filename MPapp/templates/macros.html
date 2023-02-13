@@ -1,3 +1,28 @@
+<head>
+    <style>
+        .fa-solid{
+            color: lightseagreen;
+            background-color: lightcoral;
+        }
+        .owl-stage, .owl-carousel, .owl-stage-outer {
+            width: 1px !important;
+        }
+       .item{
+        background-color: #4DC7A0;
+  color: white;
+  font-size: 30px;
+
+  padding: 10px;
+       }
+      
+
+
+
+    </style>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" integrity="sha512-sMXtMNL1zRzolHYKEujM2AqCLUR9F2C4/05cdbxjjLSRvMQIciEPCQZo++nk7go3BtSuK9kfa/s+a4f4i5pLkw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
 {% macro fastq_uploader() -%}
 
     <div class="card border-dark">
@@ -53,19 +78,21 @@
 
 {% macro file_dropper(random_id) -%}
 
-    <div class="card border-dark">
-        <div class="card-header bg-dark text-white text-center">
-            File input
-        </div>
-        <div class="card-body">
-            <p class="card-text">
+    <div class="drop-section">
+        
+        <div class="body">
+            <p class="text">
                 Please drop your files in here and click submit when done.
+                
             </p>
             <form method="POST" action='{{ url_for("main.file_upload",upload_id=random_id) }}' class="dropzone dz-clickable" 
                 id="dropper" enctype="multipart/form-data">
+                <div class="dz-message" data-dz-message> <i class="fa fa-upload fa-6x" aria-hidden="true"></i></div>
+               
             </form>
             <form method="post">
                 <div class="row justify-content-center text-center">
+                    
                     <div class="form-check" style="margin-right: 50px;">
                         <input class="form-check-input" type="radio" name="radio_platform" id="radiobtn_illumina" value="illumina" checked>
                         <label class="form-check-label" for="radiobtn_illumina">Illumina</label>
@@ -77,7 +104,7 @@
                 </div>
                 <hr> 
                 <div class="pt-2 justify-content-center text-center">
-                    <button type="submit" class="btn btn-success btn-lg" name="submit_button" value="{{random_id}}" id="bam_submit">Submit</button>
+                    <button type="submit" class="btn btn-outline-success btn-lg" name="submit_button" value="{{random_id}}" id="bam_submit">SUBMIT</button>
                 </div>
             </form>
         </div>
@@ -101,42 +128,43 @@
 
 
 {% macro result_retriever() -%}
-
-    <div class="card border-dark">
-        <div class="card-header bg-dark text-white text-center">
+<main style="margin-top: 10%;">
+    <div class="header">
+        <h1 class="header">
             Get results
-        </div>
-        <div class="card-body">
+        </h1>
+        <div class="text-align">
             <div class="row justify-content-center">
-                <p class="card-text justify-content-center">
+                <p class="justify-content-center">
                     Find your results by entering your unique <b>Result ID</b> into
                     the search box below.
                 </p>
             </div>
             <form method="post" enctype=multipart/form-data>
                 <div class="row justify-content-center text-center">                
-                    <div class="form-group mb-0">
-                        <input type="text" name="result_id" class="form-control" style="width: 310px;" placeholder="Result ID">
+                    <div class=" tags-input">
+                        <input type="text" name="result_id" class="form-control no-border shadow-none"  placeholder="Result ID">
                     </div>
                 </div>
                 <hr>
                 <div class="justify-content-center text-center">
-                    <button type="submit" id="result_submit" name="result_submit", class="btn btn-success btn-lg">Submit</button>
+                    <button type="submit" id="result_submit" name="result_submit", class="btn btn-outline-success btn-lg">SUBMIT</button>
                 </div>
             </form>
         </div>
     </div>
-
+</main>
 {%- endmacro %}
 
 {% macro description() -%}
 
-<div class="card border-dark">
-    <div class="card-header bg-dark text-white text-center">
-        File input
+<div class="text-align">
+    <div class="header">
+        
     </div>
-    <div class="card-body">
-        <p class="card-text">
+    <hr>
+    <div class="body">
+        <p class="text">
             For the analysis you can upload multiple <b>fastq</b> or <b>bam</b> files below. In the single run all uploaded data should be from the same platform - Illumina or Nanopore.
             
             During upload, each sample will be assigned a unique <b>Result ID</b> that is required to retrieve the corresponding result.
@@ -146,14 +174,235 @@
 </div>
 {%- endmacro %}
 
+{% macro resistanceTable1(rows, columns, name, genus) -%}
+{% set rand_id = range(1, 5000) | random %}
+<div class="rtablerr" style="height: inherit;">
+    {% set ns = namespace(current_var='') %}
+    {% set gene_var_dict = {} %}
+    {% set ns2 = namespace(current_gene = "") %}
+    {% for row in rows %}
+        {% for key in columns %}
+            {% if key == "gene" %}
+                {% set ns2.current_gene = row[key] %}
+            {% endif %}
+            {% if key == "change" %}
+                {% set ns.current_var = row[key] %}
+            {% endif %}
+        {% endfor %}
+        {% if ns2.current_gene not in gene_var_dict %}
+            {% set gene_var_dict = gene_var_dict.update({(ns2.current_gene):[ns.current_var]}) %}
+           
+        {% else %}
+        {% set vars_list = gene_var_dict[ns2.current_gene] %}
+{% set vars_list = vars_list + [ns.current_var] %}
+{% set gene_var_dict = gene_var_dict.update({ns2.current_gene:vars_list}) %}
 
+                 {% endif %}
+    {% endfor %}
+
+   
+        
+    <div class="card-body">
+        <div class="card-header text-center">
+            <p style="font-family: 'Sofia Sans' sans-serif; color: black;">{{name}}</p>
+        </div>
+        <table class="table table-hover" id="table-{{rand_id}}">
+            <thead>
+                <tr>
+                    <th scope="col" style="width: 10%">Gene</th>    
+                    <th scope="col" style="width: 30%">Mutations</th>
+                </tr>
+            </thead>
+            <tbody id="resultsTable">
+                {% for key, values in gene_var_dict.items() %}
+                {% set my_counter = loop.index %}
+                    <tr>
+                        <td>
+                            {{key | safe}} 
+                            {% set keyz = key|string %}
+                        </td>
+                        <td>
+                            <button type="button" id="dropdownMenu{{loop.index+1000}}" class="btn btn-outline-success dropdown-toggle" data-toggle="dropdown" aria-expanded="false" >
+                                SELECT MUTATION
+                              </button>
+                              <div class="dropdown-menu rr" aria-labelledby="dropdownMenu{{loop.index+1000}}">
+                                  {% for value in values %}
+                                  <div  class="dropdown-item rr" onclick="showGene(this,{{my_counter+1000}})" data-value={{ value }}>
+                                    {{ value }}
+                                    
+                                </div>
+                                {% endfor %}
+                              </div>
+                            
+                            <a  class="btn btn-outline-success"onclick="showGene2({{loop.index+1000}},'#rvr-data','{{genus}}')" data-keyz="{{keyz}}" >VIEW IN IGV</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+            </tbody>
+            
+
+
+        </table>
+    </div>
+</div>
+
+{%- endmacro %}
+
+
+{% macro resistanceTable2 (rows, columns, name, genus) -%}
+{% set rand_id = range(1, 5000) | random %}
+<div class="rtableov" style="height: inherit;">
+    {% set ns = namespace(current_var='') %}
+    {% set gene_var_dict = {} %}
+    {% set ns2 = namespace(current_gene = "") %}
+    {% for row in rows %}
+        {% for key in columns %}
+            {% if key == "gene" %}
+                {% set ns2.current_gene = row[key] %}
+            {% endif %}
+            {% if key == "change" %}
+                {% set ns.current_var = row[key] %}
+            {% endif %}
+        {% endfor %}
+        {% if ns2.current_gene not in gene_var_dict %}
+            {% set gene_var_dict = gene_var_dict.update({(ns2.current_gene):[ns.current_var]}) %}
+           
+        {% else %}
+        {% set vars_list = gene_var_dict[ns2.current_gene] %}
+{% set vars_list = vars_list + [ns.current_var] %}
+{% set gene_var_dict = gene_var_dict.update({ns2.current_gene:vars_list}) %}
+
+                 {% endif %}
+    {% endfor %}
+
+   
+        
+    <div class="card-body">
+        <div class="card-header text-center">
+            <p style="font-family: 'Sofia Sans' sans-serif;">{{name}}</p>
+        </div>
+        <table class="table table-hover" id="table-{{rand_id}}">
+            <thead>
+                <tr>
+                    <th scope="col" style="width: 10%">Gene</th>    
+                    <th scope="col" style="width: 30%">Mutations</th>
+                </tr>
+            </thead>
+            <tbody id="resultsTable">
+                {% for key, values in gene_var_dict.items() %}
+                {% set my_counter = loop.index %}
+                    <tr>
+                        <td>
+                            {{key | safe}} 
+                            {% set keyz = key|string %}
+                        </td>
+                        <td>
+                            <button type="button" id="dropdownMenu{{loop.index+2000}}" class="btn btn-outline-success dropdown-toggle" data-toggle="dropdown" aria-expanded="false" >
+                                SELECT MUTATION
+                              </button>
+                              <div class="dropdown-menu ov" aria-labelledby="dropdownMenu2{{loop.index+2000}}">
+                                  {% for value in values %}
+                                  <div  class="dropdown-item ov" onclick="showGene(this,{{my_counter+2000}})" data-value={{ value }}>
+                                    {{ value }}
+                                    
+                                </div>
+                                {% endfor %}
+                              </div>
+                              <a  class="btn btn-outline-success"onclick="showGene2({{loop.index+2000}},'#other-data', '{{genus}}')" data-keyz="{{keyz}}" >VIEW IN IGV</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+            </tbody>
+            
+
+
+        </table>
+    </div>
+</div>
+
+{%- endmacro %}
+
+
+{% macro resistanceTable3(rows, columns, name, genus) -%}
+
+{% set rand_id = range(1, 5000) | random %}
+<div class="rtablemp" style="height: inherit;">
+    {% set ns = namespace(current_var='') %}
+    {% set gene_var_dict = {} %}
+    {% set ns2 = namespace(current_gene = "") %}
+    {% for row in rows %}
+        {% for key in columns %}
+            {% if key == "gene" %}
+                {% set ns2.current_gene = row[key] %}
+            {% endif %}
+            {% if key == "variants" %}
+                {% set ns.current_var = row[key] %}
+            {% endif %}
+        {% endfor %}
+        {% if ns2.current_gene not in gene_var_dict %}
+            {% set gene_var_dict = gene_var_dict.update({(ns2.current_gene):[ns.current_var]}) %}
+           
+        {% else %}
+        {% set vars_list = gene_var_dict[ns2.current_gene] %}
+{% set vars_list = vars_list + [ns.current_var] %}
+{% set gene_var_dict = gene_var_dict.update({ns2.current_gene:vars_list}) %}
+
+                 {% endif %}
+    {% endfor %}
+
+   
+        
+    <div class="card-body">
+        <div class="card-header text-center">
+            <p style="font-family: 'Sofia Sans' sans-serif;">{{name}}</p>
+        </div>
+        <table class="table table-hover" id="table-{{rand_id}}">
+            <thead>
+                <tr>
+                    <th scope="col" style="width: 10%">Gene</th>    
+                    <th scope="col" style="width: 30%">Mutations</th>
+                </tr>
+            </thead>
+            <tbody id="resultsTable">
+                {% for key, values in gene_var_dict.items() %}
+                {% set my_counter = loop.index %}
+                    <tr>
+                        <td>
+                            {{key | safe}} 
+                            {% set keyz = key|string %}
+                        </td>
+                        <td>
+                            <button type="button" id="dropdownMenu{{loop.index+3000}}" class="btn btn-outline-success dropdown-toggle" data-toggle="dropdown" aria-expanded="false" >
+                                SELECT MUTATION
+                              </button>
+                              <div class="dropdown-menu mp" aria-labelledby="dropdownMenu{{loop.index+3000}}">
+                                  {% for value in values %}
+                                  <div  class="dropdown-item mp" onclick="showGene(this,{{my_counter+3000}})" data-value={{ value }}>
+                                    {{ value }}
+                                    
+                                </div>
+                                {% endfor %}
+                              </div>
+                              <a  class="btn btn-outline-success"onclick="showGene2({{loop.index+3000}},'#miss-data', '{{genus}}')" data-keyz="{{keyz}}" >VIEW IN IGV</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+            </tbody>
+            
+
+
+        </table>
+    </div>
+</div>
+
+{%- endmacro %}
 
 
 {% macro generic_table(rows, columns, name) -%}
-
+<div class="generic_table">
 {% set rand_id = range(1, 5000) | random %}
-<div class="card border-dark shadow">
-    <div class="card-header text-center bg-dark text-white">
+<div class="card shadow">
+    <div class="card-header text-center ">
         {{name}}
     </div>
     <div class="card-body">
@@ -161,23 +410,205 @@
             <thead>
                 <tr>
                     {% for key in columns %}
+                    {% if key != 'Genotypic Resistance' %}
                         <th scope="col" style="width: 10%">{{ columns[key] }}</th>
-                    {% endfor %}
+                        {% endif %}
+                        {% endfor %}
                 </tr>
             </thead>
             <tbody id="resultsTable">
                 {% for row in rows %}
                     <tr>
                     {% for key in columns %}
+                    {% if key != 'Genotypic Resistance' %}
                         <td>
                             {{ row[key]|safe }}
                         </td>
+                        {% endif %}
                     {% endfor %}
                     </tr>
+                    
                 {% endfor %}                
             </tbody>
         </table>
     </div>
 </div>
-
+</div>
 {%- endmacro %}
+{% macro get_results(rows, columns, name) -%}
+<div class="container">
+    
+    {% for row in rows %}
+    
+    {% for key in columns %}
+    <div class="font_awesome d-flex  align-items-center justify-content-center"  >
+        {% if row[key] == 'falciparum' %}
+        <i class="fa-solid fa-p fa-6x"></i>
+        <i class="fa-solid fa-f fa-3x"></i>
+        {% elif row[key] == 'ovale' %}
+        <i class="fa-solid fa-p fa-6x"></i>
+        <i class="fa-solid fa-o fa-3x"></i>
+        {% elif row[key] == 'vivax_simium' %}
+        <i class="fa-solid fa-p fa-6x"></i>
+        <i class="fa-solid fa-v fa-3x"></i>
+        {% elif row[key] == 'knowlesi' %}
+        <i class="fa-solid fa-p fa-6x"></i>
+        <i class="fa-solid fa-k fa-3x"></i>
+        {% elif row[key] == 'malariae' %}
+        <i class="fa-solid fa-p fa-6x"></i>
+        <i class="fa-solid fa-m fa-3x"></i>
+        
+        
+        {% else %}
+        
+        
+                {% endif %}
+                
+    </div>
+    <div class="text d-flex  align-items-center justify-content-center">
+        {% if row[key] == 'falciparum' %}
+        <p><em>Plasmodium {{row[key]}}</em></p>
+        {% elif row[key] == 'ovale' %}
+        <p><em>Plasmodium {{row[key]}}</em></p>
+        {% elif row[key] == 'vivax_simium' %}
+        <p><em>Plasmodium {{row[key]}}</em></p>
+        {% elif row[key] == 'knowlesi' %}
+        <p><em><em>Plasmodium {{row[key]}}</em></em></p>
+        {% elif row[key] == 'malariae' %}
+        <p><em><em>Plasmodium {{row[key]}}</em></em></p>
+        
+        {% else %}
+        
+        
+                {% endif %}
+    </div>
+        {% endfor %}
+    {% endfor %}
+
+    <table class="table table-hover" id="table-{{rand_id}}">
+        <thead>
+            <tr>
+                {% for key in columns %}
+                
+                {% if columns[key] != "Species" %}
+                    
+                    <th scope="col" >{{ columns[key] }}</th>
+                    {% endif %}
+                    {% endfor %}
+            </tr>
+        </thead>
+        <tbody id="resultsTable">
+            {% for row in rows %}
+                <tr>
+                {% for key in columns %}
+                {% if row[key] not in ['vivax_simium', 'falciparum', 'malariae', 'knowlesi', 'ovale'] %}
+                    <td>
+                        {{ row[key]|safe }}
+                    </td>
+                    {% endif %}
+                {% endfor %}
+                </tr>
+            {% endfor %}                
+        </tbody>
+    </table>
+                  
+
+</div>
+{%- endmacro %}
+
+
+{% macro get_results2(rows, columns, name) -%}
+<div class="contasiner">
+ {% for row in rows %}
+  {% for key in columns %}
+      {% if not '-' in row[key] %}
+      <p style="">{{ row[key] }}</p>
+         
+     {% else %} 
+    
+    {% endif %}      
+    {% endfor %}
+
+{% endfor %}                
+
+</div>
+{%- endmacro %}
+
+{% macro get_analysis(rows, columns, name) -%}
+<div class="coverage">
+<div class="owl-carousel">{% set values = [] %}
+    {% for row in rows %}
+                    {% for key in columns %}
+                    {{values.append(row[key]) or ""}}
+                    {% if loop.index0 == 3 %}
+    <div class="item">
+
+        <table class="table table-hover" id="table-{{rand_id}}">
+                <thead>
+                <tr>
+                    <th scope="col" style="width: 10%;">Gene</th>   
+                    <th scope="col" style="width: 10%;">Locus Tag</th>   
+                    <th scope="col" style="width: 10%;">Cutoff</th>   
+                    <th scope="col" style="width: 10%;">Fraction</th>   
+                </tr>
+            </thead>
+                
+                    
+            <tbody id="resultsTable">
+                    
+                <tr>
+                    <td class="col-md-2" >
+                        {{ values[0]}}
+                    </td>
+                    <td class="col-md-2">
+                        {{ values[1]}}
+                    </td class="col-md-2">
+                    <td>
+                    {{ values[2]}}
+                    </td >
+                    <td class="col-md-2">
+                    {{ values[3]}}
+                    </td>
+                </tr>
+                   
+                    {{values.clear() or ""}}
+                   
+                    
+        
+        
+                </tbody>
+            </table>
+            
+        </div>
+        {% endif %}
+        {% endfor %}    
+                {% endfor %}
+       
+            
+      </div>
+     
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.js"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.theme.default.css"></script>
+    <script>
+       $(document).ready(function() {
+        $(".owl-carousel").owlCarousel({
+            loop:true,
+            autoplay:true,
+    autoplayTimeout:2000,
+    autoplayHoverPause:true, 
+            margin:10,
+            dots:true,
+            
+            items: 1,
+            singleItem:true,
+            
+                   });
+                });
+
+    </script>
+{%- endmacro %}
+
+</div>   
