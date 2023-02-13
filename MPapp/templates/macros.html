@@ -174,11 +174,7 @@
 </div>
 {%- endmacro %}
 
-
-
-
-{% macro resistanceTable1(rows, columns, name) -%}
-
+{% macro resistanceTable1(rows, columns, name, genus) -%}
 {% set rand_id = range(1, 5000) | random %}
 <div class="rtablerr" style="height: inherit;">
     {% set ns = namespace(current_var='') %}
@@ -237,7 +233,8 @@
                                 </div>
                                 {% endfor %}
                               </div>
-                              <a  class="btn btn-outline-success"onclick="showGene2({{loop.index+1000}},'#rvr-data')" data-keyz="{{keyz}}" >VIEW IN IGV</a>
+                            
+                            <a  class="btn btn-outline-success"onclick="showGene2({{loop.index+1000}},'#rvr-data','{{genus}}')" data-keyz="{{keyz}}" >VIEW IN IGV</a>
                         </td>
                     </tr>
                     {% endfor %}
@@ -252,8 +249,7 @@
 {%- endmacro %}
 
 
-{% macro resistanceTable2 (rows, columns, name) -%}
-
+{% macro resistanceTable2 (rows, columns, name, genus) -%}
 {% set rand_id = range(1, 5000) | random %}
 <div class="rtableov" style="height: inherit;">
     {% set ns = namespace(current_var='') %}
@@ -312,7 +308,7 @@
                                 </div>
                                 {% endfor %}
                               </div>
-                              <a  class="btn btn-outline-success"onclick="showGene2({{loop.index+2000}},'#other-data')" data-keyz="{{keyz}}" >VIEW IN IGV</a>
+                              <a  class="btn btn-outline-success"onclick="showGene2({{loop.index+2000}},'#other-data', '{{genus}}')" data-keyz="{{keyz}}" >VIEW IN IGV</a>
                         </td>
                     </tr>
                     {% endfor %}
@@ -327,7 +323,7 @@
 {%- endmacro %}
 
 
-{% macro resistanceTable3(rows, columns, name) -%}
+{% macro resistanceTable3(rows, columns, name, genus) -%}
 
 {% set rand_id = range(1, 5000) | random %}
 <div class="rtablemp" style="height: inherit;">
@@ -387,7 +383,7 @@
                                 </div>
                                 {% endfor %}
                               </div>
-                              <a  class="btn btn-outline-success"onclick="showGene2({{loop.index+3000}},'#miss-data')" data-keyz="{{keyz}}" >VIEW IN IGV</a>
+                              <a  class="btn btn-outline-success"onclick="showGene2({{loop.index+3000}},'#miss-data', '{{genus}}')" data-keyz="{{keyz}}" >VIEW IN IGV</a>
                         </td>
                     </tr>
                     {% endfor %}
