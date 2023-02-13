@@ -163,18 +163,42 @@
             <div class="modal-content">
                <div class="tabb"  >    
                 <div class="tab-content" id="tabcontent"> 
+                  {% set ns = namespace (genus = '') %}
                   {% for key in tables %}     
                   {% if key == "Resistance variants report" %}
                   <div class="tab-pane fade show active" id="{{ keyname }}-tabs" role="tabpanel" aria-labelledby="{{ keyname }}-tab">
-                  {{macros.resistanceTable1(tables[key][0], tables[key][1], key)}}
+                    {% for key in tables %}
+                    
+                      {% if key == 'Species' %}
+                     
+                      {% for row in tables[key][0] %}
+                    
+                      {% for key in tables[key][1] %}
+                      {% if row[key][0] == falciparum %}
+                      {% set ns.genus = 'falciparum' %}
+                      {% elif row[key] == ovale %}
+                      {% set ns.genus = 'ovale' %}
+                      {% elif row[key] == vivax %}
+                      {% set ns.genus = 'vivax' %}
+                      {% elif row[key] == knowlesi %}
+                      {% set ns.genus = 'knowlesi' %}
+                      {% elif row[key] == malariae %}
+                      {% set ns.genus = 'malariae' %}
+                      {% else %}
+                      {% endif %}
+                      {% endfor %} 
+                      {% endfor %} 
+                      {% endif %}
+                      {% endfor %} 
+                      {{macros.resistanceTable1(tables[key][0], tables[key][1], key,ns.genus)}}
                 </div> 
                 {% elif key == "Other variants" %}
                 <div class="tab-pane fade show active" id="{{ keyname }}-tabs" role="tabpanel" aria-labelledby="{{ keyname }}-tab">
-                  {{macros.resistanceTable2(tables[key][0], tables[key][1], key)}}
+                  {{macros.resistanceTable2(tables[key][0], tables[key][1], key, ns.genus)}}
                 </div> 
                 {% elif key == "Missing positions report" %}
                 <div class="tab-pane fade show active" id="{{ keyname }}-tabs" role="tabpanel" aria-labelledby="{{ keyname }}-tab">
-                  {{macros.resistanceTable3(tables[key][0], tables[key][1], key)}}
+                  {{macros.resistanceTable3(tables[key][0], tables[key][1], key, ns.genus)}}
                 </div> 
                 {% endif %}
                 {% endfor %}

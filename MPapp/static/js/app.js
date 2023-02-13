@@ -339,8 +339,15 @@ am5.ready(function() {
   }
   var locus = initiallocus.replace(/\s+/g, '')
   var url = ""
+  if (genus=="falciparum"){
+  url = '/static/fastafiles/'+ "new_" + genus +'.fna.gz'
+  index = '/static/fastafiles/'+"new_"+genus +'.fna.fai.gz'
+
+  }else{
   url = '/static/fastafiles/'+ genus +'.fna.gz'
-  index = '/static/fastafiles/'+ genus +'.fna.gz.fai'
+  index = '/static/fastafiles/'+ genus +'.fna.fai.gz'
+
+  }
   
   
   var igvDiv = document.getElementById("igvDiv");
