@@ -208,14 +208,7 @@ am5.ready(function() {
 
 
 
-  $( document ).ready(function() {
-    var w = window.innerWidth;
-  var h = window.innerHeight; 
-  console.log(w,h)
   
-  
-  
-  });
     function showDiv(divId) {
       var divs = document.getElementsByClassName("tabby");
       for (var i = 0; i < divs.length; i++) {
@@ -257,6 +250,7 @@ am5.ready(function() {
   splitValues = firstValue.split("{")
   
   }
+  
   var nucleotideArray = []
   var chromArray = []
   var resistancePosArray = []
@@ -270,7 +264,8 @@ am5.ready(function() {
   
   if(data == '#rvr-data'){
     
-    chromArray.push(split2[0].split("_")[1])
+    chromArray.push(split2[0])
+    
   resistancePosArray.push(split2[1].split(":")[1])
     var curr = split2[12].split(":")[1]
   curr = curr.replace(/['"]+/g, '').trim();
@@ -278,7 +273,7 @@ am5.ready(function() {
   nucleotideArray.push(curr)
   }else if(data == '#other-data'){
    
-    chromArray.push(split2[0].split("_")[1])
+    chromArray.push(split2[0])
   resistancePosArray.push(split2[1].split(":")[1])
     var curr = split2[11].split(":")[1]
   curr = curr.replace(/['"]+/g, '').trim();
@@ -290,7 +285,22 @@ am5.ready(function() {
     
     
     var tempVar = tempArray.split("_")[1];
-    chromArray.push(tempVar.slice(0,2))      
+    if(genus == 'falciparum'){
+      chromNumber = tempVar.slice(0,2)
+      chromArray.push("Pf3D7_"+chromNumber+"_v3")
+    }else if(genus == 'vivax'){
+      chromNumber = tempVar.slice(0,2)
+      chromArray.push("PvP01_"+chromNumber+"_v1")
+    }else if(genus == 'malariae'){
+      chromNumber = tempVar.slice(0,2)
+      chromArray.push("PmUG01_"+chromNumber+"_v1")
+    }else if(genus == 'ovale'){
+      chromNumber = tempVar.slice(0,2)
+      chromArray.push("PocGH01_"+chromNumber+"_v2")
+    }else if(genus == 'knowlesi'){
+      chromNumber = tempVar.slice(0,2)
+      chromArray.push("ordered_PKNH_"+chromNumber+"_v2")
+    }
   resistancePosArray.push(split2[0].split(":")[1])
     var curr = split2[3].split(":")[1]
   curr = curr.replace(/['"]+/g, '').trim();
@@ -324,17 +334,15 @@ am5.ready(function() {
   
   }
   currentChromosome = chromArray[currIndex]
-  if (currentChromosome.includes("0")){
-  currentChromosome = currentChromosome.replace('0','')
-  }else{
+  currentChromosome = currentChromosome.replace(/[^\w\s!?]/g,'');
+  currentChromosome = currentChromosome.replace(/\s+/g, '')
   
-  }
   var initiallocus = ""
   if( data=='#rvr-data' || data=='#other-data' ){
-  initiallocus = "chr_"+currentChromosome+":"+currentPos
+  initiallocus = currentChromosome+":"+currentPos
   
   }else{
-  initiallocus = "chr_"+currentChromosome+":"+firstPos+"-"+lastPos
+  initiallocus = currentChromosome+":"+firstPos+"-"+lastPos
   
   }
   var locus = initiallocus.replace(/\s+/g, '')
@@ -375,3 +383,31 @@ am5.ready(function() {
   
     
   }  
+  $(document).ready(function(){
+    var djangoData = $("#species-data").data();
+    var speciesValue = Object.values(djangoData);
+    var firstValue = speciesValue[0]
+    var splitValues = firstValue.split("{'species':")
+    var splitagain = splitValues[1].split(",");
+    var genus = splitagain[0].replace(/[^\w\s!?]/g,'');
+    genus = genus.replace(/\s+/g, '')
+    var  url = '/static/fastafiles/'+ genus +'.fasta'
+  var index = '/static/fastafiles/'+ genus +'.fasta.fai'
+    var igvDiv = document.getElementById("igvDiv");
+    var options =
+      {
+        reference:{
+          id: genus,
+          fastaURL: url,
+          indexURL: index,
+          height: "500",
+          autoHeight:false
+        },
+       
+       
+          
+      };
+    igv.createBrowser(igvDiv,options)
+  })
+
+  
