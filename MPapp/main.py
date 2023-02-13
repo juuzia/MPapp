@@ -139,7 +139,7 @@ def is_legal_filetype(filename):
         return False
 
 def get_conf(results):
-    db_name = results['species']['species_db_version']['name']
+    db_name = results['resistance_db_version']['name']
     conf = pp.get_db('malaria_profiler',db_name)
     return conf
     # species_prediction = results['species']
