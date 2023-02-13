@@ -350,10 +350,8 @@ am5.ready(function() {
   
   url = '/static/fastafiles/'+ genus +'.fasta'
   index = '/static/fastafiles/'+ genus +'.fasta.fai'
-
   
-  
-  
+  console.log(bam,bai,filename)
   var igvDiv = document.getElementById("igvDiv");
     var options =
       {
@@ -366,6 +364,27 @@ am5.ready(function() {
           locus: locus,
           
       };
+      var options =
+      {
+        reference:{
+          id: genus,
+          fastaURL: url,
+          indexURL: index,
+          tracks: [
+             {
+                "name": filename[0],
+                  "format": "bam",
+                  "type": "alignment",
+                   "url": bam,
+                   "indexURL":bai,                     
+                   "height": "300",
+                   "color": "#2c1087",
+                   
+             }
+             
+          
+            ]}, id:genus,
+          locus: locus}
       igv.createBrowser(igvDiv, options)
               .then(function (browser) {
               })
@@ -383,8 +402,13 @@ am5.ready(function() {
   
     
   }  
+  var filename = [""]
+  var bam = ""
+  var bai = ""
   $(document).ready(function(){
     var djangoData = $("#species-data").data();
+    
+    getFileName(filename)
     var speciesValue = Object.values(djangoData);
     var firstValue = speciesValue[0]
     var splitValues = firstValue.split("{'species':")
@@ -393,6 +417,8 @@ am5.ready(function() {
     genus = genus.replace(/\s+/g, '')
     var  url = '/static/fastafiles/'+ genus +'.fasta'
   var index = '/static/fastafiles/'+ genus +'.fasta.fai'
+  bam = '/static/results/'+filename+".bam"
+  bai = '/static/results/' +filename+ ".bam.bai"
     var igvDiv = document.getElementById("igvDiv");
     var options =
       {
@@ -400,14 +426,30 @@ am5.ready(function() {
           id: genus,
           fastaURL: url,
           indexURL: index,
-          height: "500",
-          autoHeight:false
-        },
-       
-       
+          tracks: [
+             {
+                "name": filename,
+                  "format": "bam",
+                  "type": "alignment",
+                   "url": bam,
+                   "indexURL":bai,                     
+                   "height": "300",
+                   "color": "#2c1087",
+                   
+             }
+             
           
-      };
+            ]}}
     igv.createBrowser(igvDiv,options)
   })
 
-  
+  function getFileName(filenameRef){
+    var resultID = $("#result-id").data();
+    var resultsValue = Object.values(resultID)
+    var resultsFirst = resultsValue[0]
+    var resultsSplit = resultsFirst.split("[{'id':")
+    var resultsSplitAgain = resultsSplit[1].split(",");
+    filenameRef[0] = resultsSplitAgain[0].replace(/[ \']/g,'');
+    filenameRef[0] = filenameRef[0]//.replace(/\s+/g, '')
+    console.log(filenameRef[0])
+}

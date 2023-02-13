@@ -39,7 +39,19 @@
       {{macros.get_results2(tables[key][0], tables[key][1], key)}}
       
       {% endif %}
-      {% endfor %}              
+      {% endfor %} 
+      {% set values = [] %}
+
+      {% for key in tables %}
+  
+  {% for row in tables[key][0] %}
+  {% if key == 'General information' %}
+  {{ values.append(row) or "" }}
+ {% endif %}
+  {% endfor %}
+      
+{% endfor %}
+<meta id="result-id" data-name="{{values}}" >             
     </div>
     <div class="id">
       <form method="get" action="{{ url_for('main.download', run_id=run_id) }}">          
