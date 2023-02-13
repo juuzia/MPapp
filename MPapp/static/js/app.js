@@ -331,23 +331,19 @@ am5.ready(function() {
   }
   var initiallocus = ""
   if( data=='#rvr-data' || data=='#other-data' ){
-  initiallocus = "chr"+currentChromosome+":"+currentPos
+  initiallocus = "chr_"+currentChromosome+":"+currentPos
   
   }else{
-  initiallocus = "chr"+currentChromosome+":"+firstPos+"-"+lastPos
+  initiallocus = "chr_"+currentChromosome+":"+firstPos+"-"+lastPos
   
   }
   var locus = initiallocus.replace(/\s+/g, '')
   var url = ""
-  if (genus=="falciparum"){
-  url = '/static/fastafiles/'+ "new_" + genus +'.fna.gz'
-  index = '/static/fastafiles/'+"new_"+genus +'.fna.fai.gz'
+  
+  url = '/static/fastafiles/'+ genus +'.fasta'
+  index = '/static/fastafiles/'+ genus +'.fasta.fai'
 
-  }else{
-  url = '/static/fastafiles/'+ genus +'.fna.gz'
-  index = '/static/fastafiles/'+ genus +'.fna.fai.gz'
-
-  }
+  
   
   
   var igvDiv = document.getElementById("igvDiv");
