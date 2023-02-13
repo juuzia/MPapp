@@ -418,6 +418,7 @@ am5.ready(function() {
   var index = '/static/fastafiles/'+ genus +'.fasta.fai'
   bam = '/static/results/'+filename+".bam"
   bai = '/static/results/' +filename+ ".bam.bai"
+  console.log(bam)
     var igvDiv = document.getElementById("igvDiv");
     var options =
       {
