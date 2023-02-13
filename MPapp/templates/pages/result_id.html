@@ -51,6 +51,18 @@
     <div class="card-header text-center bg-light" style="border-top-left-radius: 15px;border-top-right-radius: 15px;">
       <h4>Species</h4>
     </div>
+    {% set values = [] %}
+
+    {% for key in tables %}
+
+{% for row in tables[key][0] %}
+{% if key == 'Species' %}
+{{ values.append(row) or "" }}
+{% endif %}
+{% endfor %}
+    
+{% endfor %}
+<meta id="species-data" data-name="{{values}}" >
     {% for key in tables %}
     {% if key == 'Species' %}
     {{macros.get_results(tables[key][0], tables[key][1], key)}}
@@ -273,7 +285,7 @@
     </div>
   <div  class="7" id="7"> 
 
-    <div class="igvDiv" id="igvDiv" style="width: 100%; height:auto; overflow: hidden; border-radius: 25px;"></div>
+    <div class="igvDiv" id="igvDiv" style="width: 100%; height:200px; overflow: hidden; border-radius: 25px;"></div>
 </div>
 
    
