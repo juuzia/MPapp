@@ -139,20 +139,23 @@ def is_legal_filetype(filename):
         return False
 
 def get_conf(results):
-    species_prediction = results['species']
-    if len(species_prediction['prediction'])>1:
-            pp.infolog(f"Multiple species found.\n")
-            return None
-    if len(species_prediction['prediction'])==0:
-        pp.infolog(f"Species classification failed.\n")
-        return None
-    if len(species_prediction['prediction'])==1:
-        pp.infolog("No resistance database was specified. Attempting to use database based on species prediction...\n")
-        db_name = species_prediction['prediction'][0]["species"].replace(" ","_")
-        conf = pp.get_db('malaria_profiler',db_name)
-        if not conf:
-            pp.infolog(f"No resistance db found for {db_name}.\n")
-        return conf
+    db_name = results['species']['species_db_version']['name']
+    conf = pp.get_db('malaria_profiler',db_name)
+    return conf
+    # species_prediction = results['species']
+    # if len(species_prediction['prediction'])>1:
+    #         pp.infolog(f"Multiple species found.\n")
+    #         return None
+    # if len(species_prediction['prediction'])==0:
+    #     pp.infolog(f"Species classification failed.\n")
+    #     return None
+    # if len(species_prediction['prediction'])==1:
+    #     pp.infolog("No resistance database was specified. Attempting to use database based on species prediction...\n")
+    #     db_name = species_prediction['prediction'][0]["species"].replace(" ","_")
+    #     conf = pp.get_db('malaria_profiler',db_name)
+    #     if not conf:
+    #         pp.infolog(f"No resistance db found for {db_name}.\n")
+    #     return conf
 
 def parse_result_summary(json_file):
     geoclass, drugs, var_drug, variants, gene_coverage, missing = None, None, None, None, None, None
