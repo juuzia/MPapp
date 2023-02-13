@@ -169,10 +169,17 @@ def parse_result_summary(json_file):
             {"id": "Identifier",
              "date": "Date"})
 
-    species = (json_results['species']['prediction'],
-              {"species": "Species",
-               "mean": "Mean kmer coverage",
-               "std": "Standard dev"})
+    if len(json_results['species']['prediction'])==0:
+        json_results['species']['prediction'] = [{"species": json_results['resistance_db_version']['name'], "mean": 0, "std": 0}]
+
+    species = (
+        json_results['species']['prediction'],
+        {
+            "species": "Species",
+            "mean": "Mean kmer coverage",
+            "std": "Standard dev"
+        }
+    )
 
     analysis = (json_results['pipeline_software'],
                 {'Analysis': 'Analysis',
