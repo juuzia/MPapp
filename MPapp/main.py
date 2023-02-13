@@ -47,7 +47,7 @@ def analysis():
             with open("%s/%s.log" % (app.config["RESULTS_DIR"], run_id), "w") as O:
                 O.write("Starting job: %s\n" % run_id)
             if app.config["RUN_SUBMISSION"]=="local":
-                run_mp.delay(f.type, f.files, run_id, app.config["RESULTS_DIR"], platform)
+                run_mp.delay(f.type, f.files, run_id, app.config["RESULTS_DIR"], platform,threads=app.config["THREADS"])
             elif app.config["RUN_SUBMISSION"]=="remote":
                 remote_profile.delay(f.type, f.files, run_id, app.config["RESULTS_DIR"], platform)
             else:

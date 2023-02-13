@@ -8,6 +8,7 @@ def create_app(test_config=None):
     app.config.from_mapping(
         SECRET_KEY='dev',
         UPLOAD_FOLDER="/tmp",
+        THREADS=4,
         RUN_SUBMISSION="local",
         APP_ROOT=os.path.dirname(os.path.abspath(__file__)),
         RESULTS_DIR=os.path.dirname(os.path.abspath(__file__))+"/results"
