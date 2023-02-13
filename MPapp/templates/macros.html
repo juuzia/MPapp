@@ -76,7 +76,7 @@
 
 {%- endmacro %}
 
-{% macro file_dropper(random_id) -%}
+{% macro file_dropper(random_id,species) -%}
 
     <div class="drop-section">
         
@@ -92,16 +92,27 @@
             </form>
             <form method="post">
                 <div class="row justify-content-center text-center">
-                    
-                    <div class="form-check" style="margin-right: 50px;">
-                        <input class="form-check-input" type="radio" name="radio_platform" id="radiobtn_illumina" value="illumina" checked>
-                        <label class="form-check-label" for="radiobtn_illumina">Illumina</label>
+                    <div class="col-md-6">
+                        <div class="form-check" >
+                            <input class="form-check-input" type="radio" name="radio_platform" id="radiobtn_illumina" value="illumina" checked>
+                            <label class="form-check-label" for="radiobtn_illumina">Illumina</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="radio_platform" id="radiobtn_nanopore" value="nanopore">
+                            <label class="form-check-label" for="radiobtn_nanopore">Nanopore</label>
+                        </div>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="radio_platform" id="radiobtn_nanopore" value="nanopore">
-                        <label class="form-check-label" for="radiobtn_nanopore">Nanopore</label>
+                    <div class="col-md-6">
+                        <select class="form-control" name="species"  aria-label="Default select example">
+                            {% for s in species %}
+                                <option value="{{s[0]}}">{{s[1]}}</option>
+                            {% endfor %}
+    
+                        </select> 
+                        
                     </div>
                 </div>
+                
                 <hr> 
                 <div class="pt-2 justify-content-center text-center">
                     <button type="submit" class="btn btn-outline-success btn-lg" name="submit_button" value="{{random_id}}" id="bam_submit">SUBMIT</button>

@@ -377,8 +377,7 @@ am5.ready(function() {
                   "type": "alignment",
                    "url": bam,
                    "indexURL":bai,                     
-                   "height": "300",
-                   "color": "#2c1087",
+                   "height": "300"
                    
              }
              
@@ -433,8 +432,7 @@ am5.ready(function() {
                   "type": "alignment",
                    "url": bam,
                    "indexURL":bai,                     
-                   "height": "300",
-                   "color": "#2c1087",
+                   "height": "300"
                    
              }
              

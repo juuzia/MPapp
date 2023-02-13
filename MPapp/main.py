@@ -30,6 +30,8 @@ def analysis():
     if request.method == "POST":
         #if  == "illumina":
         platform = request.form["radio_platform"]
+        species = request.form["species"]
+        print(species)
 
         runs = []
         upload_id = request.form['submit_button']
@@ -47,9 +49,9 @@ def analysis():
             with open("%s/%s.log" % (app.config["RESULTS_DIR"], run_id), "w") as O:
                 O.write("Starting job: %s\n" % run_id)
             if app.config["RUN_SUBMISSION"]=="local":
-                run_mp.delay(f.type, f.files, run_id, app.config["RESULTS_DIR"], platform,threads=app.config["THREADS"])
+                run_mp.delay(f.type, f.files, run_id, app.config["RESULTS_DIR"], platform,species=species,threads=app.config["THREADS"])
             elif app.config["RUN_SUBMISSION"]=="remote":
-                remote_profile.delay(f.type, f.files, run_id, app.config["RESULTS_DIR"], platform)
+                remote_profile.delay(f.type, f.files, run_id, app.config["RESULTS_DIR"], platform,species=species)
             else:
                 raise Exception("Unknown RUN_SUBMISSION type: %s" % app.config["RUN_SUBMISSION"])
             runs.append({"id":run_id, "files":f.files})
@@ -63,8 +65,15 @@ def analysis():
         #     writer.writerows(runs)
         #     csv_text = O.getvalue()
         # return Response(csv_text,mimetype="text/csv",headers={"Content-disposition": "attachment; filename=run-ids.csv"})
-
-    return render_template("pages/analysis.html", random_id=random_id)
+    species_list = [
+        ('falciparum', 'Plasmodium falciparum'),
+        ('vivax_simium', 'Plasmodium vivax'),
+        ('knowlesi', 'Plasmodium lnowlesi'),
+        ('malariae_brasilianum', 'Plasmodium malariae'),
+        ('ovale', 'Plasmodium ovale'),
+        ('autodetect', 'Autodetect')
+    ]
+    return render_template("pages/analysis.html", random_id=random_id,species = species_list)
 
 file_patterns = {
     "fasta": "\.fasta$|\.fa$",

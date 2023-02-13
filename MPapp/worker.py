@@ -41,8 +41,9 @@ def get_status(run_id):
     return AsyncResult(run_id).state
 
 @celery.task
-def run_mp(ftype, files, run_id, results_dir, platform, threads = 1):
+def run_mp(ftype, files, run_id, results_dir, platform, species, threads = 1):
     print(files)
+    print(species)
     if ftype=="fastq":
         if len(files)==2:
             tmp = f"-1 {files[0]} -2 {files[1]}"
@@ -53,6 +54,9 @@ def run_mp(ftype, files, run_id, results_dir, platform, threads = 1):
     elif ftype in ["bam","cram"]:
         tmp = f"-a {files[0]}"
 
+    if species!="autodetect":
+        tmp += f" --resistance_db {species}"
+    print("malaria-profiler profile --dir %s %s --prefix %s --platform %s -t %s --txt" % (results_dir, tmp, run_id, platform, threads))
     sp.call("malaria-profiler profile --dir %s %s --prefix %s --platform %s -t %s --txt" % (results_dir, tmp, run_id, platform, threads), shell=True)
     db_name = json.load(open(f"{results_dir}/{run_id}.results.json"))["resistance_db_version"]["name"]
     bed_file = f"{sys.base_prefix}/share/malaria_profiler/{db_name}.bed"

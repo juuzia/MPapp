@@ -1,8 +1,8 @@
-MPapp/results/*
+MPapp/static/results/*
 !MPapp/.gitkeep
-!MPapp/results/d61749da-9e7b-40a2-bc98-6b8b3798dbae.results.txt
-!MPapp/results/d61749da-9e7b-40a2-bc98-6b8b3798dbae.results.json
-!MPapp/results/d61749da-9e7b-40a2-bc98-6b8b3798dbae.log
+!MPapp/static/results/d61749da-9e7b-40a2-bc98-6b8b3798dbae.results.txt
+!MPapp/static/results/d61749da-9e7b-40a2-bc98-6b8b3798dbae.results.json
+!MPapp/static/results/d61749da-9e7b-40a2-bc98-6b8b3798dbae.log
 MPapp/__pycache__
 .vscode/
 *.rdb
