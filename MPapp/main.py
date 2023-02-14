@@ -26,6 +26,14 @@ def index():
 
 @bp.route('/analysis', methods=["GET", "POST"])
 def analysis():
+    species_list = [
+        ('falciparum', 'Plasmodium falciparum'),
+        ('vivax_simium', 'Plasmodium vivax'),
+        ('knowlesi', 'Plasmodium lnowlesi'),
+        ('malariae_brasilianum', 'Plasmodium malariae'),
+        ('ovale', 'Plasmodium ovale'),
+        ('autodetect', 'Autodetect')
+    ]
     random_id = str(uuid4())
     if request.method == "POST":
         #if  == "illumina":
@@ -38,7 +46,7 @@ def analysis():
         upload_dir = get_upload_dir(upload_id)
         if not os.path.isdir(upload_dir):
             flash("No new files uploaded","info")
-            return render_template("pages/analysis.html", random_id=random_id)
+            return render_template("pages/analysis.html", random_id=random_id, species_list=species_list)
 
         new_upload_id = str(uuid4())
         new_upload_dir = get_upload_dir(new_upload_id)
@@ -65,14 +73,7 @@ def analysis():
         #     writer.writerows(runs)
         #     csv_text = O.getvalue()
         # return Response(csv_text,mimetype="text/csv",headers={"Content-disposition": "attachment; filename=run-ids.csv"})
-    species_list = [
-        ('falciparum', 'Plasmodium falciparum'),
-        ('vivax_simium', 'Plasmodium vivax'),
-        ('knowlesi', 'Plasmodium lnowlesi'),
-        ('malariae_brasilianum', 'Plasmodium malariae'),
-        ('ovale', 'Plasmodium ovale'),
-        ('autodetect', 'Autodetect')
-    ]
+    
     return render_template("pages/analysis.html", random_id=random_id,species = species_list)
 
 file_patterns = {
@@ -142,20 +143,6 @@ def get_conf(results):
     db_name = results['resistance_db_version']['name']
     conf = pp.get_db('malaria_profiler',db_name)
     return conf
-    # species_prediction = results['species']
-    # if len(species_prediction['prediction'])>1:
-    #         pp.infolog(f"Multiple species found.\n")
-    #         return None
-    # if len(species_prediction['prediction'])==0:
-    #     pp.infolog(f"Species classification failed.\n")
-    #     return None
-    # if len(species_prediction['prediction'])==1:
-    #     pp.infolog("No resistance database was specified. Attempting to use database based on species prediction...\n")
-    #     db_name = species_prediction['prediction'][0]["species"].replace(" ","_")
-    #     conf = pp.get_db('malaria_profiler',db_name)
-    #     if not conf:
-    #         pp.infolog(f"No resistance db found for {db_name}.\n")
-    #     return conf
 
 def parse_result_summary(json_file):
     geoclass, drugs, var_drug, variants, gene_coverage, missing = None, None, None, None, None, None
