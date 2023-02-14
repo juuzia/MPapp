@@ -68,7 +68,7 @@ def analysis():
     species_list = [
         ('falciparum', 'Plasmodium falciparum'),
         ('vivax_simium', 'Plasmodium vivax'),
-        ('knowlesi', 'Plasmodium lnowlesi'),
+        ('knowlesi', 'Plasmodium knowlesi'),
         ('malariae_brasilianum', 'Plasmodium malariae'),
         ('ovale', 'Plasmodium ovale'),
         ('autodetect', 'Autodetect')
