@@ -25,3 +25,7 @@ MPapp/static/Plasmodium_falciparum.ASM276v2.dna.chromosome.1.fa.gz
 MPapp/static/fastafiles/AAKM01.fasta
 MPapp/static/fastafiles/malariae.fasta
 *.fasta
+*.log
+*.bai
+*.json
+*.txt
