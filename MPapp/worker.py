@@ -56,8 +56,9 @@ def run_mp(ftype, files, run_id, results_dir, platform, species, threads = 1):
 
     if species!="autodetect":
         tmp += f" --resistance_db {species}"
-    print("malaria-profiler profile --dir %s %s --prefix %s --platform %s -t %s --txt" % (results_dir, tmp, run_id, platform, threads))
-    sp.call("malaria-profiler profile --dir %s %s --prefix %s --platform %s -t %s --txt" % (results_dir, tmp, run_id, platform, threads), shell=True)
+    cmd = "malaria-profiler profile --dir %s %s --prefix %s --platform %s -t %s --txt --kmer_counter dsk" % (results_dir, tmp, run_id, platform, threads)
+    print(cmd)
+    sp.call(cmd, shell=True)
     db_name = json.load(open(f"{results_dir}/{run_id}.results.json"))["resistance_db_version"]["name"]
     bed_file = f"{sys.base_prefix}/share/malaria_profiler/{db_name}.bed"
     print(bed_file)
