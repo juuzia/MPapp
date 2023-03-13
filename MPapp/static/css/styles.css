@@ -1,4 +1,7 @@
-
+<<<<<<< Updated upstream
+=======
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400');
+>>>>>>> Stashed changes
 #table-{
     text-align: left;
   }
@@ -170,6 +173,7 @@
   .text-center p{
     font-family: 'Sofia Sans', sans-serif;
   }
+  
   th,tr{
     text-align: center;
   }
@@ -375,3 +379,51 @@
       vertical-align: bottom;
   }
    
+  .step{
+    border: 2px solid rgb(255,89,0);
+    position: relative;
+    
+  }
+  .step .nextBtn{
+    width: 50%;
+  }
+  .guide {
+    display: none;
+    position: absolute;
+    border: 2px solid rgb(255,89,0);
+    top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+    width: 50%;
+    background-color: rgba(255, 255, 255, 0.8);
+    z-index: 9999999999999999999;
+    padding: 10px;
+    filter: brightness(1);
+    text-align: center;
+  } 
+
+.col-md-12{
+  position: relative;
+  }
+abbr[title]::after {
+  content: attr(title);
+  padding: 5px 10px;
+  background-color: #333;
+  color: #fff;
+  font-size: 14px;
+  border-radius: 5px;
+  position: absolute;
+
+  z-index: 99999999999999999999999999;
+  margin-top: 20px;
+  
+  
+  opacity: 0;
+  transition: opacity 0.3s;
+
+}
+
+abbr[title]:hover::after {
+  opacity: 1;
+  z-index: 99999999999999999999999999999999999;
+}

@@ -415,6 +415,15 @@
     <div class="card shadow">
         <div class="card-header text-center ">
             {{name}}
+            {% if name == "Resistance report" %}
+            <abbr title="Table indicating areas of resistance and what drug is affected"><i class="fa-solid fa-question" title=""></i></abbr>
+            {% endif %}
+            {% if name == "Other variants" %}
+            <abbr title="Table indicating areas where other changes occured not to do with drug resistance"><i class="fa-solid fa-question" title=""></i></abbr>
+            {% endif %}
+            {% if name == "Missing positions report" %}
+            <abbr title="Table indicating positions missing from the genome"><i class="fa-solid fa-question" title=""></i></abbr>
+            {% endif %}
         </div>
         <div class="card-body">
             <table class="table table-hover" id="table-{{rand_id}}">
