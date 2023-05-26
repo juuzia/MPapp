@@ -71,8 +71,7 @@
       <a  class="nextBtn btn btn-outline-success btn-lg" id="nextBtn">Next</a>
     </div>
     <div class="card-header text-center bg-light" style="border-top-left-radius: 15px;border-top-right-radius: 15px;display: flex; align-items: center; justify-content: center;">
-      <h4 style="margin-right: 10px;">Species</h4>
-      <abbr title="What species is your sample"><i class="fa-solid fa-question" style="margin-bottom: 12px;"></i></abbr>
+      <h4 style="margin-right: 10px;">Species</h4><abbr title="What species is your sample at 99% accuracy"><i class="fa-solid fa-question" style="margin-bottom: 12px;"></i></abbr>
     </div>
     {% set values = [] %}
 
@@ -95,12 +94,8 @@
   </div>
   <div class="3" id="three">
     <div class="guide"id="guide3">
-      <h4>Genomic variants</h4>
-      <p>3 tables.</p>
-      <p>1. Indicating drug resistant markers</p>
-      <p>2. Other variants encounterd</p>
-      <p>3. Areas which were missing when analysing
-      <p>4. With the option to select show more info, this allows precise viewing in the IGV browser below</p>
+      <h4>Species view</h4>
+      <p>What species is your sample at 99% accuracy</p>
       <a  class="nextBtn btn btn-outline-success btn-lg" id="nextBtn">Next</a>
     </div>
      <div class="card-header text-center bg-light" style="border-top-left-radius: 15px;border-top-right-radius: 15px;display: flex; align-items: center; justify-content: center;">
@@ -731,7 +726,7 @@
   </script>
 <script>
    $(document).ready(function() {
-    if (!localStorage.getItem('guideShown')) {
+ if (!localStorage.getItem('guideShown')) {
     var currentStep = 1;
     var totalSteps = $('.guide').length;
     $("."+currentStep).addClass("step")
@@ -756,7 +751,7 @@
         localStorage.setItem('guideShown', true);
       }
     });
-    }
+  }
 }
 );
     </script>
