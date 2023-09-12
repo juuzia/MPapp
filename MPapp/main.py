@@ -251,9 +251,10 @@ def result_id(run_id):
         status = "Processing"
         results = None
         tables = None
+        refresh_page = True
         flash("Analysis in progress...", "info")
         flash("Wait or copy Result ID and check later.", "info")
-        return render_template('pages/result_id.html', run_id=run_id, results = results, status=status, tables=tables)
+        return render_template('pages/result_id.html', run_id=run_id, results = results, status=status, tables=tables, refresh_page=refresh_page)
     else:
         status = "OK"
         results = open(result_file).read()

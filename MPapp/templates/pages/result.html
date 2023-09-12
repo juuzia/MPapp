@@ -4,7 +4,12 @@
 {% endblock %}
 {% block content %}
 
-
+<!DOCTYPE html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Results Page</title>
+</head>
 <style>
     html, body, main {
   height: 100%; }
@@ -68,7 +73,7 @@ width: 100%;}
 }
 .no-border {
     border: 0;
-    box-shadow: none; /* You may want to include this as bootstrap applies these styles too */
+    box-shadow: none; 
 }
 
 .form-control:focus, input:focus{
@@ -84,4 +89,5 @@ width: 100%;}
         {{macros.result_retriever()}}
     </div>
 </div>
+
 {% endblock %}
