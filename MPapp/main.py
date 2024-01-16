@@ -174,7 +174,7 @@ def parse_result_summary(json_file):
 
     if conf:
         if "drugs" in conf:
-            json_results = pp.get_summary(json_results, conf, columns = None, drug_order = None, reporting_af=0.0)
+            json_results = pp.get_summary(json_results, conf, columns = None)
 
         if "geoclassification" in json_results:
             converted = [{"region": l.replace("_", " ")} for l in json_results['geoclassification']]
