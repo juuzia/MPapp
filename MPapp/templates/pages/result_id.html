@@ -26,7 +26,7 @@
 {% endblock %}
 {% block content %}
 {% if status == "OK" %}
-{% set ns = namespace(genus='') %}
+
   
 
 
@@ -100,7 +100,7 @@
       <h4>Genomic variants</h4>
       <p>3 tables.</p>
       <p>1. Indicating drug resistant markers</p>
-      <p>2. Other variants encountered</p>
+      <p>2. Other variants encounterd</p>
       <p>3. Areas which were missing when analysing
       <p>4. With the option to select show more info, this allows precise viewing in the IGV browser below</p>
       <a  class="nextBtn btn btn-outline-success btn-lg" id="nextBtn">Next</a>
@@ -114,7 +114,7 @@
           {% for key in tables %}     
                 {% if key == "Resistance report" %}
                 <div class="tab-pane fade show active" id="{{ keyname }}-tabs" role="tabpanel" aria-labelledby="{{ keyname }}-tab">
-                  {{macros.generic_table(tables[key][0], tables[key][1], key,ns.genus)}}
+                  {{macros.generic_table(tables[key][0], tables[key][1], key)}}
                 </div>       
             
                 
@@ -128,7 +128,7 @@
           {% for key in tables %}     
                 {% if key == "Other variants" %}
                 <div class="tab-pane fade show active" id="{{ keyname }}-tabs" role="tabpanel" aria-labelledby="{{ keyname }}-tab">
-                  {{macros.generic_table(tables[key][0], tables[key][1], key,ns.genus)}}
+                  {{macros.generic_table(tables[key][0], tables[key][1], key)}}
                 </div>       
             
               
@@ -142,7 +142,7 @@
           {% for key in tables %}     
                 {% if key == "Missing positions report" %}
                 <div class="tab-pane fade show active" id="{{ keyname }}-tabs" role="tabpanel" aria-labelledby="{{ keyname }}-tab">
-                  {{macros.generic_table(tables[key][0], tables[key][1], key,ns.genus)}}
+                  {{macros.generic_table(tables[key][0], tables[key][1], key)}}
                 </div>       
             
                 
@@ -209,6 +209,7 @@
             <div class="modal-content">
                <div class="tabb"  >    
                 <div class="tab-content" id="tabcontent"> 
+                  {% set ns = namespace (genus = '') %}
                   {% for key in tables %}     
                   {% if key == "Resistance variants report" %}
                   <div class="tab-pane fade show active" id="{{ keyname }}-tabs" role="tabpanel" aria-labelledby="{{ keyname }}-tab">
@@ -322,10 +323,7 @@
               {% for key in tables %}     
             {% if key == "Coverage report" %}
             <div class="tab-pane fade show active" id="{{ keyname }}-tabs" role="tabpanel" aria-labelledby="{{ keyname }}-tab">
-              <script>
-                console.log({{genus}})
-              </script>
-              {{macros.generic_table(tables[key][0], tables[key][1], key,ns.genus)}}
+              {{macros.generic_table(tables[key][0], tables[key][1], key)}}
             </div> 
             {% endif %}
             {% endfor %}
@@ -479,7 +477,7 @@
                 {% for key in tables %}     
                       {% if key == "Resistance report" %}
                       <div class="tab-pane fade show active" id="{{ keyname }}-tabs" role="tabpanel" aria-labelledby="{{ keyname }}-tab">
-                        {{macros.generic_table(tables[key][0], tables[key][1], key,ns.genus)}}
+                        {{macros.generic_table(tables[key][0], tables[key][1], key)}}
                       </div>       
                   
                       
@@ -493,7 +491,7 @@
                 {% for key in tables %}     
                       {% if key == "Other variants" %}
                       <div class="tab-pane fade show active" id="{{ keyname }}-tabs" role="tabpanel" aria-labelledby="{{ keyname }}-tab">
-                        {{macros.generic_table(tables[key][0], tables[key][1], key,ns.genus)}}
+                        {{macros.generic_table(tables[key][0], tables[key][1], key)}}
                       </div>       
                   
                     
@@ -507,7 +505,7 @@
                 {% for key in tables %}     
                       {% if key == "Missing positions report" %}
                       <div class="tab-pane fade show active" id="{{ keyname }}-tabs" role="tabpanel" aria-labelledby="{{ keyname }}-tab">
-                        {{macros.generic_table(tables[key][0], tables[key][1], key,ns.genus)}}
+                        {{macros.generic_table(tables[key][0], tables[key][1], key)}}
                       </div>       
                   
                       
@@ -675,7 +673,7 @@
           <div class="carousel">
             {% for key in tables %}
           {% if key == 'Coverage report' %}
-          {{macros.generic_table(tables[key][0], tables[key][1], key,ns.genus)}}
+          {{macros.generic_table(tables[key][0], tables[key][1], key)}}
           
           {% endif %}
           {% endfor %}

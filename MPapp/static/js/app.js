@@ -120,6 +120,7 @@ am5.ready(function() {
   });
   $(document).ready(function(){
    
+   
     var region = $('#region').data();
   var regionalValues = Object.values(region);
   
@@ -216,9 +217,8 @@ am5.ready(function() {
       document.getElementById(divId).style.display = "block";
   }
   function showGene2(number,dataN,genus) {
-    console.log(number,dataN,genus)
+  
   var genusForIGV = genus.toString()
-  console.log(genusForIGV)
   var gene = document.getElementById("dropdownMenu"+number).parentNode.querySelector("[data-keyz]").getAttribute("data-keyz");
     var protein = document.getElementById("dropdownMenu"+number).innerText  
     changeData(dataN,gene,protein,genusForIGV)
@@ -351,6 +351,7 @@ am5.ready(function() {
   url = '/static/fastafiles/'+ genus +'.fasta'
   index = '/static/fastafiles/'+ genus +'.fasta.fai'
   
+  console.log(bam,bai,filename)
   var igvDiv = document.getElementById("igvDiv");
     var options =
       {
@@ -417,6 +418,7 @@ am5.ready(function() {
   var index = '/static/fastafiles/'+ genus +'.fasta.fai'
   bam = '/static/results/'+filename+".bam"
   bai = '/static/results/' +filename+ ".bam.bai"
+  console.log(bam)
     var igvDiv = document.getElementById("igvDiv");
     var options =
       {
@@ -448,5 +450,6 @@ am5.ready(function() {
     var resultsSplitAgain = resultsSplit[1].split(",");
     filenameRef[0] = resultsSplitAgain[0].replace(/[ \']/g,'');
     filenameRef[0] = filenameRef[0]//.replace(/\s+/g, '')
+    console.log(filenameRef[0])
 }
 
