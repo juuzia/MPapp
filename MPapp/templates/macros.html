@@ -409,7 +409,7 @@
 {%- endmacro %}
 
 
-{% macro generic_table(rows, columns, name,buttons=False) -%}
+{% macro generic_table(rows, columns, name,genus,buttons=False) -%}
 <div class="generic_table">
     {% set rand_id = range(1, 5000) | random %}
     <div class="card shadow">
@@ -438,18 +438,28 @@
                 </thead>
                 <tbody id="resultsTable">
                     {% for row in rows %}
-                        <tr>
+                    <tr>
                         {% for key in columns %}
                         {% if key != 'Genotypic Resistance' %}
-                            <td>
-                                {{ row[key]|safe }}
-                            </td>
+                        <td>
+                            {% if key == 'Mutations' %}
+                                {% set mutations = row[key].split(',') %}
+                                {% set keyz = key|string %} 
+                                {% for mutation in mutations %}
+                                    <a href="#" onclick="showGene2({{ loop.index0 + 3000 }}, '#rvr-data', '{{ genus }}')" data-keyz="{{ keyz }}">
+                                        {{ mutation | safe }}
+                                    </a>{% if not loop.last %}, {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                {{ row[key] | safe }}
                             {% endif %}
+                        </td>
+                        {% endif %}
                         {% endfor %}
-                        </tr>
-                        
-                    {% endfor %}                
+                    </tr>
+                    {% endfor %}
                 </tbody>
+                
             </table>
         </div>
     </div>
