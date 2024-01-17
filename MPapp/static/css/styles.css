@@ -163,7 +163,7 @@
   .dropdown-item{
     color: white;
   }
-  #remove2,#remove1,#remove3{
+  #remove2,#remove1,#remove3,#remove4{
     overflow-y:  scroll;
   }
   #desktop_dashboard .tabby{

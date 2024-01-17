@@ -216,11 +216,14 @@ am5.ready(function() {
       document.getElementById(divId).style.display = "block";
   }
   function showGene2(number,dataN,genus) {
-    console.log(number,dataN,genus)
-  var genusForIGV = genus.toString()
-  console.log(genusForIGV)
-  var gene = document.getElementById("dropdownMenu"+number).parentNode.querySelector("[data-keyz]").getAttribute("data-keyz");
-    var protein = document.getElementById("dropdownMenu"+number).innerText  
+    
+    
+    var genusForIGV = genus.toString()
+ 
+    
+    gene = number.split(" ")[0]
+    protein = number.split(" ")[1]
+    
     changeData(dataN,gene,protein,genusForIGV)
     
   }
@@ -244,13 +247,15 @@ am5.ready(function() {
   var rvrValues = Object.values(djangoData);
   var splitvalues = []
   firstValue = rvrValues[0]
-  if( data=='#rvr-data' || data=='#other-data' ){
+  if( data!="#miss-data" ){
   splitValues = firstValue.split("{'chrom':")
+  
   }else{
   splitValues = firstValue.split("{")
   
   }
   
+  var proteinArray = []
   var nucleotideArray = []
   var chromArray = []
   var resistancePosArray = []
@@ -262,23 +267,21 @@ am5.ready(function() {
   if(split2.find(a =>a.includes(gene))){
   
   
-  if(data == '#rvr-data'){
-    
+  if(data != '#miss-data'){
     chromArray.push(split2[0])
     
   resistancePosArray.push(split2[1].split(":")[1])
-    var curr = split2[12].split(":")[1]
+    
+  var curr = split2[13].split(":")[1]
+ 
   curr = curr.replace(/['"]+/g, '').trim();
   
-  nucleotideArray.push(curr)
-  }else if(data == '#other-data'){
-   
-    chromArray.push(split2[0])
-  resistancePosArray.push(split2[1].split(":")[1])
-    var curr = split2[11].split(":")[1]
-  curr = curr.replace(/['"]+/g, '').trim();
+  var curr2 = split2[12].split(":")[1]
+ 
+  curr2 = curr2.replace(/['"]+/g, '').trim();
+  nucleotideArray.push(curr2)
+  proteinArray.push(curr)
   
-  nucleotideArray.push(curr)
   }else{
    
     var tempArray = split2[1].split(":")[1]
@@ -306,10 +309,14 @@ am5.ready(function() {
   curr = curr.replace(/['"]+/g, '').trim();
   
   nucleotideArray.push(curr)
+  
   }
   }
   }
+  
   proteins = protein.trim();
+  console.log(nucleotideArray)
+  console.log(proteinArray)
   function getAllIndexes(arr, val) {
   var indexes = [], i = -1;
   while ((i = arr.indexOf(val, i+1)) != -1){
@@ -319,8 +326,15 @@ am5.ready(function() {
   }
   var currentChromosome = "";
   var currentPos = "";
-  var currIndex = nucleotideArray.indexOf(proteins)
-  if( data=='#rvr-data' || data=='#other-data' ){
+  var currIndex ="";
+  if(nucleotideArray.includes(proteins)){
+    currIndex = nucleotideArray.indexOf(proteins)
+  }else{
+    currIndex = proteinArray.indexOf(proteins)
+  }
+  
+  
+  if( data!="miss-data" ){
   currentPos = resistancePosArray[currIndex]
   }else{
   var indexes = getAllIndexes(nucleotideArray, proteins);
@@ -336,9 +350,8 @@ am5.ready(function() {
   currentChromosome = chromArray[currIndex]
   currentChromosome = currentChromosome.replace(/[^\w\s!?]/g,'');
   currentChromosome = currentChromosome.replace(/\s+/g, '')
-  
   var initiallocus = ""
-  if( data=='#rvr-data' || data=='#other-data' ){
+  if( data!="miss-data" ){
   initiallocus = currentChromosome+":"+currentPos
   
   }else{

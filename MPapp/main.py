@@ -160,7 +160,7 @@ def parse_result_summary(json_file):
         json_results['species']['prediction'] = [{"species": json_results['resistance_db_version']['name'], "mean": 0, "std": 0}]
 
     species = (
-        json_results['species']['prediction'],
+        json_results['species']['prediction_info'],
         {
             "species": "Species",
             "mean": "Mean kmer coverage",
@@ -223,6 +223,14 @@ def parse_result_summary(json_file):
                        "position": "Position",
                        "variants": "Variants",
                        "drugs": "Drugs"})
+        if "qc_fail_variants" in json_results:
+            fail_variants = (json_results['qc_fail_variants'],
+                        {"chrom": "Chromosome:",
+                        "genome_pos": "Genome Position",
+                        "locus_tag": "Locus Tag",
+                        "gene": "Gene Name",
+                        "change": "Change",
+                        "freq": "Estimated fraction"})
 
     tables = {
         "General information" : info,
@@ -232,6 +240,7 @@ def parse_result_summary(json_file):
         "Resistance report": drugs,
         "Resistance variants report": var_drug,
         "Other variants": variants,
+        "QC failed variants": fail_variants,
         "Coverage report": gene_coverage,
         "Missing positions report": missing
         }

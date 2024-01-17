@@ -111,15 +111,35 @@
       <div class="tabby" id="remove1">    
         <div class="tab-content" id="tabcontent">  
           
-          {% for key in tables %}     
-                {% if key == "Resistance report" %}
-                <div class="tab-pane fade show active" id="{{ keyname }}-tabs" role="tabpanel" aria-labelledby="{{ keyname }}-tab">
-                  {{macros.generic_table(tables[key][0], tables[key][1], key,ns.genus)}}
-                </div>       
-            
+          {% for key in tables %}
+          {% if key == 'Species' %}
+              {% for row in tables[key][0] %}
                 
-            {% endif %}
-          {% endfor %}
+                  {% for key, value in row.items() %}
+                      {% if value == 'falciparum' %}
+                          {% set ns.genus = 'falciparum' %}
+                      {% elif value == 'ovale' %}
+                          {% set ns.genus = 'ovale' %}
+                      {% elif value == 'vivax' %}
+                          {% set ns.genus = 'vivax' %}
+                      {% elif value == 'knowlesi' %}
+                          {% set ns.genus = 'knowlesi' %}
+                      {% elif value == 'malariae' %}
+                          {% set ns.genus = 'malariae' %}
+                      {% endif %}
+                  {% endfor %}
+              {% endfor %}
+          {% endif %}
+      {% endfor %}
+
+      {% for key in tables %}
+      
+          {% if key == "Resistance report" %}
+              <div class="tab-pane fade show active" id="{{ keyname }}-tabs" role="tabpanel" aria-labelledby="{{ keyname }}-tab">
+                  {{ macros.generic_table(tables[key][0], tables[key][1], key, ns.genus) }}
+              </div>
+          {% endif %}
+      {% endfor %}
         </div>
       </div>
       <div class="tabby" id="remove2" style="display:none;">    
@@ -139,10 +159,27 @@
       <div class="tabby" id="remove3" style="display:none;">    
         <div class="tab-content" id="tabcontent">  
           
-          {% for key in tables %}     
+          {% for key in tables %}    
+           
                 {% if key == "Missing positions report" %}
                 <div class="tab-pane fade show active" id="{{ keyname }}-tabs" role="tabpanel" aria-labelledby="{{ keyname }}-tab">
                   {{macros.generic_table(tables[key][0], tables[key][1], key,ns.genus)}}
+                </div>       
+            
+                
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+      <div class="tabby" id="remove4" style="display:none;">    
+        <div class="tab-content" id="tabcontent">  
+          
+          {% for key in tables %}     
+            
+                {% if key == "QC failed variants" %}
+                <div class="tab-pane fade show active" id="{{ keyname }}-tabs" role="tabpanel" aria-labelledby="{{ keyname }}-tab">
+                  {{macros.generic_table(tables[key][0], tables[key][1], key,ns.genus)}}
+                  
                 </div>       
             
                 
@@ -195,12 +232,26 @@
     {% endfor %}
     <meta id="miss-data" data-name="{{values}}" >
          <a  class="orange btn btn-outline-success btn-lg" id="missingButton" onclick="showDiv('remove3')">MISSING POSITIONS</a>
+   
         </span>
         </div>
         <div class="moreButtons">
           <span style="display: table;
         margin: 0 auto;">
-          <a  data-toggle="modal" data-target=".bd-example-modal-lg" class=" btn btn-outline-success btn-lg" style="margin-top: 10px;" id="showButton">SHOW MORE INFO</a>
+        {% set values = [] %}
+        {% for key in tables %}
+    
+        {% for row in tables[key][0] %}
+        {% if key == 'QC failed variants' %}
+        
+        {{ values.append(row) or "" }}
+       {% endif %}
+        {% endfor %}
+            
+    {% endfor %}
+    
+           <meta id="fail-data" data-name="{{values}}" >
+         <a  class="orange btn btn-outline-success btn-lg" id="failButton" onclick="showDiv('remove4')" style="margin-top:10px; margin-bottom:10px">QC FAIL VARIANTS</a>
           </span>
         </div>
        
@@ -242,6 +293,10 @@
                   {{macros.resistanceTable2(tables[key][0], tables[key][1], key, ns.genus)}}
                 </div> 
                 {% elif key == "Missing positions report" %}
+                <div class="tab-pane fade show active" id="{{ keyname }}-tabs" role="tabpanel" aria-labelledby="{{ keyname }}-tab">
+                  {{macros.resistanceTable3(tables[key][0], tables[key][1], key, ns.genus)}}
+                </div> 
+                {% elif key == "QC failed variants" %}
                 <div class="tab-pane fade show active" id="{{ keyname }}-tabs" role="tabpanel" aria-labelledby="{{ keyname }}-tab">
                   {{macros.resistanceTable3(tables[key][0], tables[key][1], key, ns.genus)}}
                 </div> 
@@ -301,6 +356,7 @@
     </div>
     <div class="carousel">
       {% for key in tables %}
+   
     {% if key == 'Coverage report' %}
     {{macros.get_analysis(tables[key][0], tables[key][1], key)}}
     

@@ -424,12 +424,16 @@
             {% if name == "Missing positions report" %}
             <abbr title="Table indicating positions missing from the genome"><i class="fa-solid fa-question" title=""></i></abbr>
             {% endif %}
+            {% if name == "QC failed variants" %}
+            <abbr title="Table indicating positions that failed quality control"><i class="fa-solid fa-question" title=""></i></abbr>
+            {% endif %}
         </div>
         <div class="card-body">
             <table class="table table-hover" id="table-{{rand_id}}">
                 <thead>
                     <tr>
                         {% for key in columns %}
+                        
                         {% if key != 'Genotypic Resistance' %}
                             <th scope="col" style="width: 10%">{{ columns[key] }}</th>
                             {% endif %}
@@ -437,21 +441,59 @@
                     </tr>
                 </thead>
                 <tbody id="resultsTable">
+                    {% set ns = namespace(gene='') %}
                     {% for row in rows %}
                     <tr>
                         {% for key in columns %}
                         {% if key != 'Genotypic Resistance' %}
+                        
                         <td>
-                            {% if key == 'Mutations' %}
+                            {% if key == 'Drug' %}
+
+                            
+                            {% set mutations = row[key].split(',') %}
+                            
+                            {% set keyz = key|string %} 
+                            {% for mutation in mutations %}
+                                <p>
+                                    {{ mutation | safe }}
+                                    
+                                </p>{% if not loop.last %}, {% endif %}
+                            {% endfor %}
+                            {% elif key == 'Mutations' %}
+
+                            
                                 {% set mutations = row[key].split(',') %}
+                                
                                 {% set keyz = key|string %} 
+                                
                                 {% for mutation in mutations %}
-                                    <a href="#" onclick="showGene2({{ loop.index0 + 3000 }}, '#rvr-data', '{{ genus }}')" data-keyz="{{ keyz }}">
+                                    <a href="#" onclick="showGene2('{{ mutation | safe }}', '#rvr-data', '{{ genus }}')" data-keyz="{{ keyz }}">
                                         {{ mutation | safe }}
+                                        
                                     </a>{% if not loop.last %}, {% endif %}
                                 {% endfor %}
-                            {% else %}
+                            {% elif key == 'gene' %}
+                                {% set ns.gene = row[key] %}
+                                {{row[key] | safe}}
+                            {% elif key == "change"  %}
+                                
+                            {% if name == "QC failed variants" %}
+                            <a href="#" class="qc-failed" onclick="showGene2('{{ ns.gene }} {{ row[key] | safe }}', '#fail-data', '{{ genus }}')" data-keyz="{{ keyz }}">
+                                {{ row[key] | safe }} <i class="fa fa-exclamation-triangle" title="QC Failed"></i>
+                            </a>
+                        {% else %}
+                            <a href="#" onclick="showGene2('{{ ns.gene }} {{ row[key] | safe }}', '#other-data', '{{ genus }}')" data-keyz="{{ keyz }}">
                                 {{ row[key] | safe }}
+                            </a>
+                        {% endif %}
+                            {% elif key == "variants"  %}
+                                <a href="#" onclick="showGene2('{{ ns.gene }} {{ row[key] | safe }}', '#miss-data', '{{ genus }}')" data-keyz="{{ keyz }}">
+                                    {{ row[key] | safe }}
+                                    
+                                </a>
+                            {% else %}
+                            {{ row[key] | safe }}
                             {% endif %}
                         </td>
                         {% endif %}
