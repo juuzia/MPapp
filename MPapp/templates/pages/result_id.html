@@ -114,22 +114,24 @@
           {% for key in tables %}
           {% if key == 'Species' %}
               {% for row in tables[key][0] %}
+                
                   {% for key, value in row.items() %}
-                      {% if 'falciparum' in value %}
+                      {% if value == 'falciparum' %}
                           {% set ns.genus = 'falciparum' %}
-                      {% elif 'ovale' in value %}
+                      {% elif value == 'ovale' %}
                           {% set ns.genus = 'ovale' %}
-                      {% elif 'vivax' in value %}
+                      {% elif value == 'vivax' %}
                           {% set ns.genus = 'vivax' %}
-                      {% elif 'knowlesi' in value%}
+                      {% elif value == 'knowlesi' %}
                           {% set ns.genus = 'knowlesi' %}
-                      {% elif 'malariae' in value %}
+                      {% elif value == 'malariae' %}
                           {% set ns.genus = 'malariae' %}
                       {% endif %}
                   {% endfor %}
               {% endfor %}
           {% endif %}
       {% endfor %}
+
       {% for key in tables %}
       
           {% if key == "Resistance report" %}
@@ -316,23 +318,16 @@
      <div class="card-header text-center bg-light" style="border-top-left-radius: 15px;border-top-right-radius: 15px;display: flex; align-items: center; justify-content: center;">
       <h4 style="margin-right: 10px;">Estimated Region of Origin</h4><abbr title="Where your sample is from"><i class="fa-solid fa-question" style="margin-bottom: 12px;"></i></abbr>
   </div>
-  {% set ns = namespace(regiono="", probability=0) %}
-{% for key, value in tables.items() %}
-  {% if key == 'Geoclassification' %}
-    {% for row in value %}
-      <meta id="region-{{ loop.index }}" data-region="{{ row['region'] }}" data-probability="{{ row['probability'] }}" >
-      {% if row['probability'] > ns.probability %}
-        {% set ns.probability = row['probability'] %}
-        {% set ns.regiono = row['region'] %}
-      {% endif %}
+  {% for key in tables %}
+    
+    {% for row in tables[key][0] %}
+    {% if key == 'Geoclassification' %}
+    <meta id="region" data-name="{{row}}" >
+    <p style="text-align: center; margin-top: 5px; font-family: 'Sofia Sans', sans-serif;">{{row['region']}}</p>
+    {% endif %}
     {% endfor %}
-    <div id="chartdiv"></div>
-    <div id="legenddiv"></div>
-    <p style="text-align: center; margin-top: 5px; font-family: 'Sofia Sans', sans-serif;">{{ ns.regiono }} - {{ (ns.probability*100)|round }}%</p>
-  {% endif %}
-{% endfor %}
-
-    </div>
+    {% endfor %}
+    <div id="chartdiv" ></div></div>
   <div class="5">
     <div class="guide"id="guide5">
       <h4>Tools used</h4>
