@@ -140,47 +140,44 @@ def is_legal_filetype(filename):
         return False
 
 def get_conf(results):
-    db_name = results['resistance_db_version']['name']
+    db_name = results['species']['species'][0]['species']
     conf = pp.get_db('malaria_profiler',db_name)
     return conf
 
 def parse_result_summary(json_file):
-    geoclass, drugs, var_drug, variants, gene_coverage, missing = None, None, None, None, None, None
+    geoclass, drugs, var_drug, variants, gene_coverage, missing,fail_variants = None, None, None, None, None, None,None
 
     with open(json_file) as json_file:
         json_results = json.load(json_file, parse_float=lambda x: round(float(x), 2))
 
     conf = get_conf(json_results)
-
     info = ([{"id" : json_results['id'], "date": time.ctime()}],
             {"id": "Identifier",
              "date": "Date"})
-
-    if len(json_results['species']['prediction'])==0:
-        json_results['species']['prediction'] = [{"species": json_results['resistance_db_version']['name'], "mean": 0, "std": 0}]
+    if len(json_results['species']['species'])==0:
+        json_results['species']['species'] = [{"species": json_results['species']['species'], "mean": 0, "std": 0}]
 
     species = (
-        json_results['species']['prediction_info'],
+        json_results['species']['species'],
         {
             "species": "Species",
-            "mean": "Mean kmer coverage",
-            "std": "Standard dev"
+            "prediction_info": "Prediction",
+            
         }
     )
 
-    analysis = (json_results['pipeline_software'],
-                {'Analysis': 'Analysis',
-                 'Program': 'Program'})
-
+    # analysis = (json_results['pipeline_software'],
+    #             {'Analysis': 'Analysis',
+    #              'Program': 'Program'})
     if conf:
+        
         if "drugs" in conf:
             json_results = pp.get_summary(json_results, conf, columns = None)
 
-        if "geoclassification" in json_results:
-            converted = [{"region": l.replace("_", " ")} for l in json_results['geoclassification']]
-            geoclass = (converted,
-                        {"region": "Region"})
-
+        if "geo_classification" in json_results:
+            probabilities = json_results["geo_classification"]["probabilities"]
+            geoclass = [{"region": item["region"].replace("_", " "), "probability": item["probability"]} for item in probabilities]
+            
         if "drugs" in conf:
             json_results['drug_table'] = [[y for y in json_results['drug_table'] if y["Drug"].upper()==d.upper()][0] for d in conf['drugs']]
             drugs = (json_results['drug_table'],
@@ -223,8 +220,8 @@ def parse_result_summary(json_file):
                        "position": "Position",
                        "variants": "Variants",
                        "drugs": "Drugs"})
-        if "qc_fail_variants" in json_results:
-            fail_variants = (json_results['qc_fail_variants'],
+        if "fail_variants" in json_results:
+            fail_variants = (json_results['fail_variants'],
                         {"chrom": "Chromosome:",
                         "genome_pos": "Genome Position",
                         "locus_tag": "Locus Tag",
@@ -235,7 +232,7 @@ def parse_result_summary(json_file):
     tables = {
         "General information" : info,
         "Species" : species,
-        "Analysis" : analysis,
+        # "Analysis" : analysis,
         "Geoclassification": geoclass,
         "Resistance report": drugs,
         "Resistance variants report": var_drug,
@@ -244,7 +241,7 @@ def parse_result_summary(json_file):
         "Coverage report": gene_coverage,
         "Missing positions report": missing
         }
-
+    print(geoclass)
     return tables
 
 @bp.route('/result/<uuid:run_id>')
@@ -255,7 +252,7 @@ def result_id(run_id):
         return render_template('pages/result.html')
     result_file = "%s/%s.results.txt" % (app.config["RESULTS_DIR"], run_id)
     json_file = "%s/%s.results.json" % (app.config["RESULTS_DIR"], run_id)
-
+    
     if not os.path.isfile(result_file):
         status = "Processing"
         results = None
