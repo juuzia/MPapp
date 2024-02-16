@@ -261,6 +261,7 @@
 
 
 {% macro resistanceTable2 (rows, columns, name, genus) -%}
+
 {% set rand_id = range(1, 5000) | random %}
 <div class="rtableov" style="height: inherit;">
     {% set ns = namespace(current_var='') %}
@@ -295,12 +296,14 @@
         <table class="table table-hover" id="table-{{rand_id}}">
             <thead>
                 <tr>
-                    <th scope="col" style="width: 10%">Gene</th>    
+                    <th scope="col" style="width: 10%">Gene</th>   
+                    {{rows, columns,name,genus}} 
                     <th scope="col" style="width: 30%">Mutations</th>
                 </tr>
             </thead>
             <tbody id="resultsTable">
                 {% for key, values in gene_var_dict.items() %}
+                
                 {% set my_counter = loop.index %}
                     <tr>
                         <td>
@@ -444,12 +447,13 @@
                     {% set ns = namespace(gene='') %}
                     {% for row in rows %}
                     <tr>
+                        
                         {% for key in columns %}
                         {% if key != 'Genotypic Resistance' %}
                         
                         <td>
                             {% if key == 'Drug' %}
-
+                            
                             
                             {% set mutations = row[key].split(',') %}
                             
@@ -461,7 +465,7 @@
                                 </p>{% if not loop.last %}, {% endif %}
                             {% endfor %}
                             {% elif key == 'Mutations' %}
-
+                                
                             
                                 {% set mutations = row[key].split(',') %}
                                 
@@ -474,11 +478,10 @@
                                     </a>{% if not loop.last %}, {% endif %}
                                 {% endfor %}
                             {% elif key == 'gene' %}
-                                {% set ns.gene = row[key] %}
-                                {{row[key] | safe}}
+                                {% set ns.gene = row['gene_name'] %}
+                                {{ns.gene }}
                             {% elif key == "change"  %}
-                                
-                            {% if name == "QC failed variants" %}
+                                {% if name == "QC failed variants" %}
                             <a href="#" class="qc-failed" onclick="showGene2('{{ ns.gene }} {{ row[key] | safe }}', '#fail-data', '{{ genus }}')" data-keyz="{{ keyz }}">
                                 {{ row[key] | safe }} <i class="fa fa-exclamation-triangle" title="QC Failed"></i>
                             </a>
@@ -487,11 +490,19 @@
                                 {{ row[key] | safe }}
                             </a>
                         {% endif %}
+                        
                             {% elif key == "variants"  %}
+                            
                                 <a href="#" onclick="showGene2('{{ ns.gene }} {{ row[key] | safe }}', '#miss-data', '{{ genus }}')" data-keyz="{{ keyz }}">
                                     {{ row[key] | safe }}
                                     
                                 </a>
+                                
+                                {%elif key == "genome_pos"%}
+                                {{row["pos"]}}
+                                
+                                {% elif key =="locus_tag" %}
+                                {{row["gene_id"]}}
                             {% else %}
                             {{ row[key] | safe }}
                             {% endif %}

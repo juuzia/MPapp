@@ -323,10 +323,8 @@ document.addEventListener('DOMContentLoaded', function() {
       
       
     // var regionalValues = Object.values(region);
-    // console.log(regionalValues)
     // firstValue = regionalValues[0]
     // var splitValues = firstValue.split(":")
-    // console.log(splitValues)
     // beforeTrim = splitValues[1];
     // finalRegion = beforeTrim.replace(/[^\w\s!?]/g,'');
     
@@ -435,10 +433,12 @@ document.addEventListener('DOMContentLoaded', function() {
     
     var genusForIGV = genus.toString()
  
-    
+    number = number.trimStart()
     gene = number.split(" ")[0]
     protein = number.split(" ")[1]
-    
+    console.log(number)
+    console.log(protein)
+    console.log(gene)
     changeData(dataN,gene,protein,genusForIGV)
     
   }
@@ -478,7 +478,6 @@ document.addEventListener('DOMContentLoaded', function() {
   for(var i =1; i<splitValues.length;i++){
   
   var split2 =splitValues[i].split(",")
-  console.log(split2)
   if(split2.find(a =>a.includes(gene))){
   
   
@@ -490,14 +489,10 @@ document.addEventListener('DOMContentLoaded', function() {
   var curr = split2[17].split(":")[1]
    
   curr = curr.replace(/['"]+/g, '').trim();
-  console.log(curr)
   var curr2 = split2[16].split(":")[1]
-  console.log(curr2)
   curr2 = curr2.replace(/['"]+/g, '').trim();
   nucleotideArray.push(curr2)
   proteinArray.push(curr)
-  console.log(nucleotideArray)
-  console.log(proteinArray)
   }else{
    
     var tempArray = split2[1].split(":")[1]
@@ -541,9 +536,12 @@ document.addEventListener('DOMContentLoaded', function() {
   var currentChromosome = "";
   var currentPos = "";
   var currIndex ="";
+  console.log(proteins)
   if(nucleotideArray.includes(proteins)){
     currIndex = nucleotideArray.indexOf(proteins)
   }else{
+    console.log("ho")
+
     currIndex = proteinArray.indexOf(proteins)
   }
   
