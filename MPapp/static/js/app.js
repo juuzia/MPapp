@@ -1,31 +1,59 @@
 
 document.addEventListener('DOMContentLoaded', function() {
   
-  const regionMetas = document.querySelectorAll('meta[id^="region-"]');
   
   am5.ready(function() {
+    initialiseChart("chartdiv-mobile");
+    initialiseChart("chartdiv-desktop");
+        
 
-    var root = am5.Root.new("chartdiv");
+    }); 
+});
+function resizeChart(chart) {
+  if (chart) {
+      chart.invalidateSize();
+  }
+}
+
+// Example usage
+
+
+function initialiseChart(targetDivId){
+  const regionMetas = document.querySelectorAll('meta[id^="region-"]');
+  var root = am5.Root.new(targetDivId);
     
     
     root.setThemes([
       am5themes_Animated.new(root)
     ]);
     
+    if (targetDivId ==="chartdiv-mobile"){
+      var chart = root.container.children.push(am5map.MapChart.new(root, {
+        panX: "none",
+        panY: "none",
+        wheelX: "none",
+        wheelY: "none",
+        pinchZoom: false,
+        projection: am5map.geoNaturalEarth1(),
     
-    var chart = root.container.children.push(am5map.MapChart.new(root, {
+      }));
      
-      projection: am5map.geoNaturalEarth1(),
-      paddingBottom: 20,
-      paddingTop: 20,
-      paddingLeft: 20,
-      paddingRight: 20,
-      minZoomLevel:1.5,
-      homeZoomLevel: 1.5,
-      maxZoomLevel: 1.5,
-      homeGeoPoint: { longitude: 30, latitude:-20 }
-  
-    }));
+    }else{
+      var chart = root.container.children.push(am5map.MapChart.new(root, {
+     
+        projection: am5map.geoNaturalEarth1(),
+        paddingBottom: 20,
+        paddingTop: 20,
+        paddingLeft: 20,
+        paddingRight: 20,
+        minZoomLevel:1.5,
+        homeZoomLevel: 1.5,
+        maxZoomLevel: 1.5,
+        homeGeoPoint: { longitude: 30, latitude:-20 }
+    
+      }));
+    }
+   
     // var cont = chart.children.push(
     //   am5.Container.new(root, {
     //     layout: root.horizontalLayout,
@@ -408,16 +436,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       });
       chart.appear(1000, 100);
+      if(targetDivId==="chartdiv-desktop"){
       chart.goHome()
+
+      }
     }, 1000);
     
     
     
-    }); 
-});
-
-
-
+}
 
 
   
