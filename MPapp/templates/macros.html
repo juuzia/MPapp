@@ -446,6 +446,7 @@
                 <tbody id="resultsTable">
                     {% set ns = namespace(gene='') %}
                     {% for row in rows %}
+                    
                     <tr>
                         
                         {% for key in columns %}
@@ -478,8 +479,17 @@
                                     </a>{% if not loop.last %}, {% endif %}
                                 {% endfor %}
                             {% elif key == 'gene' %}
-                                {% set ns.gene = row['gene_name'] %}
+                                {% set ns.gene = row['gene'] %}
                                 {{ns.gene }}
+                            {% elif key == "pos" %}
+                                {% if name == "Missing positions report" %}
+                                <a href="#" class="miss-data" onclick="showGene2('{{ ns.gene }} {{ row[key] | safe }}', '#miss-data', '{{ genus }}')" data-keyz="{{ keyz }}">
+                                    {{ row[key] | safe }} 
+                                </a>
+                                {% else %}
+                                {{row[key]| safe}}
+
+                                {% endif %}
                             {% elif key == "change"  %}
                                 {% if name == "QC failed variants" %}
                             <a href="#" class="qc-failed" onclick="showGene2('{{ ns.gene }} {{ row[key] | safe }}', '#fail-data', '{{ genus }}')" data-keyz="{{ keyz }}">
@@ -498,13 +508,16 @@
                                     
                                 </a>
                                 
-                                {%elif key == "genome_pos"%}
-                                {{row["pos"]}}
-                                
-                                {% elif key =="locus_tag" %}
-                                {{row["gene_id"]}}
+                            {%elif key == "annotation" %}
+                            {% if row[key] %}  {# Check if annotation is not empty #}
+                                {% for annotation in row[key] %}
+                                    Type: {{ annotation.type }}, Drug: {{ annotation.drug }}, Source: {{ annotation.source }}
+                                {% endfor %}
                             {% else %}
-                            {{ row[key] | safe }}
+                                <p>No annotation available</p>
+                            {% endif %}
+                            {% else %}
+                               {{row[key] | safe}}
                             {% endif %}
                         </td>
                         {% endif %}
@@ -602,9 +615,13 @@
                 <tr>
                 {% for key in columns %}
                 {% if row[key] not in ['vivax_simium', 'falciparum', 'malariae', 'knowlesi', 'ovale'] %}
+                    {% if row[key]|length == 0 %}
+                        <td>No prediction information available</td>
+                    {% else %}    
                     <td>
                         {{ row[key]|safe }}
                     </td>
+                    {% endif %}
                     {% endif %}
                 {% endfor %}
                 </tr>

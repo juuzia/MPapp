@@ -87,7 +87,7 @@ function initialiseChart(targetDivId){
     var backgroundSeries = chart.series.push(am5map.MapPolygonSeries.new(root, {}));
     
     backgroundSeries.mapPolygons.template.setAll({
-      fill: am5.color("#ff5900"),
+      fill: am5.color("#808080"),
       fillOpacity: 0.5,
       strokeOpacity: 0
     });
@@ -102,16 +102,24 @@ function initialiseChart(targetDivId){
       // "SE","GB","NO","CH","LI","IS","AL","BA","MD","GL","US","CA","MX","RU","SJ","UA","BY","CN","TM","TR","TC","KZ","RS","XK","ME","MK","GE","AZ","AM","IR",
       // "IQ","IL","JO","SA","YE","OM","AE","KW","MN","SY","PS","LB","QA","TJ","UZ","TW","KG","JP","KR","KP","PG","AU","NZ","NI","CR","GT","PA","DO","HN","SV",
       // "CU","HT","PR","BZ","JM","BS"
+       
     }));
     
-    polygonSeries.mapPolygons.template.setAll({
-      fill: am5.color("#ff5900"),
-      tooltipText: "{name}: {value}%",
-      strokeWidth: 0.5,
-      stroke: root.interfaceColors.get("background"),
-      
-    });
     
+    
+    polygonSeries.mapPolygons.template.adapters.add("tooltipText", function(text, target) {
+      polygonSeries.mapPolygons.template.setAll({
+        fill: am5.color("#b5a39a"),
+        strokeWidth: 0.5,
+        stroke: root.interfaceColors.get("background"),
+        
+      });
+      if (target.dataItem.dataContext.value !== undefined) {
+        return "{region}: {value}%";
+      } else {
+        return "";
+      }
+    });
     polygonSeries.set("heatRules", [{
       target: polygonSeries.mapPolygons.template,
       dataField: "value",
@@ -181,170 +189,200 @@ function initialiseChart(targetDivId){
     let value = meta.getAttribute('data-probability');
     value = value*100
     if (region ==="Central Africa"){
-      regions_probs.push({"id":"CF",
-      "value":value})
-      regions_probs.push({"id":"TD",
-      "value":value})
+      // regions_probs.push({"id":"CF",
+      // "value":value})
+      // regions_probs.push({"id":"TD",
+      // "value":value})
       regions_probs.push({"id":"CM",
-      "value":value})
-      regions_probs.push({"id":"AO",
-      "value":value})
-      regions_probs.push({"id":"GQ",
-      "value":value})
+      "value":value,
+      region:region})
+      // regions_probs.push({"id":"AO",
+      // "value":value})
+      // regions_probs.push({"id":"GQ",
+      // "value":value})
       regions_probs.push({"id":"GA",
-      "value":value})
+      "value":value,
+      region:region})
       regions_probs.push({"id":"CD",
-      "value":value})
-      regions_probs.push({"id":"ST",
-      "value":value})
+      "value":value,
+      region:region})
+      // regions_probs.push({"id":"ST",
+      // "value":value})
       regions_probs.push({"id":"CG",
-      "value":value})
-      regions_probs.push({"id":"BI",
-      "value":value})
-      regions_probs.push({"id":"RW",
-      "value":value})
-      regions_probs.push({"id":"SS",
-      "value":value})  
+      "value":value,
+      region:region})
+      // regions_probs.push({"id":"BI",
+      // "value":value})
+      // regions_probs.push({"id":"RW",
+      // "value":value})
+      // regions_probs.push({"id":"SS",
+      // "value":value})  
       regions_probs.push({"id":"SD",
-      "value":value})
+      "value":value,
+      region:region})
         
     }else if (region ==="Eastern Africa"){
       
       regions_probs.push({"id":"KE",
-      "value":value})
+      "value":value,
+      region:region})
       regions_probs.push({"id":"TZ",
       "value":value})
       regions_probs.push({"id":"ET",
-      "value":value})
-      regions_probs.push({"id":"SO",
-      "value":value})
+      "value":value,
+      region:region})
+      // regions_probs.push({"id":"SO",
+      // "value":value})
       regions_probs.push({"id":"DJ",
-      "value":value})
-      regions_probs.push({"id":"KM",
-      "value":value})
+      "value":value,
+      region:region})
+      // regions_probs.push({"id":"KM",
+      // "value":value})
       regions_probs.push({"id":"MG",
-      "value":value})
+      "value":value,
+      region:region})
       regions_probs.push({"id":"MW",
-      "value":value})
-      regions_probs.push({"id":"MU",
-      "value":value})
+      "value":value,
+      region:region})
+      // regions_probs.push({"id":"MU",
+      // "value":value})
       regions_probs.push({"id":"MZ",
-      "value":value})
-      regions_probs.push({"id":"SC",
-      "value":value})
-      regions_probs.push({"id":"ER",
-      "value":value})
-      regions_probs.push({"id":"RE",
-      "value":value})
-      regions_probs.push({"id":"ZW",
-      "value":value})
-      regions_probs.push({"id":"ZA",
-      "value":value})
+      "value":value,
+      region:region})
+      // regions_probs.push({"id":"SC",
+      // "value":value})
+      // regions_probs.push({"id":"ER",
+      // "value":value})
+      // regions_probs.push({"id":"RE",
+      // "value":value})
+      // regions_probs.push({"id":"ZW",
+      // "value":value})
+      // regions_probs.push({"id":"ZA",
+      // "value":value})
       regions_probs.push({"id":"UG",
-      "value":value})
+      "value":value,
+      region:region})
       
     }else if (region ==="South America"){
-      regions_probs.push({"id":"AR",
-      "value":value})
-      regions_probs.push({"id":"BO",
-      "value":value})
-      regions_probs.push({"id":"BR",
-      "value":value})
-      regions_probs.push({"id":"CL",
-      "value":value})
-      regions_probs.push({"id":"EC",
-      "value":value})
-      regions_probs.push({"id":"FK",
-      "value":value})
-      regions_probs.push({"id":"GF",
-      "value":value})
-      regions_probs.push({"id":"GY",
-      "value":value})
-      regions_probs.push({"id":"PY",
-      "value":value})
+      // regions_probs.push({"id":"AR",
+      // "value":value})
+      // regions_probs.push({"id":"BO",
+      // "value":value})
+      // regions_probs.push({"id":"BR",
+      // "value":value})
+      // regions_probs.push({"id":"CL",
+      // "value":value})
+      // regions_probs.push({"id":"EC",
+      // "value":value})
+      // regions_probs.push({"id":"FK",
+      // "value":value})
+      // regions_probs.push({"id":"GF",
+      // "value":value})
+      // regions_probs.push({"id":"GY",
+      // "value":value})
+      // regions_probs.push({"id":"PY",
+      // "value":value})
       regions_probs.push({"id":"PE",
-      "value":value})
-      regions_probs.push({"id":"GS",
-      "value":value})
-      regions_probs.push({"id":"SR",
-      "value":value})
-      regions_probs.push({"id":"UY",
-      "value":value})
+      "value":value,
+      region:region})
+      // regions_probs.push({"id":"GS",
+      // "value":value})
+      // regions_probs.push({"id":"SR",
+      // "value":value})
+      regions_probs.push({"id":"CO",
+      "value":value,
+      region:region})
       regions_probs.push({"id":"VE",
-      "value":value})
+      "value":value,
+      region:region})
 
     }else if (region ==="South Asia"){
-      regions_probs.push({"id":"AF",
-      "value":value})
+      // regions_probs.push({"id":"AF",
+      // "value":value})
       regions_probs.push({"id":"BD",
-      "value":value})
-      regions_probs.push({"id":"BT",
-      "value":value})
+      "value":value,
+      region:region})
+      // regions_probs.push({"id":"BT",
+      // "value":value})
       regions_probs.push({"id":"IN",
-      "value":value})
-      regions_probs.push({"id":"NP",
-      "value":value})
-      regions_probs.push({"id":"MV",
-      "value":value})
-      regions_probs.push({"id":"PK",
-      "value":value})
-      regions_probs.push({"id":"LK",
-      "value":value})
+      "value":value,
+      region:region})
+      // regions_probs.push({"id":"NP",
+      // "value":value})
+      // regions_probs.push({"id":"MV",
+      // "value":value})
+      // regions_probs.push({"id":"PK",
+      // "value":value})
+      // regions_probs.push({"id":"LK",
+      // "value":value})
 
     }else if (region ==="Southeast Asia"){
-      regions_probs.push({"id":"BN",
-      "value":value})
+      // regions_probs.push({"id":"BN",
+      // "value":value})
       regions_probs.push({"id":"KH",
-      "value":value})
+      "value":value,
+      region:region})
       regions_probs.push({"id":"ID",
-      "value":value})
+      "value":value,
+      region:region})
       regions_probs.push({"id":"LA",
-      "value":value})
-      regions_probs.push({"id":"MY",
-      "value":value})
+      "value":value,
+      region:region})
+      // regions_probs.push({"id":"MY",
+      // "value":value})
       regions_probs.push({"id":"MM",
-      "value":value})
-      regions_probs.push({"id":"PH",
-      "value":value})
-      regions_probs.push({"id":"SG",
-      "value":value})
+      "value":value,
+      region:region})
+      // regions_probs.push({"id":"PH",
+      // "value":value})
+      // regions_probs.push({"id":"SG",
+      // "value":value})
       regions_probs.push({"id":"TH",
-      "value":value})
+      "value":value,
+      region:region})
       regions_probs.push({"id":"VN",
-      "value":value})
-      regions_probs.push({"id":"TL",
-      "value":value})
+      "value":value,
+      region:region})
+      // regions_probs.push({"id":"TL",
+      // "value":value})
     }else if (region==="Western Africa"){
       regions_probs.push({"id":"BJ",
-      "value":value})
-      regions_probs.push({"id":"NE",
-      "value":value})
+      "value":value,
+      region:region})
+      // regions_probs.push({"id":"NE",
+      // "value":value})
       regions_probs.push({"id":"NG",
-      "value":value})
-      regions_probs.push({"id":"SH",
-      "value":value})
+      "value":value,
+      region:region})
+      // regions_probs.push({"id":"SH",
+      // "value":value})
       regions_probs.push({"id":"SN",
-      "value":value})
-      regions_probs.push({"id":"SL",
-      "value":value})
-      regions_probs.push({"id":"TG",
-      "value":value})
+      "value":value,
+      region:region})
+      // regions_probs.push({"id":"SL",
+      // "value":value})
+      // regions_probs.push({"id":"TG",
+      // "value":value})
       regions_probs.push({"id":"CI",
-      "value":value})
-      regions_probs.push({"id":"LR",
-      "value":value})
+      "value":value,
+      region:region})
+      // regions_probs.push({"id":"LR",
+      // "value":value})
       regions_probs.push({"id":"GM",
-      "value":value})
-      regions_probs.push({"id":"CV",
-      "value":value})
+      "value":value,
+      region:region})
+      // regions_probs.push({"id":"CV",
+      // "value":value})
       regions_probs.push({"id":"ML",
-      "value":value})
+      "value":value,
+      region:region})
       regions_probs.push({"id":"BF",
-      "value":value})
-      regions_probs.push({"id":"GN",
-      "value":value})
-      regions_probs.push({"id":"GW",
-      "value":value})
+      "value":value,
+      region:region})
+      // regions_probs.push({"id":"GN",
+      // "value":value})
+      // regions_probs.push({"id":"GW",
+      // "value":value})
     }
     
     });
@@ -456,17 +494,40 @@ function initialiseChart(targetDivId){
       document.getElementById(divId).style.display = "block";
   }
   function showGene2(number,dataN,genus) {
-    
-    
     var genusForIGV = genus.toString()
+    if (dataN != "#miss-data"){
+      
  
-    number = number.trimStart()
-    gene = number.split(" ")[0]
-    protein = number.split(" ")[1]
-    console.log(number)
-    console.log(protein)
-    console.log(gene)
-    changeData(dataN,gene,protein,genusForIGV)
+      number = number.trimStart()
+      gene = number.split(" ")[0]
+      protein = number.split(" ")[1]
+      changeData(dataN,gene,protein,genusForIGV)
+    }else{
+      var djangoData = $(dataN).data();
+
+      var rvrValues = Object.values(djangoData);
+      let position = parseInt(number, 10);
+      var matchedChrom = null;
+      
+      let pos
+      let chrom
+      var splitValues = rvrValues[0].split("}")
+      splitValues.forEach(item => {
+          let posMatch = item.match(/'pos': (\d+)/);
+          let chromMatch = item.match(/'chrom': '([^']+)/);
+          if (posMatch && chromMatch) {
+              pos = parseInt(posMatch[1], 10);
+              chrom = chromMatch[1];
+              if (pos === position) {
+                  matchedChrom = chrom;
+                  matchedPos = pos
+                  changeMissData(chrom,pos,genusForIGV)
+              }
+          }
+         });
+     
+    }
+    
     
   }
   
@@ -478,7 +539,6 @@ function initialiseChart(targetDivId){
   }
   
   function changeData(data,gene,protein,genus){
-  
   igv.removeAllBrowsers()
   
   
@@ -491,12 +551,10 @@ function initialiseChart(targetDivId){
   firstValue = rvrValues[0]
   if( data!="#miss-data" ){
   splitValues = firstValue.split("{'chrom':")
-  
   }else{
   splitValues = firstValue.split("{")
   
   }
-  
   var proteinArray = []
   var nucleotideArray = []
   var chromArray = []
@@ -510,13 +568,11 @@ function initialiseChart(targetDivId){
   
   if(data != '#miss-data'){
     chromArray.push(split2[0])
-    
   resistancePosArray.push(split2[1].split(":")[1])
     
-  var curr = split2[17].split(":")[1]
-   
+  var curr = split2[16].split(":")[1]
   curr = curr.replace(/['"]+/g, '').trim();
-  var curr2 = split2[16].split(":")[1]
+  var curr2 = split2[15].split(":")[1]
   curr2 = curr2.replace(/['"]+/g, '').trim();
   nucleotideArray.push(curr2)
   proteinArray.push(curr)
@@ -563,11 +619,9 @@ function initialiseChart(targetDivId){
   var currentChromosome = "";
   var currentPos = "";
   var currIndex ="";
-  console.log(proteins)
   if(nucleotideArray.includes(proteins)){
     currIndex = nucleotideArray.indexOf(proteins)
   }else{
-    console.log("ho")
 
     currIndex = proteinArray.indexOf(proteins)
   }
@@ -586,10 +640,7 @@ function initialiseChart(targetDivId){
   lastPos = tempChr[tempChr.length-1];  
   
   }
-  console.log(chromArray)
   currentChromosome = chromArray[currIndex]
-  console.log(currentChromosome)
-  console.log(currIndex)
   currentChromosome = currentChromosome.replace(/[^\w\s!?]/g,'');
   currentChromosome = currentChromosome.replace(/\s+/g, '')
   var initiallocus = ""
@@ -643,7 +694,55 @@ function initialiseChart(targetDivId){
               })
   }
   
+  function changeMissData(chrom,pos,genus){
+    initiallocus = chrom+":"+pos
+    var locus = initiallocus.replace(/\s+/g, '')
+    var url = ""
+      
+    url = '/static/fastafiles/'+ genus +'.fasta'
+    index = '/static/fastafiles/'+ genus +'.fasta.fai'
+    igv.removeAllBrowsers()
+    
+    url = '/static/fastafiles/'+ genus +'.fasta'
+    index = '/static/fastafiles/'+ genus +'.fasta.fai'
+    
+    var igvDiv = document.getElementById("igvDiv");
+      var options =
+        {
+          reference:{
+            id: genus,
+            fastaURL: url,
+            indexURL: index,
+          },
+          id: genus,
+            locus: locus,
+            
+        };
+        var options =
+        {
+          reference:{
+            id: genus,
+            fastaURL: url,
+            indexURL: index,
+            tracks: [
+              {
+                  "name": filename[0],
+                    "format": "bam",
+                    "type": "alignment",
+                    "url": bam,
+                    "indexURL":bai,                     
+                    "height": "300"
+                    
+              }
               
+            
+              ]}, id:genus,
+            locus: locus}
+        igv.createBrowser(igvDiv, options)
+                .then(function (browser) {
+                })
+
+  }            
   function showHidden(div){
     $(div).slideDown(1000);
 

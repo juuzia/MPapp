@@ -20,6 +20,16 @@ bp = Blueprint('main', __name__)
 def get_upload_dir(upload_id):
     return os.path.join(app.config["UPLOAD_FOLDER"],upload_id)
 
+def replace_key(data, old_key, new_key):
+    if isinstance(data, dict):
+        for key in list(data.keys()):
+            replace_key(data[key], old_key, new_key)
+            if key == old_key:
+                data[new_key] = data.pop(old_key)
+    elif isinstance(data, list):
+        for item in data:
+            replace_key(item, old_key, new_key)
+
 @bp.route('/')
 def index():
     return render_template("pages/index.html")
@@ -165,7 +175,8 @@ def parse_result_summary(json_file):
             
         }
     )
-
+    replace_key(json_results, 'gene_name', 'gene')
+    
     # analysis = (json_results['pipeline_software'],
     #             {'Analysis': 'Analysis',
     #              'Program': 'Program'})
@@ -190,8 +201,8 @@ def parse_result_summary(json_file):
                 var['drug'] = ", ".join([d["drug"] for d in var['drugs']])
             var_drug = (json_results['dr_variants'],
                         {"chrom": "Chromosome",
-                        "genome_pos": "Genome Position",
-                        "locus_tag": "Locus Tag",
+                        "pos": "Genome Position",
+                        "gene_id": "Locus Tag",
                         "gene": "Gene Name",
                         "change": "Change",
                         "freq": "Estimated fraction",
@@ -200,8 +211,8 @@ def parse_result_summary(json_file):
         if "other_variants" in json_results:
             variants = (json_results['other_variants'],
                         {"chrom": "Chromosome:",
-                        "genome_pos": "Genome Position",
-                        "locus_tag": "Locus Tag",
+                        "pos": "Genome Position",
+                        "gene_id": "Locus Tag",
                         "gene": "Gene Name",
                         "change": "Change",
                         "freq": "Estimated fraction"})
@@ -215,16 +226,15 @@ def parse_result_summary(json_file):
 
         if "missing_positions" in json_results['qc']:
             missing = (json_results['qc']['missing_positions'],
-                      {"gene": "Gene",
-                       "locus_tag": "Locus tag",
-                       "position": "Position",
-                       "variants": "Variants",
-                       "drugs": "Drugs"})
+                      {"chrom": "Chromosome",
+                       "pos": "Position",
+                       "depth": "Depth",
+                       "annotation": "Annotation"})
         if "fail_variants" in json_results:
             fail_variants = (json_results['fail_variants'],
                         {"chrom": "Chromosome:",
-                        "genome_pos": "Genome Position",
-                        "locus_tag": "Locus Tag",
+                        "pos": "Genome Position",
+                        "gene_id": "Locus Tag",
                         "gene": "Gene Name",
                         "change": "Change",
                         "freq": "Estimated fraction"})
@@ -241,7 +251,7 @@ def parse_result_summary(json_file):
         "Coverage report": gene_coverage,
         "Missing positions report": missing
         }
-    print(geoclass)
+    print(missing)
     return tables
 
 @bp.route('/result/<uuid:run_id>')

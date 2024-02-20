@@ -2,7 +2,9 @@
 #table-{
     text-align: left;
   }
- 
+ .btn-lg{
+  padding:10px;
+ }
   div#draw-shapes {
     width: 95%;
     height: 600px;
@@ -12,7 +14,12 @@
         background-color: RGB(240,240,240)
       }
       
-  
+  .backButton{
+    padding-top: 10px;
+    width: 10%;
+    height: 10%;
+    font-size: 12px;
+  }
   #desktop_dashboard .container-fluid > div{
     box-shadow: 2px 2px 10px ;
     height: auto;
@@ -148,7 +155,7 @@
   width:inherit;
     text-align: center;
   }
-  table {
+  .table {
       table-layout: fixed;
       overflow-y: scroll;
       word-wrap: break-word;
@@ -194,7 +201,11 @@
   }
   
     #resistanceButton,#otherButton,#missingButton,#showButton,#seeButton{
-  margin-top: 50px;
+  margin:auto;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+
   }
     #chartdiv-mobile, #chartdiv-desktop{
       width: 100%; height: 60%; display: flex-box;
@@ -221,14 +232,18 @@
   
   
   }
-    #resistanceButton,#otherButton,#missingButton,#showButton,#seeButton{
-  margin-top: 30px;
-  }
+  #resistanceButton,#otherButton,#missingButton,#showButton,#seeButton{
+    margin:auto;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+  
+    }
     th, tr{
     text-align: center;
     font-size: 12px;
   }
-  #resistanceButton,#otherButton,#missingButton,#showButton,#seeButton{
+  #resistanceButton,#otherButton,#missingButton,#failButton,#showButton,#seeButton{
     width: 150px;
     font-size: 12px;
   }
