@@ -655,37 +655,34 @@
 <div class="coverage">
 <div class="owl-carousel">{% set values = [] %}
     {% for row in rows %}
-                    {% for key in columns %}
-                    {{values.append(row[key]) or ""}}
-                    {% if loop.index0 == 3 %}
+                    
+                   
     <div class="item">
 
         <table class="table table-hover" id="table-{{rand_id}}">
                 <thead>
                 <tr>
-                    <th scope="col" style="width: 10%;">Gene</th>   
-                    <th scope="col" style="width: 10%;">Locus Tag</th>   
-                    <th scope="col" style="width: 10%;">Cutoff</th>   
-                    <th scope="col" style="width: 10%;">Fraction</th>   
+                    
+                    <th scope="col" >Gene</th>   
+                    <th scope="col" >Percentage Depth passed</th>   
+                    <th scope="col">Median Depth</th>   
                 </tr>
             </thead>
-                
+           
                     
             <tbody id="resultsTable">
                     
                 <tr>
                     <td class="col-md-2" >
-                        {{ values[0]}}
+                        {{row["target"]}}
                     </td>
                     <td class="col-md-2">
-                        {{ values[1]}}
+                        {{row["percent_depth_pass"]}}
                     </td class="col-md-2">
                     <td>
-                    {{ values[2]}}
+                        {{row["median_depth"]}}
                     </td >
-                    <td class="col-md-2">
-                    {{ values[3]}}
-                    </td>
+                    
                 </tr>
                    
                     {{values.clear() or ""}}
@@ -697,8 +694,7 @@
             </table>
             
         </div>
-        {% endif %}
-        {% endfor %}    
+         
                 {% endfor %}
        
             

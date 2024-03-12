@@ -217,12 +217,11 @@ def parse_result_summary(json_file):
                         "change": "Change",
                         "freq": "Estimated fraction"})
 
-        if "gene_coverage" in json_results['qc']:
-            gene_coverage = (json_results['qc']['gene_coverage'],
-                            {"gene": "Gene",
-                             "locus_tag": "Locus tag",
-                             "cutoff": "Cutoff",
-                             "fraction": "Fraction"})
+        if "target_qc" in json_results['qc']:
+            gene_coverage = (json_results['qc']['target_qc'],
+                            {"target": "Gene",
+                             "percent_depth_pass": "Percentage depth passed",
+                             "median_depth": "Median Depth"})
 
         if "missing_positions" in json_results['qc']:
             missing = (json_results['qc']['missing_positions'],
@@ -251,7 +250,6 @@ def parse_result_summary(json_file):
         "Coverage report": gene_coverage,
         "Missing positions report": missing
         }
-    print(missing)
     return tables
 
 @bp.route('/result/<uuid:run_id>')
