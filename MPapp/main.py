@@ -37,12 +37,11 @@ def index():
 @bp.route('/analysis', methods=["GET", "POST"])
 def analysis():
     species_list = [
-        ('falciparum', 'Plasmodium falciparum'),
-        ('vivax_simium', 'Plasmodium vivax'),
-        ('knowlesi', 'Plasmodium lnowlesi'),
-        ('malariae_brasilianum', 'Plasmodium malariae'),
-        ('ovale', 'Plasmodium ovale'),
-        ('autodetect', 'Autodetect')
+        ('Plasmodium_falciparum', 'Plasmodium falciparum'),
+        ('Plasmodium_vivax', 'Plasmodium vivax'),
+        ('Plasmodium_knowlesi', 'Plasmodium lnowlesi'),
+        ('Plasmodium_malariae', 'Plasmodium malariae'),
+        ('Plasmodium_ovale', 'Plasmodium ovale')
     ]
     random_id = str(uuid4())
     if request.method == "POST":
@@ -150,7 +149,7 @@ def is_legal_filetype(filename):
         return False
 
 def get_conf(results):
-    db_name = results['species']['species'][0]['species']
+    db_name = results["pipeline"]["db_version"]["name"]
     conf = pp.get_db('malaria_profiler',db_name)
     return conf
 
@@ -177,9 +176,10 @@ def parse_result_summary(json_file):
     )
     replace_key(json_results, 'gene_name', 'gene')
     
-    # analysis = (json_results['pipeline_software'],
-    #             {'Analysis': 'Analysis',
-    #              'Program': 'Program'})
+    analysis = json_results['pipeline']['software']
+    columns = {'process': 'Process', 'software': 'Software'}
+
+
     if conf:
         
         if "drugs" in conf:
@@ -187,8 +187,7 @@ def parse_result_summary(json_file):
 
         if "geo_classification" in json_results:
             probabilities = json_results["geo_classification"]["probabilities"]
-            geoclass = [{"region": item["region"].replace("_", " "), "probability": item["probability"]} for item in probabilities]
-            
+            geoclass = [{"region": item["region"], "probability": item["probability"]} for item in probabilities]
         if "drugs" in conf:
             json_results['drug_table'] = [[y for y in json_results['drug_table'] if y["Drug"].upper()==d.upper()][0] for d in conf['drugs']]
             drugs = (json_results['drug_table'],
@@ -241,7 +240,7 @@ def parse_result_summary(json_file):
     tables = {
         "General information" : info,
         "Species" : species,
-        # "Analysis" : analysis,
+        "Analysis" : (analysis,columns),
         "Geoclassification": geoclass,
         "Resistance report": drugs,
         "Resistance variants report": var_drug,

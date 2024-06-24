@@ -41,31 +41,35 @@ def get_status(run_id):
     return AsyncResult(run_id).state
 
 @celery.task
-def run_mp(ftype, files, run_id, results_dir, platform, species, threads = 1):
-    print(files)
-    print(species)
-    if ftype=="fastq":
-        if len(files)==2:
+def run_mp(ftype, files, run_id, results_dir, platform, species, threads=1):
+    if ftype == "fastq":
+        if len(files) == 2:
             tmp = f"-1 {files[0]} -2 {files[1]}"
         else:
             tmp = f"-1 {files[0]}"
-    elif ftype=="fasta":
+    elif ftype == "fasta":
         tmp = f"-f {files[0]}"
-    elif ftype in ["bam","cram"]:
+    elif ftype in ["bam", "cram"]:
         tmp = f"-a {files[0]}"
-
-    if species!="autodetect":
+    
+    if species != "autodetect":
         tmp += f" --resistance_db {species}"
-    cmd = "malaria-profiler profile --dir %s %s --prefix %s --platform %s -t %s --txt --kmer_counter dsk" % (results_dir, tmp, run_id, platform, threads)
+    
+    cmd = "malaria-profiler profile --dir %s %s --prefix %s --platform %s -t %s --txt" % (results_dir, tmp, run_id, platform, threads)
     print(cmd)
     sp.call(cmd, shell=True)
-    db_name = json.load(open(f"{results_dir}/{run_id}.results.json"))["resistance_db_version"]["name"]
+    
+    results_path = f"{results_dir}/{run_id}.results.json"
+    
+    with open(results_path) as file:
+        data = json.load(file)
+    
+    db_name = data["pipeline"]["db_version"]["name"]
     bed_file = f"{sys.base_prefix}/share/malaria_profiler/{db_name}.bed"
     print(bed_file)
     sp.call(f"samtools view -bL {bed_file} {results_dir}/{run_id}.bam > {results_dir}/{run_id}.bed.bam", shell=True)
     sp.call(f"mv {results_dir}/{run_id}.bed.bam {results_dir}/{run_id}.bam", shell=True)
     sp.call(f"samtools index {results_dir}/{run_id}.bam", shell=True)
-
     
 
 @celery.task

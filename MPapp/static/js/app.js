@@ -759,7 +759,6 @@ function initialiseChart(targetDivId){
   var bai = ""
   $(document).ready(function(){
     var djangoData = $("#species-data").data();
-    
     getFileName(filename)
     var speciesValue = Object.values(djangoData);
     var firstValue = speciesValue[0]

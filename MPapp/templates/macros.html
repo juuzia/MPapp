@@ -555,19 +555,19 @@
     
     {% for key in columns %}
     <div class="font_awesome d-flex  align-items-center justify-content-center"  >
-        {% if row[key] == 'falciparum' %}
+        {% if 'falciparum' in row[key] %}
         <i class="fa-solid fa-p fa-6x"></i>
         <i class="fa-solid fa-f fa-3x"></i>
-        {% elif row[key] == 'ovale' %}
+        {% elif 'ovale' in row[key] %}
         <i class="fa-solid fa-p fa-6x"></i>
         <i class="fa-solid fa-o fa-3x"></i>
-        {% elif row[key] == 'vivax_simium' %}
+        {% elif 'vivax' in row[key] %}
         <i class="fa-solid fa-p fa-6x"></i>
         <i class="fa-solid fa-v fa-3x"></i>
-        {% elif row[key] == 'knowlesi' %}
+        {% elif 'knowlesi' in row[key] %}
         <i class="fa-solid fa-p fa-6x"></i>
         <i class="fa-solid fa-k fa-3x"></i>
-        {% elif row[key] == 'malariae' %}
+        {% elif 'malariae' in row[key] %}
         <i class="fa-solid fa-p fa-6x"></i>
         <i class="fa-solid fa-m fa-3x"></i>
         
@@ -579,16 +579,16 @@
                 
     </div>
     <div class="text d-flex  align-items-center justify-content-center">
-        {% if row[key] == 'falciparum' %}
-        <p><em>Plasmodium {{row[key]}}</em></p>
-        {% elif row[key] == 'ovale' %}
-        <p><em>Plasmodium {{row[key]}}</em></p>
-        {% elif row[key] == 'vivax_simium' %}
-        <p><em>Plasmodium {{row[key]}}</em></p>
-        {% elif row[key] == 'knowlesi' %}
-        <p><em><em>Plasmodium {{row[key]}}</em></em></p>
-        {% elif row[key] == 'malariae' %}
-        <p><em><em>Plasmodium {{row[key]}}</em></em></p>
+        {% if 'falciparum' in row[key] %}
+        <p><em>{{row[key]}}</em></p>
+        {% elif 'ovale' in row[key] %}
+        <p><em>{{row[key]}}</em></p>
+        {% elif 'vivax' in row[key] %}
+        <p><em>{{row[key]}}</em></p>
+        {% elif 'knowlesi' in row[key] %}
+        <p><em><em>{{row[key]}}</em></em></p>
+        {% elif 'malariae' in row[key] %}
+        <p><em><em>{{row[key]}}</em></em></p>
         
         {% else %}
         
@@ -603,25 +603,24 @@
             <tr>
                 {% for key in columns %}
                 
-                {% if columns[key] != "Species" %}
-                    
-                    <th scope="col" >{{ columns[key] }}</th>
-                    {% endif %}
-                    {% endfor %}
+                    <th scope="col" >{{ columns[key]}}</th>
+                                    {% endfor %}
             </tr>
         </thead>
         <tbody id="resultsTable">
             {% for row in rows %}
+            
                 <tr>
                 {% for key in columns %}
-                {% if row[key] not in ['vivax_simium', 'falciparum', 'malariae', 'knowlesi', 'ovale'] %}
+                <!-- {% print(columns) %} -->
+                <!-- {% print(columns) %} -->
+                <!-- {% print(key) %} -->
                     {% if row[key]|length == 0 %}
                         <td>No prediction information available</td>
                     {% else %}    
                     <td>
                         {{ row[key]|safe }}
                     </td>
-                    {% endif %}
                     {% endif %}
                 {% endfor %}
                 </tr>
@@ -635,21 +634,34 @@
 
 
 {% macro get_results2(rows, columns, name) -%}
-<div class="contasiner">
- {% for row in rows %}
-  {% for key in columns %}
-      {% if not '-' in row[key] %}
-      <p style="">{{ row[key] }}</p>
-         
-     {% else %} 
-    
-    {% endif %}      
-    {% endfor %}
-
-{% endfor %}                
+<div class="container">
+   
+    <table class="table table-hover" id="table-{{rand_id}}">
+        <thead>
+            <tr>
+                {% for key in columns %}
+                    <th scope="col" >{{ columns[key] | title }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody id="resultsTable">
+            {% for row in rows %}
+            
+                <tr>
+                {% for key in columns %}
+                    <td>
+                        {{ row[key]| title }}
+                    </td>
+                {% endfor %}
+                </tr>
+            {% endfor %}                
+        </tbody>
+    </table>
+                  
 
 </div>
 {%- endmacro %}
+
 
 {% macro get_analysis(rows, columns, name) -%}
 <div class="coverage">

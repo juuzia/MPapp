@@ -43,7 +43,7 @@
     <div class="date">
       {% for key in tables %}
       {% if key == 'General information' %}
-      {{macros.get_results2(tables[key][0], tables[key][1], key)}}
+      <!-- {{macros.get_results2(tables[key][0], tables[key][1], key)}} -->
       
       {% endif %}
       {% endfor %} 
@@ -344,7 +344,8 @@
     </div>
     {% for key in tables %}
     {% if key == 'Analysis' %}
-    {{macros.get_results(tables[key][0], tables[key][1], key)}}
+
+    {{macros.get_results2(tables[key][0], tables[key][1], key)}}
     
     {% endif %}
     {% endfor %}  
