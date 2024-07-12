@@ -612,16 +612,25 @@
             
                 <tr>
                 {% for key in columns %}
+                
                 <!-- {% print(columns) %} -->
                 <!-- {% print(columns) %} -->
-                <!-- {% print(key) %} -->
-                    {% if row[key]|length == 0 %}
-                        <td>No prediction information available</td>
-                    {% else %}    
-                    <td>
-                        {{ row[key]|safe }}
-                    </td>
-                    {% endif %}
+                
+                {% if key == "species" %}
+                <td>
+                    <p> {{ row[key]|safe }}</p>
+                </td>
+                {% else %}
+                {% if row[key]|length == 0 %}
+                            
+                    <td>No prediction information available</td>
+                        {% else %} 
+                        <td>
+                            <p> ani : {{ row[key]['ani']|safe }}</p>
+                        </td>
+                {% endif %}
+        
+                {% endif %}
                 {% endfor %}
                 </tr>
             {% endfor %}                
