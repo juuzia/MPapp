@@ -30,11 +30,11 @@ def replace_key(data, old_key, new_key):
         for item in data:
             replace_key(item, old_key, new_key)
 
-@bp.route('/')
+@bp.route('/malaria-profiler/')
 def index():
     return render_template("pages/index.html")
 
-@bp.route('/analysis', methods=["GET", "POST"])
+@bp.route('/malaria-profiler/analysis', methods=["GET", "POST"])
 def analysis():
     species_list = [
         ('Plasmodium_falciparum', 'Plasmodium falciparum'),
@@ -92,7 +92,7 @@ file_patterns = {
     "cram": "\.cram$"
 }
 
-@bp.route('/run_result/<uuid:analysis_id>')
+@bp.route('/malaria-profiler/run_result/<uuid:analysis_id>')
 def analysis_runs_id(analysis_id):
     data = json.load(open("%s/%s.json" % (app.config["RESULTS_DIR"], analysis_id)))
     for d in data:
@@ -251,7 +251,7 @@ def parse_result_summary(json_file):
         }
     return tables
 
-@bp.route('/result/<uuid:run_id>')
+@bp.route('/malaria-profiler/result/<uuid:run_id>')
 def result_id(run_id):
     log_file = "%s/%s.log" % (app.config["RESULTS_DIR"], run_id)
     if not os.path.isfile(log_file):
@@ -274,12 +274,12 @@ def result_id(run_id):
         tables = parse_result_summary(json_file)
         return render_template('pages/result_id.html', run_id=run_id, results = results, status=status, tables=tables)
 
-@bp.route('/result/<uuid:run_id>/download', methods=['GET', 'POST'])
+@bp.route('/malaria-profiler/result/<uuid:run_id>/download', methods=['GET', 'POST'])
 def download(run_id):
         result_file = "%s/%s.results.txt" % (app.config["RESULTS_DIR"], run_id)
         return send_file(result_file, as_attachment=True)
 
-@bp.route('/result', methods=['POST', 'GET'])
+@bp.route('/malaria-profiler/result', methods=['POST', 'GET'])
 def result():
     if request.method == "POST":
         if "result_submit" in request.form:
@@ -289,7 +289,7 @@ def result():
 
 
 
-@bp.route('/file_upload/<uuid:upload_id>',methods=('GET','POST'))
+@bp.route('/malaria-profiler/file_upload/<uuid:upload_id>',methods=('GET','POST'))
 def file_upload(upload_id):
 
     upload_id = str(upload_id)

@@ -227,7 +227,8 @@ function initialiseChart(targetDivId){
       "value":value,
       region:region})
       regions_probs.push({"id":"TZ",
-      "value":value})
+      "value":value,
+      region:region})
       regions_probs.push({"id":"ET",
       "value":value,
       region:region})
@@ -653,9 +654,9 @@ function initialiseChart(targetDivId){
   }
   var locus = initiallocus.replace(/\s+/g, '')
   var url = ""
-  
-  url = '/static/fastafiles/'+ genus +'.fasta'
-  index = '/static/fastafiles/'+ genus +'.fasta.fai'
+  genus = "Plasmodium_"+ genus
+  url = '/malaria-profiler/static/malaria-db/db/'+ genus +'/genome.fasta'
+  index = '/malaria-profiler/static/malaria-db/db/'+ genus +'/genome.fasta.fai'
   
   var igvDiv = document.getElementById("igvDiv");
     var options =
@@ -698,13 +699,11 @@ function initialiseChart(targetDivId){
     initiallocus = chrom+":"+pos
     var locus = initiallocus.replace(/\s+/g, '')
     var url = ""
-      
-    url = '/static/fastafiles/'+ genus +'.fasta'
-    index = '/static/fastafiles/'+ genus +'.fasta.fai'
+    genus = "Plasmodium_"+ genus
+    url = '/malaria-profiler/static/malaria-db/db/'+ genus +'/genome.fasta'
+    index = '/malaria-profiler/static/malaria-db/db/'+ genus +'/genome.fasta.fai'
     igv.removeAllBrowsers()
     
-    url = '/static/fastafiles/'+ genus +'.fasta'
-    index = '/static/fastafiles/'+ genus +'.fasta.fai'
     
     var igvDiv = document.getElementById("igvDiv");
       var options =
@@ -764,12 +763,13 @@ function initialiseChart(targetDivId){
     var firstValue = speciesValue[0]
     var splitValues = firstValue.split("{'species':")
     var splitagain = splitValues[1].split(",");
-    var genus = splitagain[0].replace(/[^\w\s!?]/g,'');
-    genus = genus.replace(/\s+/g, '')
-    var  url = '/static/fastafiles/'+ genus +'.fasta'
-  var index = '/static/fastafiles/'+ genus +'.fasta.fai'
-  bam = '/static/results/'+filename+".bam"
-  bai = '/static/results/' +filename+ ".bam.bai"
+    var genus = splitagain[0].trimStart().replace(/\s+/g, '_');
+    genus = genus.replace("'","")
+    genus = genus.replace("'","")
+    var url = '/malaria-profiler/static/malaria-db/db/'+ genus + '/' + 'genome.fasta'
+    var index = '/malaria-profiler/static/malaria-db/db/'+ genus + '/' + 'genome.fasta.fai'
+    bam = '/malaria-profiler/static/results/'+filename+".bam"
+    bai = '/malaria-profiler/static/results/' +filename+ ".bam.bai"
     var igvDiv = document.getElementById("igvDiv");
     var options =
       {
