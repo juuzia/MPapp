@@ -173,7 +173,7 @@ def parse_result_summary(json_file):
             
         }
         return tables
-    elif json_results["error"]:
+    elif "error" in json_results :
         
         error_value = json_results["error"]
         tables = {
