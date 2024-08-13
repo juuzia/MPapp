@@ -12,6 +12,14 @@ import sys
 
 BASH_TIMEOUT = os.environ.get('BASH_TIMEOUT', 1200)
 
+def safe_get(data, *keys):
+    for key in keys:
+        if isinstance(data, dict):
+            data = data.get(key)
+        else:
+            return None
+    return data
+
 def make_celery(app):
     celery = Celery(
         app.import_name,
@@ -64,12 +72,16 @@ def run_mp(ftype, files, run_id, results_dir, platform, species, threads=1):
     with open(results_path) as file:
         data = json.load(file)
     
-    db_name = data["pipeline"]["db_version"]["name"]
-    bed_file = f"{sys.base_prefix}/share/malaria_profiler/{db_name}.bed"
-    print(bed_file)
-    sp.call(f"samtools view -bL {bed_file} {results_dir}/{run_id}.bam > {results_dir}/{run_id}.bed.bam", shell=True)
-    sp.call(f"mv {results_dir}/{run_id}.bed.bam {results_dir}/{run_id}.bam", shell=True)
-    sp.call(f"samtools index {results_dir}/{run_id}.bam", shell=True)
+    db_name = data.get("pipeline", {}).get("db_version", {}).get("name")
+    
+    if db_name:
+        bed_file = f"{sys.base_prefix}/share/malaria_profiler/{db_name}.bed"
+        print(bed_file)
+        sp.call(f"samtools view -bL {bed_file} {results_dir}/{run_id}.bam > {results_dir}/{run_id}.bed.bam", shell=True)
+        sp.call(f"mv {results_dir}/{run_id}.bed.bam {results_dir}/{run_id}.bam", shell=True)
+        sp.call(f"samtools index {results_dir}/{run_id}.bam", shell=True)
+    else:
+        sys.stderr.write(f"No valid database version found for run_id {run_id}. Skipping BED processing.\n")
     
 
 @celery.task

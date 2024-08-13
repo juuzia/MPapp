@@ -25,6 +25,19 @@
 {% endif %}
 {% endblock %}
 {% block content %}
+{% if not tables %}
+  <div class="error-page" style="text-align: center; margin-top: 100px;">
+    <h1 style="font-size: 3rem; color: red;">Error</h1>
+    <p style="font-size: 1.5rem;">There was an issue processing your results. Please try again later or contact us.</p>
+  </div>
+{% elif 'Error' in tables %}
+<div class="error-page" style="text-align: center; margin-top: 100px;">
+  <h1 style="color: red;">Error</h1>
+  <p>Your error value:</p>
+  <p >{{ tables.Error }}</p>
+  <p>Check the quality of your files and try again</p>
+</div>
+{% else %}
 {% if status == "OK" %}
 {% set ns = namespace(genus='') %}
   
@@ -39,7 +52,19 @@
       <p>Here you can view your analysis</p>
       <a  class="nextBtn btn btn-outline-success btn-lg" id="nextBtn">Next</a>
     </div>
-    <h4><b>RESULT ID: </b> {{run_id}}</h4>
+    <h4><b>RESULT ID: </b> {{ run_id }}</h4>
+      {% if filename %}
+          <h4><b>FASTQ FILE NAME:   </b> {{ filename }}</h4>
+      {% else %}
+          {% for key, value in tables.items() %}
+              {% if key == 'Filename' %}
+                  
+                      <h4><b>FASTQ FILE NAME: </b> {{ value }}</h4>
+                  
+              {% endif %}
+          {% endfor %}
+      {% endif %}
+        
     <div class="date">
       {% for key in tables %}
       {% if key == 'General information' %}
@@ -316,21 +341,32 @@
      <div class="card-header text-center bg-light" style="border-top-left-radius: 15px;border-top-right-radius: 15px;display: flex; align-items: center; justify-content: center;">
       <h4 style="margin-right: 10px;">Estimated Region of Origin</h4><abbr title="Where your sample is from"><i class="fa-solid fa-question" style="margin-bottom: 12px;"></i></abbr>
   </div>
+  {% set geoclass_found = false %}
   {% set ns = namespace(regiono="", probability=0) %}
 {% for key, value in tables.items() %}
   {% if key == 'Geoclassification' %}
-    {% for row in value %}
-      <meta id="region-{{ loop.index }}" data-region="{{ row['region'] }}" data-probability="{{ row['probability'] }}" >
-      {% if row['probability'] > ns.probability %}
-        {% set ns.probability = row['probability'] %}
-        {% set ns.regiono = row['region'] %}
-      {% endif %}
-    {% endfor %}
-    <div id="chartdiv-desktop"></div>
-    <div id="legenddiv"></div>
-    <p style="text-align: center; margin-top: 5px; font-family: 'Sofia Sans', sans-serif;">{{ ns.regiono }} - {{ (ns.probability*100)|round }}%</p>
+    {% set geoclass_found = true %}
+    {% if value is not none %}
+      {% for row in value %}
+        <meta id="region-{{ loop.index }}" data-region="{{ row['region'] }}" data-probability="{{ row['probability'] }}" >
+        {% if row['probability'] > ns.probability %}
+          {% set ns.probability = row['probability'] %}
+          {% set ns.regiono = row['region'] %}
+        {% endif %}
+      {% endfor %}
+      <div id="chartdiv-desktop"></div>
+      <div id="legenddiv"></div>
+      <p style="text-align: center; margin-top: 5px; font-family: 'Sofia Sans', sans-serif;">{{ ns.regiono }} - {{ (ns.probability*100)|round }}%</p>
+
+    {% endif %}
   {% endif %}
 {% endfor %}
+
+{% if not geoclass_found %}
+<div class="NA"> 
+  <p style="text-align: center; justify-content: center; font-family: 'Sofia Sans', sans-serif;">Region info not available</p>
+</div>
+{% endif %}
 
     </div>
   <div class="5">
@@ -704,9 +740,12 @@
           <div class="card-header text-center bg-light" style="border-top-left-radius: 15px;border-top-right-radius: 15px;">
             <h4>Estimated Region of Origin</h4>
         </div>
+        {% set geoclass_found = false %}
         {% set ns = namespace(regiono="", probability=0) %}
-        {% for key, value in tables.items() %}
-          {% if key == 'Geoclassification' %}
+      {% for key, value in tables.items() %}
+        {% if key == 'Geoclassification' %}
+          {% set geoclass_found = true %}
+          {% if value is not none %}
             {% for row in value %}
               <meta id="region-{{ loop.index }}" data-region="{{ row['region'] }}" data-probability="{{ row['probability'] }}" >
               {% if row['probability'] > ns.probability %}
@@ -714,9 +753,19 @@
                 {% set ns.regiono = row['region'] %}
               {% endif %}
             {% endfor %}
+            <div id="chartdiv-desktop"></div>
+            <div id="legenddiv"></div>
             <p style="text-align: center; margin-top: 5px; font-family: 'Sofia Sans', sans-serif;">{{ ns.regiono }} - {{ (ns.probability*100)|round }}%</p>
+      
           {% endif %}
-        {% endfor %}
+        {% endif %}
+      {% endfor %}
+      
+      {% if not geoclass_found %}
+      <div class="NA"> 
+        <p style="text-align: center; justify-content: center; font-family: 'Sofia Sans', sans-serif;">Region info not available</p>
+      </div>
+      {% endif %}
           <div id="chartdiv-mobile"  style="height:500px"></div></div>
         <div class="goback">
           <span  style="display: table; margin: 0 auto;" >
@@ -863,6 +912,6 @@
 
 </scripts>
 
-
+{% endif %}
 {% endif %}
 {% endblock %}

@@ -3,6 +3,7 @@ import os
 from uuid import uuid4
 import re
 import time
+import sys
 
 from flask import (
     Blueprint, flash, request, redirect, render_template, url_for, current_app, send_file, make_response, Response)
@@ -39,7 +40,7 @@ def analysis():
     species_list = [
         ('Plasmodium_falciparum', 'Plasmodium falciparum'),
         ('Plasmodium_vivax', 'Plasmodium vivax'),
-        ('Plasmodium_knowlesi', 'Plasmodium lnowlesi'),
+        ('Plasmodium_knowlesi', 'Plasmodium knowlesi'),
         ('Plasmodium_malariae', 'Plasmodium malariae'),
         ('Plasmodium_ovale', 'Plasmodium ovale')
     ]
@@ -149,8 +150,15 @@ def is_legal_filetype(filename):
         return False
 
 def get_conf(results):
-    db_name = results["pipeline"]["db_version"]["name"]
-    conf = pp.get_db('malaria_profiler',db_name)
+
+    pipeline_data = results.get("pipeline", {})
+    db_version = pipeline_data.get("db_version", {})
+    db_name = db_version.get("name")
+    if db_name:
+        conf = pp.get_db('malaria_profiler', db_name)
+    else:
+        conf = ""
+    
     return conf
 
 def parse_result_summary(json_file):
@@ -158,7 +166,22 @@ def parse_result_summary(json_file):
 
     with open(json_file) as json_file:
         json_results = json.load(json_file, parse_float=lambda x: round(float(x), 2))
-
+    
+    if not json_results:
+        sys.stderr.write("Warning: JSON results are empty or malformed.\n")
+        tables = {
+            
+        }
+        return tables
+    elif json_results["error"]:
+        
+        error_value = json_results["error"]
+        tables = {
+            "Error": error_value
+        }
+        
+        return tables
+        
     conf = get_conf(json_results)
     info = ([{"id" : json_results['id'], "date": time.ctime()}],
             {"id": "Identifier",
@@ -178,16 +201,19 @@ def parse_result_summary(json_file):
     
     analysis = json_results['pipeline']['software']
     columns = {'process': 'Process', 'software': 'Software'}
-
-
+    if 'filename' in json_results:
+        filename = json_results['filename']
+    else:
+        filename = " unknown"
     if conf:
         
         if "drugs" in conf:
             json_results = pp.get_summary(json_results, conf, columns = None)
 
-        if "geo_classification" in json_results:
-            probabilities = json_results["geo_classification"]["probabilities"]
-            geoclass = [{"region": item["region"], "probability": item["probability"]} for item in probabilities]
+        if "geo_classification" in json_results and json_results["geo_classification"] is not None:
+            if json_results["geo_classification"]["probabilities"] is not None:
+                probabilities = json_results["geo_classification"]["probabilities"]
+                geoclass = [{"region": item["region"], "probability": item["probability"]} for item in probabilities]
         if "drugs" in conf:
             json_results['drug_table'] = [[y for y in json_results['drug_table'] if y["Drug"].upper()==d.upper()][0] for d in conf['drugs']]
             drugs = (json_results['drug_table'],
@@ -247,7 +273,8 @@ def parse_result_summary(json_file):
         "Other variants": variants,
         "QC failed variants": fail_variants,
         "Coverage report": gene_coverage,
-        "Missing positions report": missing
+        "Missing positions report": missing,
+        "Filename" : filename
         }
     return tables
 
