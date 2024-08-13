@@ -163,6 +163,7 @@ def get_conf(results):
 
 def parse_result_summary(json_file):
     geoclass, drugs, var_drug, variants, gene_coverage, missing,fail_variants = None, None, None, None, None, None,None
+    
 
     with open(json_file) as json_file:
         json_results = json.load(json_file, parse_float=lambda x: round(float(x), 2))
@@ -181,7 +182,11 @@ def parse_result_summary(json_file):
         }
         
         return tables
-        
+    pipeline_data = json_results.get("pipeline", {})
+    software_version_str = pipeline_data.get("software_version", "0.0.0")
+
+    software_version = tuple(map(int, software_version_str.split('.')))
+    required_version = (0, 0, 7)
     conf = get_conf(json_results)
     info = ([{"id" : json_results['id'], "date": time.ctime()}],
             {"id": "Identifier",
@@ -214,6 +219,10 @@ def parse_result_summary(json_file):
             if json_results["geo_classification"]["probabilities"] is not None:
                 probabilities = json_results["geo_classification"]["probabilities"]
                 geoclass = [{"region": item["region"], "probability": item["probability"]} for item in probabilities]
+                if software_version > required_version:
+                    fraction = json_results["geo_classification"]["fraction_genotyped"]
+                else: 
+                    fraction = "unknown"
         if "drugs" in conf:
             json_results['drug_table'] = [[y for y in json_results['drug_table'] if y["Drug"].upper()==d.upper()][0] for d in conf['drugs']]
             drugs = (json_results['drug_table'],
@@ -268,6 +277,7 @@ def parse_result_summary(json_file):
         "Species" : species,
         "Analysis" : (analysis,columns),
         "Geoclassification": geoclass,
+        "Fraction" : fraction,
         "Resistance report": drugs,
         "Resistance variants report": var_drug,
         "Other variants": variants,

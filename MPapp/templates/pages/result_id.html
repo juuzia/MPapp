@@ -341,11 +341,11 @@
      <div class="card-header text-center bg-light" style="border-top-left-radius: 15px;border-top-right-radius: 15px;display: flex; align-items: center; justify-content: center;">
       <h4 style="margin-right: 10px;">Estimated Region of Origin</h4><abbr title="Where your sample is from"><i class="fa-solid fa-question" style="margin-bottom: 12px;"></i></abbr>
   </div>
-  {% set geoclass_found = false %}
-  {% set ns = namespace(regiono="", probability=0) %}
+  {% set ns = namespace(geoclass_found=False, regiono="", probability=0) %}
+
 {% for key, value in tables.items() %}
   {% if key == 'Geoclassification' %}
-    {% set geoclass_found = true %}
+    {% set ns.geoclass_found = True %}
     {% if value is not none %}
       {% for row in value %}
         <meta id="region-{{ loop.index }}" data-region="{{ row['region'] }}" data-probability="{{ row['probability'] }}" >
@@ -355,14 +355,17 @@
         {% endif %}
       {% endfor %}
       <div id="chartdiv-desktop"></div>
-      <div id="legenddiv"></div>
-      <p style="text-align: center; margin-top: 5px; font-family: 'Sofia Sans', sans-serif;">{{ ns.regiono }} - {{ (ns.probability*100)|round }}%</p>
+      <p style="text-align: center; margin-top: 5px; margin-bottom:0; margin-top: 0; font-family: 'Sofia Sans', sans-serif;">{{ ns.regiono }} - {{ (ns.probability*100)|round }}%</p>
 
     {% endif %}
   {% endif %}
+  {% if key == 'Fraction' %}
+
+  <p style="text-align: center; font-size: 12px; font-family: 'Sofia Sans', sans-serif;">No. of barcoding SNPs that have coverage: {{value}}</p>
+  {% endif %}
 {% endfor %}
 
-{% if not geoclass_found %}
+{% if not ns.geoclass_found %}
 <div class="NA"> 
   <p style="text-align: center; justify-content: center; font-family: 'Sofia Sans', sans-serif;">Region info not available</p>
 </div>
@@ -740,11 +743,10 @@
           <div class="card-header text-center bg-light" style="border-top-left-radius: 15px;border-top-right-radius: 15px;">
             <h4>Estimated Region of Origin</h4>
         </div>
-        {% set geoclass_found = false %}
-        {% set ns = namespace(regiono="", probability=0) %}
+        {% set ns = namespace(geoclass_found=False, regiono="", probability=0) %}
       {% for key, value in tables.items() %}
         {% if key == 'Geoclassification' %}
-          {% set geoclass_found = true %}
+          {% set ns.geoclass_found = True %}
           {% if value is not none %}
             {% for row in value %}
               <meta id="region-{{ loop.index }}" data-region="{{ row['region'] }}" data-probability="{{ row['probability'] }}" >
@@ -753,15 +755,18 @@
                 {% set ns.regiono = row['region'] %}
               {% endif %}
             {% endfor %}
-            <div id="chartdiv-desktop"></div>
             <div id="legenddiv"></div>
             <p style="text-align: center; margin-top: 5px; font-family: 'Sofia Sans', sans-serif;">{{ ns.regiono }} - {{ (ns.probability*100)|round }}%</p>
       
           {% endif %}
+          {% if key == 'Fraction' %}
+
+          <p style="text-align: center; font-size: 10px;font-family: 'Sofia Sans', sans-serif;">No. of barcoding SNPs that have coverage: {{value}}</p>
+          {% endif %}
         {% endif %}
       {% endfor %}
       
-      {% if not geoclass_found %}
+      {% if not ns.geoclass_found %}
       <div class="NA"> 
         <p style="text-align: center; justify-content: center; font-family: 'Sofia Sans', sans-serif;">Region info not available</p>
       </div>
