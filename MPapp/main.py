@@ -220,6 +220,7 @@ def parse_result_summary(json_file):
                 probabilities = json_results["geo_classification"]["probabilities"]
                 geoclass = [{"region": item["region"], "probability": item["probability"]} for item in probabilities]
                 if software_version > required_version:
+                    print(software_version)
                     fraction = json_results["geo_classification"]["fraction_genotyped"]
                 else: 
                     fraction = "unknown"
