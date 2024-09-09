@@ -80,7 +80,10 @@ def remote_profile(ftype, files, run_id, results_dir, platform, species, depth,a
         "ftype": ftype,
         "platform": platform,
         "files": files,
-        "species": species
+        "species": species,
+        "depth": depth,
+        "allele": allele,
+        "strand": strand
     }
     run_file = f"{tmp_dir}/{run_id}.run_file.json"
     json.dump(conf,open(run_file,"w"))
