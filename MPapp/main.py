@@ -34,12 +34,23 @@ def replace_key(data, old_key, new_key):
 def index():
     return render_template("pages/index.html")
 
+def validate_option(option_name, option_value):
+        if option_value.count(",") != 1:
+            return f"Invalid {option_name}: must contain exactly one comma."
+
+        parts = option_value.split(",")
+        
+        if not all(part.strip().replace('.', '', 1).isdigit() for part in parts):
+            return f"Invalid {option_name}: values must be numeric."
+
+        return None
+
 @bp.route('/analysis', methods=["GET", "POST"])
 def analysis():
     species_list = [
         ('Plasmodium_falciparum', 'Plasmodium falciparum'),
         ('Plasmodium_vivax', 'Plasmodium vivax'),
-        ('Plasmodium_knowlesi', 'Plasmodium lnowlesi'),
+        ('Plasmodium_knowlesi', 'Plasmodium knowlesi'),
         ('Plasmodium_malariae', 'Plasmodium malariae'),
         ('Plasmodium_ovale', 'Plasmodium ovale')
     ]
@@ -48,7 +59,27 @@ def analysis():
         #if  == "illumina":
         platform = request.form["radio_platform"]
         species = request.form["species"]
-        print(species)
+        strand = request.form["variant_filtration_strand"]
+        allele = request.form["variant_filtration_allele"]
+        depth = request.form["variant_filtration_depth"]
+        print("\nTHE STRAND \n")
+        print(strand)
+        print("\nTHE ALLELE \n")
+        print(allele)
+        print("\n THE DEPTH \n")
+        print(depth)
+
+        error_messages = []
+        for option_name, option_value in [("strand", strand), ("allele", allele), ("depth", depth)]:
+            if option_value is not None:
+                error_message = validate_option(option_name, option_value)
+                if error_message:
+                    error_messages.append(error_message)
+        if error_messages:
+            with open("error.log", "a") as error_log:
+                error_log.write("\n".join(error_messages) + "\n")
+            flash("Invalid input detected.", "danger")
+            return render_template("pages/analysis.html", random_id=random_id, species=species_list)
 
         runs = []
         upload_id = request.form['submit_button']
@@ -66,7 +97,7 @@ def analysis():
             with open("%s/%s.log" % (app.config["RESULTS_DIR"], run_id), "w") as O:
                 O.write("Starting job: %s\n" % run_id)
             if app.config["RUN_SUBMISSION"]=="local":
-                run_mp.delay(f.type, f.files, run_id, app.config["RESULTS_DIR"], platform,species=species,threads=app.config["THREADS"])
+                run_mp.delay(f.type, f.files, run_id, app.config["RESULTS_DIR"], platform, species, depth, allele, strand, threads=app.config["THREADS"])
             elif app.config["RUN_SUBMISSION"]=="remote":
                 remote_profile.delay(f.type, f.files, run_id, app.config["RESULTS_DIR"], platform,species=species)
             else:

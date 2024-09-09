@@ -41,7 +41,7 @@ def get_status(run_id):
     return AsyncResult(run_id).state
 
 @celery.task
-def run_mp(ftype, files, run_id, results_dir, platform, species, threads=1):
+def run_mp(ftype, files, run_id, results_dir, platform, species, depth, allele, strand,threads=1):
     if ftype == "fastq":
         if len(files) == 2:
             tmp = f"-1 {files[0]} -2 {files[1]}"
@@ -55,7 +55,7 @@ def run_mp(ftype, files, run_id, results_dir, platform, species, threads=1):
     if species != "autodetect":
         tmp += f" --resistance_db {species}"
     
-    cmd = "malaria-profiler profile --dir %s %s --prefix %s --platform %s -t %s --txt" % (results_dir, tmp, run_id, platform, threads)
+    cmd = "malaria-profiler profile --dir %s %s --prefix %s --platform %s -t %s --depth %s --af %s --strand %s --txt" % (results_dir, tmp, run_id, platform, threads, depth, allele, strand)
     print(cmd)
     sp.call(cmd, shell=True)
     
@@ -73,7 +73,7 @@ def run_mp(ftype, files, run_id, results_dir, platform, species, threads=1):
     
 
 @celery.task
-def remote_profile(ftype, files, run_id, results_dir, platform, species, threads = 1):
+def remote_profile(ftype, files, run_id, results_dir, platform, species, depth,allele,strand, threads = 1):
     tmp_dir = f"/tmp/runs/"
     conf = {
         "run_id": run_id,
