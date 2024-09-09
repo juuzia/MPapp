@@ -52,6 +52,9 @@ def main(args):
             run_id = conf['run_id'], 
             platform = conf['platform'],
             species = conf['species'],
+            depth = conf['depth'],
+            allele = conf['allele'],
+            strand = conf['strand'],
             results_dir = processing_dir,
             threads = args.threads
         )
@@ -69,9 +72,10 @@ def main(args):
                 print("YEP")
                 with open(f"{err_dir}/{rid}.errlog.txt") as file:
                     lines = file.readlines()
+                    error_value = ""
                     for i, line in enumerate(lines):
                         if line.startswith("## Value:"):
-                            error_value = lines[i+2].strip()
+                            error_value = "".join(lines[i+2:]).strip()
                             break
                     with open(results_json_path, "w") as f:
                         print(error_value)

@@ -3,7 +3,6 @@ import os
 from uuid import uuid4
 import re
 import time
-import sys
 
 from flask import (
     Blueprint, flash, request, redirect, render_template, url_for, current_app, send_file, make_response, Response)
@@ -31,11 +30,22 @@ def replace_key(data, old_key, new_key):
         for item in data:
             replace_key(item, old_key, new_key)
 
-@bp.route('/malaria-profiler/')
+@bp.route('/')
 def index():
     return render_template("pages/index.html")
 
-@bp.route('/malaria-profiler/analysis', methods=["GET", "POST"])
+def validate_option(option_name, option_value):
+        if option_value.count(",") != 1:
+            return f"Invalid {option_name}: must contain exactly one comma."
+
+        parts = option_value.split(",")
+        
+        if not all(part.strip().replace('.', '', 1).isdigit() for part in parts):
+            return f"Invalid {option_name}: values must be numeric."
+
+        return None
+
+@bp.route('/analysis', methods=["GET", "POST"])
 def analysis():
     species_list = [
         ('Plasmodium_falciparum', 'Plasmodium falciparum'),
@@ -49,7 +59,27 @@ def analysis():
         #if  == "illumina":
         platform = request.form["radio_platform"]
         species = request.form["species"]
-        print(species)
+        strand = request.form["variant_filtration_strand"]
+        allele = request.form["variant_filtration_allele"]
+        depth = request.form["variant_filtration_depth"]
+        print("\nTHE STRAND \n")
+        print(strand)
+        print("\nTHE ALLELE \n")
+        print(allele)
+        print("\n THE DEPTH \n")
+        print(depth)
+
+        error_messages = []
+        for option_name, option_value in [("strand", strand), ("allele", allele), ("depth", depth)]:
+            if option_value is not None:
+                error_message = validate_option(option_name, option_value)
+                if error_message:
+                    error_messages.append(error_message)
+        if error_messages:
+            with open("error.log", "a") as error_log:
+                error_log.write("\n".join(error_messages) + "\n")
+            flash("Invalid input detected.", "danger")
+            return render_template("pages/analysis.html", random_id=random_id, species=species_list)
 
         runs = []
         upload_id = request.form['submit_button']
@@ -67,7 +97,7 @@ def analysis():
             with open("%s/%s.log" % (app.config["RESULTS_DIR"], run_id), "w") as O:
                 O.write("Starting job: %s\n" % run_id)
             if app.config["RUN_SUBMISSION"]=="local":
-                run_mp.delay(f.type, f.files, run_id, app.config["RESULTS_DIR"], platform,species=species,threads=app.config["THREADS"])
+                run_mp.delay(f.type, f.files, run_id, app.config["RESULTS_DIR"], platform, species, depth, allele, strand, threads=app.config["THREADS"])
             elif app.config["RUN_SUBMISSION"]=="remote":
                 remote_profile.delay(f.type, f.files, run_id, app.config["RESULTS_DIR"], platform,species=species)
             else:
@@ -93,7 +123,7 @@ file_patterns = {
     "cram": "\.cram$"
 }
 
-@bp.route('/malaria-profiler/run_result/<uuid:analysis_id>')
+@bp.route('/run_result/<uuid:analysis_id>')
 def analysis_runs_id(analysis_id):
     data = json.load(open("%s/%s.json" % (app.config["RESULTS_DIR"], analysis_id)))
     for d in data:
@@ -150,43 +180,16 @@ def is_legal_filetype(filename):
         return False
 
 def get_conf(results):
-
-    pipeline_data = results.get("pipeline", {})
-    db_version = pipeline_data.get("db_version", {})
-    db_name = db_version.get("name")
-    if db_name:
-        conf = pp.get_db('malaria_profiler', db_name)
-    else:
-        conf = ""
-    
+    db_name = results["pipeline"]["db_version"]["name"]
+    conf = pp.get_db('malaria_profiler',db_name)
     return conf
 
 def parse_result_summary(json_file):
     geoclass, drugs, var_drug, variants, gene_coverage, missing,fail_variants = None, None, None, None, None, None,None
-    
 
     with open(json_file) as json_file:
         json_results = json.load(json_file, parse_float=lambda x: round(float(x), 2))
-    
-    if not json_results:
-        sys.stderr.write("Warning: JSON results are empty or malformed.\n")
-        tables = {
-            
-        }
-        return tables
-    elif "error" in json_results :
-        
-        error_value = json_results["error"]
-        tables = {
-            "Error": error_value
-        }
-        
-        return tables
-    pipeline_data = json_results.get("pipeline", {})
-    software_version_str = pipeline_data.get("software_version", "0.0.0")
 
-    software_version = tuple(map(int, software_version_str.split('.')))
-    required_version = (0, 0, 7)
     conf = get_conf(json_results)
     info = ([{"id" : json_results['id'], "date": time.ctime()}],
             {"id": "Identifier",
@@ -206,24 +209,16 @@ def parse_result_summary(json_file):
     
     analysis = json_results['pipeline']['software']
     columns = {'process': 'Process', 'software': 'Software'}
-    if 'filename' in json_results:
-        filename = json_results['filename']
-    else:
-        filename = " unknown"
+
+
     if conf:
         
         if "drugs" in conf:
             json_results = pp.get_summary(json_results, conf, columns = None)
 
-        if "geo_classification" in json_results and json_results["geo_classification"] is not None:
-            if json_results["geo_classification"]["probabilities"] is not None:
-                probabilities = json_results["geo_classification"]["probabilities"]
-                geoclass = [{"region": item["region"], "probability": item["probability"]} for item in probabilities]
-                if software_version > required_version:
-                    print(software_version)
-                    fraction = json_results["geo_classification"]["fraction_genotyped"]
-                else: 
-                    fraction = "unknown"
+        if "geo_classification" in json_results:
+            probabilities = json_results["geo_classification"]["probabilities"]
+            geoclass = [{"region": item["region"], "probability": item["probability"]} for item in probabilities]
         if "drugs" in conf:
             json_results['drug_table'] = [[y for y in json_results['drug_table'] if y["Drug"].upper()==d.upper()][0] for d in conf['drugs']]
             drugs = (json_results['drug_table'],
@@ -278,18 +273,16 @@ def parse_result_summary(json_file):
         "Species" : species,
         "Analysis" : (analysis,columns),
         "Geoclassification": geoclass,
-        "Fraction" : fraction,
         "Resistance report": drugs,
         "Resistance variants report": var_drug,
         "Other variants": variants,
         "QC failed variants": fail_variants,
         "Coverage report": gene_coverage,
-        "Missing positions report": missing,
-        "Filename" : filename
+        "Missing positions report": missing
         }
     return tables
 
-@bp.route('/malaria-profiler/result/<uuid:run_id>')
+@bp.route('/result/<uuid:run_id>')
 def result_id(run_id):
     log_file = "%s/%s.log" % (app.config["RESULTS_DIR"], run_id)
     if not os.path.isfile(log_file):
@@ -312,12 +305,12 @@ def result_id(run_id):
         tables = parse_result_summary(json_file)
         return render_template('pages/result_id.html', run_id=run_id, results = results, status=status, tables=tables)
 
-@bp.route('/malaria-profiler/result/<uuid:run_id>/download', methods=['GET', 'POST'])
+@bp.route('/result/<uuid:run_id>/download', methods=['GET', 'POST'])
 def download(run_id):
         result_file = "%s/%s.results.txt" % (app.config["RESULTS_DIR"], run_id)
         return send_file(result_file, as_attachment=True)
 
-@bp.route('/malaria-profiler/result', methods=['POST', 'GET'])
+@bp.route('/result', methods=['POST', 'GET'])
 def result():
     if request.method == "POST":
         if "result_submit" in request.form:
@@ -327,7 +320,7 @@ def result():
 
 
 
-@bp.route('/malaria-profiler/file_upload/<uuid:upload_id>',methods=('GET','POST'))
+@bp.route('/file_upload/<uuid:upload_id>',methods=('GET','POST'))
 def file_upload(upload_id):
 
     upload_id = str(upload_id)

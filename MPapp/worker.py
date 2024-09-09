@@ -12,14 +12,6 @@ import sys
 
 BASH_TIMEOUT = os.environ.get('BASH_TIMEOUT', 1200)
 
-def safe_get(data, *keys):
-    for key in keys:
-        if isinstance(data, dict):
-            data = data.get(key)
-        else:
-            return None
-    return data
-
 def make_celery(app):
     celery = Celery(
         app.import_name,
@@ -49,7 +41,7 @@ def get_status(run_id):
     return AsyncResult(run_id).state
 
 @celery.task
-def run_mp(ftype, files, run_id, results_dir, platform, species, threads=1):
+def run_mp(ftype, files, run_id, results_dir, platform, species, depth, allele, strand,threads=1):
     if ftype == "fastq":
         if len(files) == 2:
             tmp = f"-1 {files[0]} -2 {files[1]}"
@@ -63,7 +55,7 @@ def run_mp(ftype, files, run_id, results_dir, platform, species, threads=1):
     if species != "autodetect":
         tmp += f" --resistance_db {species}"
     
-    cmd = "malaria-profiler profile --dir %s %s --prefix %s --platform %s -t %s --txt" % (results_dir, tmp, run_id, platform, threads)
+    cmd = "malaria-profiler profile --dir %s %s --prefix %s --platform %s -t %s --depth %s --af %s --strand %s --txt" % (results_dir, tmp, run_id, platform, threads, depth, allele, strand)
     print(cmd)
     sp.call(cmd, shell=True)
     
@@ -72,20 +64,16 @@ def run_mp(ftype, files, run_id, results_dir, platform, species, threads=1):
     with open(results_path) as file:
         data = json.load(file)
     
-    db_name = data.get("pipeline", {}).get("db_version", {}).get("name")
-    
-    if db_name:
-        bed_file = f"{sys.base_prefix}/share/malaria_profiler/{db_name}.bed"
-        print(bed_file)
-        sp.call(f"samtools view -bL {bed_file} {results_dir}/{run_id}.bam > {results_dir}/{run_id}.bed.bam", shell=True)
-        sp.call(f"mv {results_dir}/{run_id}.bed.bam {results_dir}/{run_id}.bam", shell=True)
-        sp.call(f"samtools index {results_dir}/{run_id}.bam", shell=True)
-    else:
-        sys.stderr.write(f"No valid database version found for run_id {run_id}. Skipping BED processing.\n")
+    db_name = data["pipeline"]["db_version"]["name"]
+    bed_file = f"{sys.base_prefix}/share/malaria_profiler/{db_name}.bed"
+    print(bed_file)
+    sp.call(f"samtools view -bL {bed_file} {results_dir}/{run_id}.bam > {results_dir}/{run_id}.bed.bam", shell=True)
+    sp.call(f"mv {results_dir}/{run_id}.bed.bam {results_dir}/{run_id}.bam", shell=True)
+    sp.call(f"samtools index {results_dir}/{run_id}.bam", shell=True)
     
 
 @celery.task
-def remote_profile(ftype, files, run_id, results_dir, platform, species, threads = 1):
+def remote_profile(ftype, files, run_id, results_dir, platform, species, depth,allele,strand, threads = 1):
     tmp_dir = f"/tmp/runs/"
     conf = {
         "run_id": run_id,
