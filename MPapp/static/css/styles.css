@@ -182,8 +182,12 @@
   th,tr{
     text-align: center;
   }
-  
-  
+    
+  @media only screen and (min-width: 1800px) {
+    th,tr{
+      font-size: 13px;
+    }
+  }
   @media only screen and (min-width: 1597px) {
   
     #desktop_dashboard .container-fluid {
@@ -440,3 +444,4 @@ abbr[title]:hover::after {
   opacity: 1;
   z-index: 99999999999999999999999999999999999;
 }
+
