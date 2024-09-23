@@ -462,9 +462,16 @@
                 <thead>
                     <tr>
                         {% for key in columns %}
-                        
                         {% if key != 'Genotypic Resistance' %}
-                            <th scope="col" style="width: 10%">{{ columns[key] }}</th>
+                        {% if key == "annotation" %}
+                        <th scope="col" style="width: 15%;">Gene</th>
+                        <th scope="col" style="width: 15%;">Annotation</th>
+                        <th scope="col" style="width:15%" >Drug related</th>
+                        <th scope="col" style="width: 16%;" >Variant</th>
+                        
+                        {% else %}
+                        <th scope="col" style="width: 18%">{{ columns[key] }}</th>
+                        {% endif %}
                             {% endif %}
                             {% endfor %}
                     </tr>
@@ -474,7 +481,7 @@
                     {% for row in rows %}
                     
                     <tr>
-                        
+                       
                         {% for key in columns %}
                         {% if key != 'Genotypic Resistance' %}
                         
@@ -488,6 +495,7 @@
                             {% for mutation in mutations %}
                                 <p>
                                     {{ mutation | safe }}
+                                    
                                     
                                 </p>{% if not loop.last %}, {% endif %}
                             {% endfor %}
@@ -506,6 +514,7 @@
                                 {% endfor %}
                             {% elif key == 'gene' %}
                                 {% set ns.gene = row['gene'] %}
+                                
                                 {{ns.gene }}
                             {% elif key == "pos" %}
                                 {% if name == "Missing positions report" %}
@@ -530,23 +539,42 @@
                             {% elif key == "variants"  %}
                             
                                 <a href="#" onclick="showGene2('{{ ns.gene }} {{ row[key] | safe }}', '#miss-data', '{{ genus }}')" data-keyz="{{ keyz }}">
-                                    {{ row[key] | safe }}
+                                    {{ row[key] | safe }} 
                                     
                                 </a>
-                                
+                            </td>
+                            <td>
                             {%elif key == "annotation" %}
-                            {% if row[key] %}  {# Check if annotation is not empty #}
-                                {% for annotation in row[key] %}
-                                    Type: {{ annotation.type }}, Drug: {{ annotation.drug }}, Source: {{ annotation.source }}
-                                {% endfor %}
+                            {% if row[key]  %}  
+                            {% for annotation in row[key] %}
+                                {{annotation.gene}}
+                                <!-- <td>{{annotation.type}}</td>
+                                <td>{{annotation.drug}}</td>
+                                <td>{{annotation.variant}}</td> -->
+                                    
+                            {% endfor %}
+                            {% for annotation in row[key] %}
+                                 <td>{{annotation.type}}</td>
+                                                                   
+                            {% endfor %}
+                            {% for annotation in row[key] %}
+                                <td>{{annotation.drug}}</td>
+                                    
+                            {% endfor %}
+                            {% for annotation in row[key] %}
+                                <td>{{annotation.variant}}</td>
+                                    
+                            {% endfor %}
+                            
                             {% else %}
                                 <p>No annotation available</p>
                             {% endif %}
                             {% else %}
                                {{row[key] | safe}}
                             {% endif %}
-                        </td>
+                      
                         {% endif %}
+                    </td>
                         {% endfor %}
                     </tr>
                     {% endfor %}
