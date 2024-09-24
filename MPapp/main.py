@@ -190,6 +190,26 @@ def parse_result_summary(json_file):
     with open(json_file) as json_file:
         json_results = json.load(json_file, parse_float=lambda x: round(float(x), 2))
 
+    if not json_results:
+        sys.stderr.write("Warning: JSON results are empty or malformed.\n")
+        tables = {
+            
+        }
+        return tables
+    elif "error" in json_results :
+        
+        error_value = json_results["error"]
+        tables = {
+            "Error": error_value
+        }
+        
+        return tables
+    pipeline_data = json_results.get("pipeline", {})
+    software_version_str = pipeline_data.get("software_version", "0.0.0")
+
+    software_version = tuple(map(int, software_version_str.split('.')))
+    required_version = (0, 0, 7)
+
     conf = get_conf(json_results)
     info = ([{"id" : json_results['id'], "date": time.ctime()}],
             {"id": "Identifier",
@@ -210,15 +230,25 @@ def parse_result_summary(json_file):
     analysis = json_results['pipeline']['software']
     columns = {'process': 'Process', 'software': 'Software'}
 
+    if 'filename' in json_results:
+        filename = json_results['filename']
+    else:
+        filename = " unknown"
 
     if conf:
         
         if "drugs" in conf:
             json_results = pp.get_summary(json_results, conf, columns = None)
 
-        if "geo_classification" in json_results:
-            probabilities = json_results["geo_classification"]["probabilities"]
-            geoclass = [{"region": item["region"], "probability": item["probability"]} for item in probabilities]
+        if "geo_classification" in json_results and json_results["geo_classification"] is not None:
+            if json_results["geo_classification"]["probabilities"] is not None:
+                probabilities = json_results["geo_classification"]["probabilities"]
+                geoclass = [{"region": item["region"], "probability": item["probability"]} for item in probabilities]
+                if software_version > required_version:
+                    print(software_version)
+                    fraction = json_results["geo_classification"]["fraction_genotyped"]
+                else: 
+                    fraction = "unknown"
         if "drugs" in conf:
             json_results['drug_table'] = [[y for y in json_results['drug_table'] if y["Drug"].upper()==d.upper()][0] for d in conf['drugs']]
             drugs = (json_results['drug_table'],
@@ -273,12 +303,14 @@ def parse_result_summary(json_file):
         "Species" : species,
         "Analysis" : (analysis,columns),
         "Geoclassification": geoclass,
+        "Fraction": fraction,
         "Resistance report": drugs,
         "Resistance variants report": var_drug,
         "Other variants": variants,
         "QC failed variants": fail_variants,
         "Coverage report": gene_coverage,
-        "Missing positions report": missing
+        "Missing positions report": missing,
+        "Filename": filename
         }
     return tables
 
