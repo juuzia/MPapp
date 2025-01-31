@@ -468,7 +468,8 @@
                         <th scope="col" style="width: 15%;">Annotation</th>
                         <th scope="col" style="width:15%" >Drug related</th>
                         <th scope="col" style="width: 16%;" >Variant</th>
-                        
+                        {% elif columns[key] == "Depth" %}
+                        <th scope="col" style="width: 10%;" >{{ columns[key] }}</th>
                         {% else %}
                         <th scope="col" style="width: 18%">{{ columns[key] }}</th>
                         {% endif %}
@@ -554,8 +555,10 @@
                                     
                             {% endfor %}
                             {% for annotation in row[key] %}
-                                 <td>{{annotation.type}}</td>
-                                                                   
+                                {% if "_" in annotation.type %}
+                                    {% set anno = annotation.type.split("_") %}
+                                    <td>{{ anno[0] }} {{anno[1]}}</td>
+                                {% endif %}                                
                             {% endfor %}
                             {% for annotation in row[key] %}
                                 <td>{{annotation.drug}}</td>

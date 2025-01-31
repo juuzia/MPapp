@@ -99,7 +99,7 @@ def analysis():
             if app.config["RUN_SUBMISSION"]=="local":
                 run_mp.delay(f.type, f.files, run_id, app.config["RESULTS_DIR"], platform, species, depth, allele, strand, threads=app.config["THREADS"])
             elif app.config["RUN_SUBMISSION"]=="remote":
-                remote_profile.delay(f.type, f.files, run_id, app.config["RESULTS_DIR"], platform,species=species)
+                remote_profile.delay(f.type, f.files, run_id, app.config["RESULTS_DIR"], platform,species, depth,allele,strand,threads=app.config["THREADS"])
             else:
                 raise Exception("Unknown RUN_SUBMISSION type: %s" % app.config["RUN_SUBMISSION"])
             runs.append({"id":run_id, "files":f.files})
@@ -181,11 +181,12 @@ def is_legal_filetype(filename):
 
 def get_conf(results):
     db_name = results["pipeline"]["db_version"]["name"]
+    print(db_name)
     conf = pp.get_db('malaria_profiler',db_name)
     return conf
 
 def parse_result_summary(json_file):
-    geoclass, drugs, var_drug, variants, gene_coverage, missing,fail_variants = None, None, None, None, None, None,None
+    geoclass, drugs, var_drug, variants, gene_coverage, missing,fail_variants,fraction = None, None, None, None, None, None,None, None
 
     with open(json_file) as json_file:
         json_results = json.load(json_file, parse_float=lambda x: round(float(x), 2))
@@ -234,20 +235,24 @@ def parse_result_summary(json_file):
         filename = json_results['filename']
     else:
         filename = " unknown"
-
+    print(conf)
     if conf:
-        
+        print("got conf fool")
         if "drugs" in conf:
+
             json_results = pp.get_summary(json_results, conf, columns = None)
 
         if "geo_classification" in json_results and json_results["geo_classification"] is not None:
             if json_results["geo_classification"]["probabilities"] is not None:
                 probabilities = json_results["geo_classification"]["probabilities"]
                 geoclass = [{"region": item["region"], "probability": item["probability"]} for item in probabilities]
+                print("software version", software_version)
+                print("required version", required_version)
                 if software_version > required_version:
                     print(software_version)
                     fraction = json_results["geo_classification"]["fraction_genotyped"]
                 else: 
+                    print("unknown")
                     fraction = "unknown"
         if "drugs" in conf:
             json_results['drug_table'] = [[y for y in json_results['drug_table'] if y["Drug"].upper()==d.upper()][0] for d in conf['drugs']]
@@ -297,7 +302,8 @@ def parse_result_summary(json_file):
                         "gene": "Gene Name",
                         "change": "Change",
                         "freq": "Estimated fraction"})
-
+    else:
+        "no conf fool"
     tables = {
         "General information" : info,
         "Species" : species,
